@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" /> <!-- File Permission -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" /> &lt;!&ndash; Internet Permission &ndash;&gt; -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Asset2"
+        tools:targetApi="s">
+        <activity
+            android:name=".Updatedata.Network.Update_laptop"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.Network.Update_komputer"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.Network.Update_cctv"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.Network.Update_print"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.Network.Update_switch"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.Network.Update_wireless"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.FMS.Update_network"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.FMS.Update_mobile"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.FMS.Update_ht"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.FMS.Update_jasset"
+            android:exported="false" />
+        <activity
+            android:name=".Updatedata.FMS.Update_rig"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.FMS.Dashboard_listdata_fms"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.FMS.Data_network"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.FMS.Data_jasset"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.FMS.Data_mobile"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.FMS.Data_rig"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.FMS.Data_ht"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.Network.Dashboard_listdata_net"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.Network.Data_print"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.Network.Data_switch"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.Network.Data_laptop"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.Network.Data_komputer"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.Network.Data_wireless"
+            android:exported="false" />
+        <activity
+            android:name=".Listdata.Network.Data_cctv"
+            android:exported="false" />
+        <activity
+            android:name=".NavigasiActivity"
+            android:exported="false"
+            android:label="@string/title_activity_navigasi"
+            android:theme="@style/Theme.Asset2.NoActionBar" />
+        <activity
+            android:name=".SplashScreenActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+
+        <activity
+            android:name=".DataInput.FMS.Network_input"
+            android:exported="false" />
+        <activity
+            android:name=".DataInput.FMS.Mobile_input"
+            android:exported="false" />
+        <activity
+            android:name=".DataInput.FMS.Jasset_input"
+            android:exported="false" />
+        <activity
+            android:name=".DataInput.FMS.Dashboard_fms"
+            android:exported="false" />
+        <activity
+            android:name=".DataInput.Network.Dashboard_net"
+            android:exported="false" />
+        <activity
+            android:name=".Maintenance.Dashboard_maintenance"
+            android:exported="false" />
+        <activity
+            android:name=".Maintenance.Komputer.DataKeymou"
+            android:exported="false" />
+        <activity
+            android:name=".Maintenance.Komputer.DataIPPhone"
+            android:exported="false" />
+        <activity
+            android:name=".Maintenance.Komputer.DataPrinter"
+            android:exported="false" />
+        <activity
+            android:name=".Maintenance.Komputer.DataMonitor"
+            android:exported="false" />
+        <activity
+            android:name=".Maintenance.Komputer.DataUPS"
+            android:exported="false" />
+        <activity
+            android:name=".Maintenance.Komputer.DataCPU"
+            android:exported="false" />
+        <activity android:name=".Halaman_utama" />
+        <activity android:name=".DataInput.Network.Cctv_input" />
+        <activity android:name=".DataInput.Network.Laptop_input" />
+        <activity android:name=".DataInput.FMS.Ht_input" />
+        <activity android:name=".DataInput.FMS.Rig_input" />
+        <activity android:name=".DataInput.Network.Print_input" />
+        <activity android:name=".DataInput.Network.Komputer_input" />
+        <activity android:name=".DataInput.Network.Wireless_input" />
+        <activity android:name=".DataInput.Network.Switch_input" />
+        <activity android:name=".Maintenance.Komputer.Input_maintenance" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+    </application>
+
+</manifest>

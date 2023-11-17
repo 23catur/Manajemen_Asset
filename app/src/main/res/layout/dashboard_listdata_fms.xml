@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ImageView
+        android:id="@+id/btn_jasset"
+        android:layout_width="219dp"
+        android:layout_height="211dp"
+        android:onClick="onButtonClick"
+        android:src="@drawable/jasset3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_mobile"
+        app:layout_constraintHorizontal_bias="0.259"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.082"
+        tools:ignore="OnClick" />
+
+    <ImageView
+        android:id="@+id/btn_mobile"
+        android:layout_width="219dp"
+        android:layout_height="211dp"
+        android:onClick="onButtonClick"
+        android:src="@drawable/mobile3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.082"
+        tools:ignore="OnClick" />
+
+    <ImageView
+        android:id="@+id/btn_network"
+        android:layout_width="219dp"
+        android:layout_height="211dp"
+        android:onClick="onButtonClick"
+        android:src="@drawable/network3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.969"
+        tools:ignore="OnClick" />
+
+    <ImageView
+        android:id="@+id/btn_ht"
+        android:layout_width="219dp"
+        android:layout_height="211dp"
+        android:onClick="onButtonClick"
+        android:src="@drawable/ht3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_rig"
+        app:layout_constraintHorizontal_bias="0.296"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_jasset"
+        app:layout_constraintVertical_bias="0.102"
+        tools:ignore="OnClick" />
+
+    <ImageView
+        android:id="@+id/btn_rig"
+        android:layout_width="219dp"
+        android:layout_height="211dp"
+        android:onClick="onButtonClick"
+        android:src="@drawable/rig3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_mobile"
+        app:layout_constraintVertical_bias="0.102"
+        tools:ignore="OnClick" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
