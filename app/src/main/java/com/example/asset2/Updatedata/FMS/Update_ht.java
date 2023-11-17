@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.asset2.R;
+import com.example.asset2.Updatedata.Network.Update_wireless;
 
 import org.json.JSONObject;
 
@@ -29,7 +31,7 @@ import java.util.Calendar;
 
 public class Update_ht extends AppCompatActivity {
 
-    Button btnDaftar, btnScan, btnPhoto;
+    Button btnUpdate, btnDelete;
     TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
     private ImageView imageView;
     Bitmap bitMap = null;
@@ -44,14 +46,14 @@ public class Update_ht extends AppCompatActivity {
         setContentView(R.layout.update_ht);
 
 
-        btnDaftar = findViewById(R.id.btnSelesai);
+        btnUpdate = findViewById(R.id.btnUpdate);
         Hostname = findViewById(R.id.txtHostname);
         Merk = findViewById(R.id.txtType);
         Serialnumber = findViewById(R.id.txtSerial);
         Ip = findViewById(R.id.txtIP);
         Tanggal = findViewById(R.id.txtTanggal);
         Keterangan = findViewById(R.id.txtKeterangan1);
-        btnScan = findViewById(R.id.btnScan);
+        btnDelete = findViewById(R.id.btnDelete);
         progressDialog = new ProgressDialog(this);
 
 
@@ -69,7 +71,7 @@ public class Update_ht extends AppCompatActivity {
         Tanggal.setText(tanggal);
         Keterangan.setText(keterangan);
 
-        btnDaftar.setOnClickListener(new View.OnClickListener() {
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressDialog.setMessage("Updating Data...");
@@ -91,6 +93,78 @@ public class Update_ht extends AppCompatActivity {
                 }, 1000);
             }
         });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KonfirmasiHapus();
+            }
+        });
+    }
+    private void KonfirmasiHapus() {
+        new AlertDialog.Builder(Update_ht.this)
+                .setMessage("Udah yakin boss?")
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        hapusData();
+                    }
+                })
+                .setNegativeButton("Tidak", null)
+                .show();
+    }
+
+    private void hapusData() {
+        progressDialog.setMessage("Menghapus Data...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        AndroidNetworking.post("https://jdksmurf.com/BUMA/delete_ht.php")
+                .addBodyParameter("hostname", hostname)
+                .setPriority(Priority.MEDIUM)
+                .setTag("Hapus Data")
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+                        Log.d("cekHapus", "" + response);
+                        try {
+                            Boolean status = response.getBoolean("status");
+                            String pesan = response.getString("result");
+                            Toast.makeText(Update_ht.this, "" + pesan, Toast.LENGTH_SHORT).show();
+
+                            if (status) {
+                                new AlertDialog.Builder(Update_ht.this)
+                                        .setMessage("Data berhasil dihapus!")
+                                        .setCancelable(false)
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent i = getIntent();
+                                                setResult(RESULT_OK, i);
+                                                Update_ht.this.finish();
+                                            }
+                                        })
+                                        .show();
+                            } else {
+                                new AlertDialog.Builder(Update_ht.this)
+                                        .setMessage("Gagal Menghapus Data!")
+                                        .setPositiveButton("OK", null)
+                                        .setCancelable(false)
+                                        .show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d("Tidak dapat menghapus", "" + anError.getErrorBody());
+                        progressDialog.dismiss();
+                        Toast.makeText(Update_ht.this, "Error menghapus data", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     void validatingData() {

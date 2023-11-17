@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.asset2.R;
+import com.example.asset2.Updatedata.Network.Update_wireless;
 
 import org.json.JSONObject;
 
@@ -29,7 +31,7 @@ import java.util.Calendar;
 
 public class Update_jasset extends AppCompatActivity {
 
-    Button btnDaftar, btnScan, btnPhoto;
+    Button btnUpdate, btnDelete;
     TextView Serialnumber, Status, Keterangan;
     private ImageView imageView;
     Bitmap bitMap = null;
@@ -44,11 +46,11 @@ public class Update_jasset extends AppCompatActivity {
         setContentView(R.layout.update_jasset);
 
 
-        btnDaftar = findViewById(R.id.btnSelesai);
+        btnUpdate = findViewById(R.id.btnUpdate);
         Serialnumber = findViewById(R.id.txtSerial);
         Status = findViewById(R.id.txtStatus);
         Keterangan = findViewById(R.id.txtKeterangan);
-        btnScan = findViewById(R.id.btnScan);
+        btnDelete = findViewById(R.id.btnDelete);
 
         serialnumber = getIntent().getStringExtra("serialnumber");
         status = getIntent().getStringExtra("status");
@@ -58,7 +60,7 @@ public class Update_jasset extends AppCompatActivity {
         Status.setText(status);
         Keterangan.setText(keterangan);
 
-        btnDaftar.setOnClickListener(new View.OnClickListener() {
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressDialog.setMessage("Updating Data...");
@@ -77,6 +79,79 @@ public class Update_jasset extends AppCompatActivity {
                 }, 1000);
             }
         });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                KonfirmasiHapus();
+            }
+        });
+    }
+
+    private void KonfirmasiHapus() {
+        new AlertDialog.Builder(Update_jasset.this)
+                .setMessage("Udah yakin boss?")
+                .setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        hapusData();
+                    }
+                })
+                .setNegativeButton("Tidak", null)
+                .show();
+    }
+
+    private void hapusData() {
+        progressDialog.setMessage("Menghapus Data...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        AndroidNetworking.post("https://jdksmurf.com/BUMA/delete_wireless.php")
+                .addBodyParameter("serialnumber", serialnumber)
+                .setPriority(Priority.MEDIUM)
+                .setTag("Hapus Data")
+                .build()
+                .getAsJSONObject(new JSONObjectRequestListener() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        progressDialog.dismiss();
+                        Log.d("cekHapus", "" + response);
+                        try {
+                            Boolean status = response.getBoolean("status");
+                            String pesan = response.getString("result");
+                            Toast.makeText(Update_jasset.this, "" + pesan, Toast.LENGTH_SHORT).show();
+
+                            if (status) {
+                                new AlertDialog.Builder(Update_jasset.this)
+                                        .setMessage("Data berhasil dihapus!")
+                                        .setCancelable(false)
+                                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Intent i = getIntent();
+                                                setResult(RESULT_OK, i);
+                                                Update_jasset.this.finish();
+                                            }
+                                        })
+                                        .show();
+                            } else {
+                                new AlertDialog.Builder(Update_jasset.this)
+                                        .setMessage("Gagal Menghapus Data!")
+                                        .setPositiveButton("OK", null)
+                                        .setCancelable(false)
+                                        .show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        Log.d("Tidak dapat menghapus", "" + anError.getErrorBody());
+                        progressDialog.dismiss();
+                        Toast.makeText(Update_jasset.this, "Error menghapus data", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     void validatingData() {
