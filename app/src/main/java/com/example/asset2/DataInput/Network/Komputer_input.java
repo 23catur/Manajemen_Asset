@@ -187,7 +187,7 @@ public class Komputer_input extends AppCompatActivity {
                 bitMap = decodeSampledBitmapFromFile(String.valueOf(photoFile), 1000, 700);
                 imageView.setImageBitmap(bitMap);
             } else {
-                Toast.makeText(Laptop_input.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Komputer_input.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
 

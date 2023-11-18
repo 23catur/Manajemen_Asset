@@ -101,7 +101,6 @@ public class Data_cctv extends AppCompatActivity {
 
     public void getData(){
         initializeArray();
-        //URL
         AndroidNetworking.post("https://jdksmurf.com/BUMA/getdata_cctv.php")
                 .setTag("Get Data")
                 .setPriority(Priority.MEDIUM)
