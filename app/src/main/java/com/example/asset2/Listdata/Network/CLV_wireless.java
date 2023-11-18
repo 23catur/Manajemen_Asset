@@ -2,9 +2,6 @@ package com.example.asset2.Listdata.Network;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,17 +9,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.cardview.widget.CardView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.asset2.R;
 import com.example.asset2.Updatedata.Network.Update_wireless;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +43,6 @@ public class CLV_wireless extends ArrayAdapter<String>  {
     }
 
     public void updateData(ArrayList<String> Hostname, ArrayList<String> Merk, ArrayList<String> Serialnumber, ArrayList<String> Ip, ArrayList<String> Tanggal, ArrayList<String> Keterangan, ArrayList<String> Foto) {
-        // Clear existing data
         vHostname.clear();
         vMerk.clear();
         vSerialnumber.clear();
@@ -62,7 +51,6 @@ public class CLV_wireless extends ArrayAdapter<String>  {
         vKeterangan.clear();
         vFoto.clear();
 
-        // Add new data
         vHostname.addAll(Hostname);
         vMerk.addAll(Merk);
         vSerialnumber.addAll(Serialnumber);
@@ -71,31 +59,26 @@ public class CLV_wireless extends ArrayAdapter<String>  {
         vKeterangan.addAll(Keterangan);
         vFoto.addAll(Foto);
 
-        // Update originalData
         originalData = new ArrayList<>(vHostname);
     }
 
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        //Load Custom Layout untuk list
         View rowView= inflater.inflate(R.layout.clv_wireless, null, true);
 
         CardView update = rowView.findViewById(R.id.cvWireless);
 
-        //Declarasi komponen
         TextView hostname           = rowView.findViewById(R.id.tvHostname);
         TextView merk               = rowView.findViewById(R.id.tvType);
         TextView serialnumber       = rowView.findViewById(R.id.tvSerial);
         TextView ip                 = rowView.findViewById(R.id.tvIP);
         TextView tanggal            = rowView.findViewById(R.id.tvTanggal);
         TextView keterangan         = rowView.findViewById(R.id.tvKeterangan);
-        ImageView foto               = rowView.findViewById(R.id.fotoAsset);
+        ImageView foto              = rowView.findViewById(R.id.fotoAsset);
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle CardView click event
-                // Pindah ke halaman update dengan mengirim data yang diperlukan
                 Intent intent = new Intent(context, Update_wireless.class);
                 intent.putExtra("hostname", vHostname.get(position));
                 intent.putExtra("merk", vMerk.get(position));
@@ -105,13 +88,10 @@ public class CLV_wireless extends ArrayAdapter<String>  {
                 intent.putExtra("keterangan", vKeterangan.get(position));
                 intent.putExtra("foto", vFoto.get(position));
 
-
                 context.startActivity(intent);
             }
         });
 
-        //Set Parameter Value sesuai widget textview
-//        jenis_asset.setText(vJenisAsset.get(position));
         hostname.setText(vHostname.get(position));
         merk.setText(vMerk.get(position));
         serialnumber.setText(vSerialnumber.get(position));
@@ -121,28 +101,14 @@ public class CLV_wireless extends ArrayAdapter<String>  {
 
 
         if (!vFoto.get(position).equals("")) {
-//            Glide.with(context)
-//                    .load("https://jdksmurf.com/BUMA/foto_asset/" + vFoto.get(position))
-//                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.DATA))
-//                    .into(foto);
-//            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/BUMA.png").into(foto);
+
             Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/"+vFoto.get(position)).into(foto);
 
-//            Picasso.get()
-//                    .load("https://jdksmurf.com/BUMA/foto_asset/" + vFoto.get(position))
-//                    .placeholder(R.drawable.fms4) // Set your placeholder image resource
-//                    .error(R.drawable.mainte4) // Set your error image resource
-//                    .into(foto);
         } else {
-            // Gantilah URL default yang sesuai jika vFoto kosong
             Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/BUMA.png").into(foto);
-//            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/"+vFoto.get(position)).into(foto);
-
         }
         return rowView;
     }
-
-
 
     @Override
     public Filter getFilter() {
@@ -165,21 +131,21 @@ public class CLV_wireless extends ArrayAdapter<String>  {
             try {
                 if (vHostname != null && vMerk != null && vSerialnumber != null && vIp != null && vTanggal != null && vKeterangan != null) {
                     if (constraint != null && constraint.length() > 0) {
-                        ArrayList<String> filteredListHostname = new ArrayList<>();
-                        ArrayList<String> filteredListMerk = new ArrayList<>();
-                        ArrayList<String> filteredListSerialNumber = new ArrayList<>();
-                        ArrayList<String> filteredListIp = new ArrayList<>();
-                        ArrayList<String> filteredListTanggal = new ArrayList<>();
-                        ArrayList<String> filteredListKeterangan = new ArrayList<>();
+                        ArrayList<String> filteredListHostname      = new ArrayList<>();
+                        ArrayList<String> filteredListMerk          = new ArrayList<>();
+                        ArrayList<String> filteredListSerialNumber  = new ArrayList<>();
+                        ArrayList<String> filteredListIp            = new ArrayList<>();
+                        ArrayList<String> filteredListTanggal       = new ArrayList<>();
+                        ArrayList<String> filteredListKeterangan    = new ArrayList<>();
 
                         for (int i = 0; i < originalData.size(); i++) {
                             if (i < vHostname.size() && i < vMerk.size() && i < vSerialnumber.size() && i < vIp.size() && i < vTanggal.size() && i < vKeterangan.size()) {
-                                String hostname = originalData.get(i);
-                                String merk = vMerk.get(i);
+                                String hostname     = originalData.get(i);
+                                String merk         = vMerk.get(i);
                                 String serialNumber = vSerialnumber.get(i);
-                                String ip = vIp.get(i);
-                                String tanggal = vTanggal.get(i);
-                                String keterangan = vKeterangan.get(i);
+                                String ip           = vIp.get(i);
+                                String tanggal      = vTanggal.get(i);
+                                String keterangan   = vKeterangan.get(i);
 
                                 if (hostname != null && merk != null && serialNumber != null && ip != null && tanggal != null && keterangan != null) {
                                     if (hostname.toLowerCase().contains(constraint.toString().toLowerCase()) ||
@@ -199,7 +165,6 @@ public class CLV_wireless extends ArrayAdapter<String>  {
                                 }
                             }
                         }
-
 
                         results.count = filteredListHostname.size();
                         results.values = new FilterResultModel(
@@ -239,7 +204,6 @@ public class CLV_wireless extends ArrayAdapter<String>  {
                     vKeterangan.clear();
                     vKeterangan.addAll(filterResultModel.getFilteredKeterangan());
 
-                    // Update originalData
                     originalData = new ArrayList<>(vHostname);
 
                     notifyDataSetChanged();
@@ -248,7 +212,6 @@ public class CLV_wireless extends ArrayAdapter<String>  {
                 e.printStackTrace();
             }
         }
-
     }
 
     private static class FilterResultModel {
@@ -271,25 +234,20 @@ public class CLV_wireless extends ArrayAdapter<String>  {
         public List<String> getFilteredHostname() {
             return filteredHostname;
         }
-
         public List<String> getFilteredMerk() {
             return filteredMerk;
         }
-
         public List<String> getFilteredSerialNumber() {
             return filteredSerialNumber;
         }
         public List<String> getFilteredIp() {
             return filteredIp;
         }
-
         public List<String> getFilteredTanggal() {
             return filteredTanggal;
         }
-
         public List<String> getFilteredKeterangan() {
             return filteredKeterangan;
         }
     }
-
 }

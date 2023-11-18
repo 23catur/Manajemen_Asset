@@ -12,49 +12,32 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-//import com.example.inventarisapp.DataBase.DBHelper;
-//import com.example.inventarisapp.DataBase.DataModel;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.example.asset2.DataInput.FMS.Dashboard_fms;
-import com.example.asset2.Halaman_utama;
 import com.example.asset2.NavigasiActivity;
 import com.example.asset2.R;
 import com.example.asset2.VerticalCaptureActivity;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
-import com.journeyapps.barcodescanner.CaptureActivity;
-
-import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Objects;
 
 
 public class Wireless_input extends AppCompatActivity {
@@ -67,7 +50,7 @@ public class Wireless_input extends AppCompatActivity {
     public String photoFileName = "photo.jpg";
     File photoFile;
     ProgressDialog progressDialog;
-    String hostname, merk, serialnumber, ip, tanggal, keterangan, foto;
+    String hostname, merk, serialnumber, ip, tanggal, keterangan;
     Bitmap decoded;
     static final int REQUEST_TAKE_PHOTO = 1;
     int bitmap_size = 60; // range 1 - 100
@@ -78,7 +61,6 @@ public class Wireless_input extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.input_wireless);
 
-        //memberikan nilai/object ke variabel
         btnDaftar = findViewById(R.id.btnSelesai);
         Hostname = findViewById(R.id.txtHostname);
         Merk = findViewById(R.id.txtType);
@@ -104,8 +86,6 @@ public class Wireless_input extends AppCompatActivity {
                     alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface arg0, int arg1) {
-                            //Toast.makeText(context,"You clicked yes button",Toast.LENGTH_LONG).show();
-                            //call fuction of TakePhoto
                             TakePhoto();
                         }
                     });
@@ -174,43 +154,15 @@ public class Wireless_input extends AppCompatActivity {
         }
     }
 
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
-//            Uri filePath = data.getData();
-//            try {
-//                //mengambil fambar dari Gallery
-//                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-//                // 512 adalah resolusi tertinggi setelah image di resize, bisa di ganti.
-//                setToImageView(getResizedBitmap(bitmap, 512));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        switch (requestCode) {
-//            case(CAMERA_REQUEST_CODE) :
-//                if(resultCode == Wireless_input.RESULT_OK)
-//                {
-//                    // result code sama, save gambar ke bitmap
-//                    Bitmap bitmap;
-//                    bitmap = (Bitmap) data.getExtras().get("data");
-//                    //imageView.setImageBitmap(bitmap);
-//                    setToImageView(getResizedBitmap(bitmap, 512));
-//                }
-//                break;
-//        }
-//    }
-
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
         if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            // Handle perubahan orientasi ke landscape jika diperlukan
-        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-            // Layar tetap vertikal, tidak perlu tindakan tambahan
+
+        }
+        else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+
         }
     }
 
@@ -226,6 +178,7 @@ public class Wireless_input extends AppCompatActivity {
             startActivityForResult(intent, REQUEST_TAKE_PHOTO);
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -240,52 +193,21 @@ public class Wireless_input extends AppCompatActivity {
         }
 
         switch (requestCode) {
-//            case 1:
-//                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-//                    Uri filePath = data.getData();
-//                    try {
-//                        // Mengambil gambar dari Galeri
-//                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-//                        setToImageView(getResizedBitmap(bitmap, 512));
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                break;
-//
-//            case CAMERA_REQUEST_CODE:
-//                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-//                    // Memastikan hasil dari kamera tidak null
-//                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-//                    if (photo != null) {
-//                        setToImageView(getResizedBitmap(photo, 512));
-//                    } else {
-//                        // Handle jika gambar dari kamera null
-//                        Toast.makeText(this, "Gambar dari kamera null", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//                break;
             case IntentIntegrator.REQUEST_CODE:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                // Handle hasil scan dari library IntentIntegrator
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
                 if (result != null) {
                     if (result.getContents() != null) {
-                        // Set hasil scan ke elemen formulir yang sesuai
                         Hostname.setText(result.getContents());
-                        // Set nilai hasil scan ke elemen formulir Merk
                         Merk.setText(result.getContents());
                         Serialnumber.setText(result.getContents());
                         Ip.setText(result.getContents());
                         Tanggal.setText(result.getContents());
                         Keterangan.setText(result.getContents());
-                        // Anda dapat menambahkan pernyataan serupa untuk elemen formulir lainnya seperti Ip, Tanggal, dan Keterangan
                     } else {
-                        // Jika hasil scan kosong atau batal
                         Toast.makeText(this, "Scan dibatalkan atau hasil scan tidak valid", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    // Jika hasil scan null
                     Toast.makeText(this, "Gagal mengambil hasil scan", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -293,14 +215,9 @@ public class Wireless_input extends AppCompatActivity {
     }
 
     public File getPhotoFileUri(String fileName)  {
-        // Only continue if the SD Card is mounted
         if (isExternalStorageAvailable()) {
-            // Get safe storage directory for photos
-            // Use getExternalFilesDir on Context to access package-specific directories.
-            // This way, we don't need to request external read/write runtime permissions.
             File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
 
-            // Create the storage directory if it does not exist
             if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
                 Log.d(APP_TAG, "failed to create directory");
             }
@@ -312,14 +229,12 @@ public class Wireless_input extends AppCompatActivity {
         return null;
     }
 
-    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) { // BEST QUALITY MATCH
+    public static Bitmap decodeSampledBitmapFromFile(String path, int reqWidth, int reqHeight) {
 
-        //First decode with inJustDecodeBounds=true to check dimensions
         final BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(path, options);
 
-        // Calculate inSampleSize, Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
         options.inPreferredConfig = Bitmap.Config.RGB_565;
@@ -331,25 +246,20 @@ public class Wireless_input extends AppCompatActivity {
         int expectedWidth = width / inSampleSize;
 
         if (expectedWidth > reqWidth) {
-            //if(Math.round((float)width / (float)reqWidth) > inSampleSize) // If bigger SampSize..
             inSampleSize = Math.round((float) width / (float) reqWidth);
         }
 
         options.inSampleSize = inSampleSize;
-
-        // Decode bitmap with inSampleSize set
         options.inJustDecodeBounds = false;
 
         return BitmapFactory.decodeFile(path, options);
     }
 
-    // Returns true if external storage for photos is available
     private boolean isExternalStorageAvailable() {
         String state = Environment.getExternalStorageState();
         return state.equals(Environment.MEDIA_MOUNTED);
     }
 
-    // get encode image to minimize image
     public String getStringImage(Bitmap bmp){
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -376,15 +286,13 @@ public class Wireless_input extends AppCompatActivity {
 
     private void setToImageView(Bitmap bmp) {
         if (bmp != null) {
-            // Kompresi gambar
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.PNG, bitmap_size, bytes);
             decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(bytes.toByteArray()));
 
-            // Menampilkan gambar yang dipilih dari kamera/galeri ke ImageView
             imageView.setImageBitmap(decoded);
+
         } else {
-            // Handle error atau tindakan yang sesuai jika bitmap null
             Log.e("Error", "Bitmap is null");
         }
     }
@@ -401,7 +309,6 @@ public class Wireless_input extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        // Tindakan yang akan diambil saat tanggal dipilih
                         String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                         Tanggal.setText(selectedDate);
                     }
@@ -422,10 +329,8 @@ public class Wireless_input extends AppCompatActivity {
         integrator.addExtra("SCAN_WIDTH", 768);
         integrator.addExtra("SCAN_HEIGHT", 1024);
 
-        // Atur orientasi kamera di sini
-        integrator.setOrientationLocked(false); // Jangan kunci orientasi
-        integrator.setCaptureActivity(VerticalCaptureActivity.class); // Gantilah VerticalCaptureActivity dengan nama kelas yang sesuai
-
+        integrator.setOrientationLocked(false);
+        integrator.setCaptureActivity(VerticalCaptureActivity.class);
         integrator.setCameraId(0);
         integrator.setBeepEnabled(true);
         integrator.setBarcodeImageEnabled(true);
@@ -487,8 +392,6 @@ public class Wireless_input extends AppCompatActivity {
                         }catch (Exception e){
                             e.printStackTrace();
                         }
-
-
                     }
 
                     @Override
@@ -496,9 +399,6 @@ public class Wireless_input extends AppCompatActivity {
                         Log.d("ErrorTambahData",""+anError.getErrorBody());
                     }
                 });
-
     }
-
-
 }
 

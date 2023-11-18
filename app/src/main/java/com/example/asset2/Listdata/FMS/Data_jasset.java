@@ -31,12 +31,11 @@ import java.util.ArrayList;
 
 public class Data_jasset extends AppCompatActivity {
 
-    ArrayList<String> array_serialnumber, array_status, array_keterangan;
+    ArrayList<String> array_serialnumber, array_status, array_keterangan,array_foto;
     SwipeRefreshLayout srl_main;
     ProgressDialog progressDialog;
     SearchView searchView;
     CLV_jasset adapter;
-//    EditText inputsearch;
     ListView listData;
 
     @Override
@@ -47,8 +46,6 @@ public class Data_jasset extends AppCompatActivity {
         listData = findViewById(R.id.LV_jasset);
         srl_main = findViewById(R.id.swipe_container);
         progressDialog = new ProgressDialog(this);
-//        searchView = findViewById(R.id.searchView);
-//        inputsearch = findViewById(R.id.searchView);
         searchView = findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -58,7 +55,6 @@ public class Data_jasset extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Update adapter with the filtered data
                 if (adapter != null) {
                     adapter.getFilter().filter(newText);
                 }
@@ -83,51 +79,33 @@ public class Data_jasset extends AppCompatActivity {
         );
 
         initializeArray();
-        adapter = new CLV_jasset(Data_jasset.this, array_serialnumber, array_status, array_keterangan);
+        adapter = new CLV_jasset(Data_jasset.this, array_serialnumber, array_status, array_keterangan,array_foto);
         listData.setAdapter(adapter);
 
-//        setupSearchView();
 
         scrollRefresh();
 
     }
-
-//    private void setupSearchView() {
-//        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                // Update adapter with the filtered data
-//                if (adapter != null) {
-//                    adapter.getFilter().filter(newText);
-//                }
-//                return true;
-//            }
-//        });
-//    }
 
     public  void  scrollRefresh(){
         getData();
     }
 
     void initializeArray(){
-        array_serialnumber = new ArrayList<String>();
-        array_status = new ArrayList<String>();
-        array_keterangan = new ArrayList<String>();
+        array_serialnumber  = new ArrayList<String>();
+        array_status        = new ArrayList<String>();
+        array_keterangan    = new ArrayList<String>();
+        array_foto          = new ArrayList<String>();
 
-        //clear
         array_serialnumber.clear();
         array_status.clear();
         array_keterangan.clear();
+        array_foto.clear();
+
     }
 
     public void getData(){
         initializeArray();
-        //URL
         AndroidNetworking.post("https://jdksmurf.com/BUMA/getdata_jasset.php")
                 .setTag("Get Data")
                 .setPriority(Priority.MEDIUM)
@@ -147,16 +125,15 @@ public class Data_jasset extends AppCompatActivity {
                                     array_serialnumber.add(jo.getString("serialnumber"));
                                     array_status.add(jo.getString("status"));
                                     array_keterangan.add(jo.getString("keterangan"));
+                                    array_foto.add(jo.getString("foto"));
+
                                 }
 
-                                // Jika adapter belum ada, inisialisasi
                                 if (adapter == null) {
-                                    adapter = new CLV_jasset(Data_jasset.this, array_serialnumber, array_status, array_keterangan);
+                                    adapter = new CLV_jasset(Data_jasset.this, array_serialnumber, array_status, array_keterangan, array_foto);
                                     listData.setAdapter(adapter);
                                 } else {
-                                    // Jika adapter sudah ada, update datanya
-                                    adapter.updateData(array_serialnumber, array_status, array_keterangan);
-                                    // Memberi tahu adapter bahwa dataset telah berubah
+                                    adapter.updateData(array_serialnumber, array_status, array_keterangan,array_foto);
                                     adapter.notifyDataSetChanged();
                                 }
 
@@ -171,7 +148,6 @@ public class Data_jasset extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // Handle error, for example:
                         if (anError.getErrorCode() != 0) {
                             Log.e("Error", "onError: " + anError.getErrorDetail());
                             Toast.makeText(Data_jasset.this, "Error: " + anError.getErrorDetail(), Toast.LENGTH_SHORT).show();

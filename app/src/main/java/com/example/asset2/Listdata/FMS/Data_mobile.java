@@ -1,34 +1,25 @@
 package com.example.asset2.Listdata.FMS;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.asset2.R;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class Data_mobile extends AppCompatActivity {
 
-    ArrayList<String>  array_bumaasset, array_serialnumber, array_status, array_keterangan;
+    ArrayList<String>  array_bumaasset, array_serialnumber, array_status, array_keterangan,array_foto;
     SwipeRefreshLayout srl_main;
     ProgressDialog progressDialog;
     SearchView searchView;
@@ -68,7 +59,6 @@ public class Data_mobile extends AppCompatActivity {
                 srl_main.setRefreshing(false);
             }
         });
-        // Scheme colors for animation
         srl_main.setColorSchemeColors(
                 getResources().getColor(android.R.color.holo_blue_bright),
                 getResources().getColor(android.R.color.holo_green_light),
@@ -78,36 +68,33 @@ public class Data_mobile extends AppCompatActivity {
         );
 
         initializeArray();
-        adapter = new CLV_mobile(Data_mobile.this, array_bumaasset, array_serialnumber, array_status, array_keterangan);
+        adapter = new CLV_mobile(Data_mobile.this, array_bumaasset, array_serialnumber, array_status, array_keterangan,array_foto);
         listData.setAdapter(adapter);
 
         scrollRefresh();
     }
 
     public  void  scrollRefresh(){
-//        progressDialog.setMessage("Mengambil Data ...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-
         getData();
     }
 
     void initializeArray(){
-        array_bumaasset = new ArrayList<String>();
-        array_serialnumber = new ArrayList<String>();
-        array_status = new ArrayList<String>();
-        array_keterangan = new ArrayList<String>();
+        array_bumaasset     = new ArrayList<String>();
+        array_serialnumber  = new ArrayList<String>();
+        array_status        = new ArrayList<String>();
+        array_keterangan    = new ArrayList<String>();
+        array_foto          = new ArrayList<String>();
 
-        //clear
         array_bumaasset.clear();
         array_serialnumber.clear();
         array_status.clear();
         array_keterangan.clear();
+        array_foto.clear();
+
     }
 
     public void getData(){
         initializeArray();
-        //URL
         AndroidNetworking.post("https://jdksmurf.com/BUMA/getdata_mobile.php")
                 .setTag("Get Data")
                 .setPriority(Priority.MEDIUM)
@@ -128,16 +115,15 @@ public class Data_mobile extends AppCompatActivity {
                                     array_serialnumber.add(jo.getString("serialnumber"));
                                     array_status.add(jo.getString("status"));
                                     array_keterangan.add(jo.getString("keterangan"));
+                                    array_foto.add(jo.getString("foto"));
+
                                 }
 
-                                // Jika adapter belum ada, inisialisasi
                                 if (adapter == null) {
-                                    adapter = new CLV_mobile(Data_mobile.this, array_bumaasset, array_serialnumber, array_status, array_keterangan);
+                                    adapter = new CLV_mobile(Data_mobile.this, array_bumaasset, array_serialnumber, array_status, array_keterangan,array_foto);
                                     listData.setAdapter(adapter);
                                 } else {
-                                    // Jika adapter sudah ada, update datanya
-                                    adapter.updateData(array_bumaasset, array_serialnumber, array_status, array_keterangan);
-                                    // Memberi tahu adapter bahwa dataset telah berubah
+                                    adapter.updateData(array_bumaasset, array_serialnumber, array_status, array_keterangan,array_foto);
                                     adapter.notifyDataSetChanged();
                                 }
 
@@ -153,7 +139,6 @@ public class Data_mobile extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // Handle error, for example:
                         if (anError.getErrorCode() != 0) {
                             Log.e("Error", "onError: " + anError.getErrorDetail());
                             Toast.makeText(Data_mobile.this, "Error: " + anError.getErrorDetail(), Toast.LENGTH_SHORT).show();

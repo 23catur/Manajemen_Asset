@@ -7,18 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.cardview.widget.CardView;
-
 import com.example.asset2.R;
 import com.example.asset2.Updatedata.Network.Update_switch;
-import com.example.asset2.Updatedata.Network.Update_wireless;
-
+import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CLV_switch extends ArrayAdapter<String> {
+public class CLV_switch extends ArrayAdapter<String>  {
 
     final Activity context;
     private ArrayList<String> vHostname;
@@ -31,8 +29,9 @@ public class CLV_switch extends ArrayAdapter<String> {
     private ValueFilter valueFilter;
     private ArrayList<String> originalData;
 
-    public CLV_switch(Activity context, ArrayList<String> Hostname, ArrayList<String> Merk, ArrayList<String> Serialnumber, ArrayList<String> Ip, ArrayList<String> Tanggal, ArrayList<String> Keterangan) {
+    public CLV_switch(Activity context, ArrayList<String> Hostname, ArrayList<String> Merk, ArrayList<String> Serialnumber, ArrayList<String> Ip, ArrayList<String> Tanggal, ArrayList<String> Keterangan, ArrayList<String> Foto) {
         super(context, R.layout.clv_switch, Hostname);
+
         this.context        = context;
         this.vHostname      = Hostname;
         this.vMerk          = Merk;
@@ -40,52 +39,46 @@ public class CLV_switch extends ArrayAdapter<String> {
         this.vIp            = Ip;
         this.vTanggal       = Tanggal;
         this.vKeterangan    = Keterangan;
-//        this.vFoto          = Foto;
+        this.vFoto          = Foto;
     }
 
-    public void updateData(ArrayList<String> Hostname, ArrayList<String> Merk, ArrayList<String> Serialnumber, ArrayList<String> Ip, ArrayList<String> Tanggal, ArrayList<String> Keterangan) {
-        // Clear existing data
+    public void updateData(ArrayList<String> Hostname, ArrayList<String> Merk, ArrayList<String> Serialnumber, ArrayList<String> Ip, ArrayList<String> Tanggal, ArrayList<String> Keterangan, ArrayList<String> Foto) {
         vHostname.clear();
         vMerk.clear();
         vSerialnumber.clear();
         vIp.clear();
         vTanggal.clear();
         vKeterangan.clear();
+        vFoto.clear();
 
-        // Add new data
         vHostname.addAll(Hostname);
         vMerk.addAll(Merk);
         vSerialnumber.addAll(Serialnumber);
         vIp.addAll(Ip);
         vTanggal.addAll(Tanggal);
         vKeterangan.addAll(Keterangan);
+        vFoto.addAll(Foto);
 
-        // Update originalData
         originalData = new ArrayList<>(vHostname);
     }
 
-    @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        //Load Custom Layout untuk list
         View rowView= inflater.inflate(R.layout.clv_switch, null, true);
 
         CardView update = rowView.findViewById(R.id.cvSwitch);
 
-        //Declarasi komponen
         TextView hostname           = rowView.findViewById(R.id.tvHostname);
         TextView merk               = rowView.findViewById(R.id.tvType);
         TextView serialnumber       = rowView.findViewById(R.id.tvSerial);
         TextView ip                 = rowView.findViewById(R.id.tvIP);
         TextView tanggal            = rowView.findViewById(R.id.tvTanggal);
         TextView keterangan         = rowView.findViewById(R.id.tvKeterangan);
-//        ImageView foto               = rowView.findViewById(R.id.fotoLaporan);
+        ImageView foto              = rowView.findViewById(R.id.fotoAsset);
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle CardView click event
-                // Pindah ke halaman update dengan mengirim data yang diperlukan
                 Intent intent = new Intent(context, Update_switch.class);
                 intent.putExtra("hostname", vHostname.get(position));
                 intent.putExtra("merk", vMerk.get(position));
@@ -93,14 +86,12 @@ public class CLV_switch extends ArrayAdapter<String> {
                 intent.putExtra("ip", vIp.get(position));
                 intent.putExtra("tanggal", vTanggal.get(position));
                 intent.putExtra("keterangan", vKeterangan.get(position));
+                intent.putExtra("foto", vFoto.get(position));
 
                 context.startActivity(intent);
             }
         });
 
-
-        //Set Parameter Value sesuai widget textview
-//        jenis_asset.setText(vJenisAsset.get(position));
         hostname.setText(vHostname.get(position));
         merk.setText(vMerk.get(position));
         serialnumber.setText(vSerialnumber.get(position));
@@ -109,15 +100,14 @@ public class CLV_switch extends ArrayAdapter<String> {
         keterangan.setText(vKeterangan.get(position));
 
 
-//        if (vFoto.get(position).equals(""))
-//        {
-//            Picasso.get().load("https://tekajeapunya.com/kelompok_9/image_laporpak/profile.png").into(foto);
-//        }
-//        else
-//        {
-//            Picasso.get().load("https://tekajeapunya.com/kelompok_9/image_laporpak/"+vFoto.get(position)).into(foto);
-//        }
-       return rowView;
+        if (!vFoto.get(position).equals("")) {
+
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/"+vFoto.get(position)).into(foto);
+
+        } else {
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/BUMA.png").into(foto);
+        }
+        return rowView;
     }
 
     @Override
@@ -141,21 +131,21 @@ public class CLV_switch extends ArrayAdapter<String> {
             try {
                 if (vHostname != null && vMerk != null && vSerialnumber != null && vIp != null && vTanggal != null && vKeterangan != null) {
                     if (constraint != null && constraint.length() > 0) {
-                        ArrayList<String> filteredListHostname = new ArrayList<>();
-                        ArrayList<String> filteredListMerk = new ArrayList<>();
-                        ArrayList<String> filteredListSerialNumber = new ArrayList<>();
-                        ArrayList<String> filteredListIp = new ArrayList<>();
-                        ArrayList<String> filteredListTanggal = new ArrayList<>();
-                        ArrayList<String> filteredListKeterangan = new ArrayList<>();
+                        ArrayList<String> filteredListHostname      = new ArrayList<>();
+                        ArrayList<String> filteredListMerk          = new ArrayList<>();
+                        ArrayList<String> filteredListSerialNumber  = new ArrayList<>();
+                        ArrayList<String> filteredListIp            = new ArrayList<>();
+                        ArrayList<String> filteredListTanggal       = new ArrayList<>();
+                        ArrayList<String> filteredListKeterangan    = new ArrayList<>();
 
                         for (int i = 0; i < originalData.size(); i++) {
                             if (i < vHostname.size() && i < vMerk.size() && i < vSerialnumber.size() && i < vIp.size() && i < vTanggal.size() && i < vKeterangan.size()) {
-                                String hostname = originalData.get(i);
-                                String merk = vMerk.get(i);
+                                String hostname     = originalData.get(i);
+                                String merk         = vMerk.get(i);
                                 String serialNumber = vSerialnumber.get(i);
-                                String ip = vIp.get(i);
-                                String tanggal = vTanggal.get(i);
-                                String keterangan = vKeterangan.get(i);
+                                String ip           = vIp.get(i);
+                                String tanggal      = vTanggal.get(i);
+                                String keterangan   = vKeterangan.get(i);
 
                                 if (hostname != null && merk != null && serialNumber != null && ip != null && tanggal != null && keterangan != null) {
                                     if (hostname.toLowerCase().contains(constraint.toString().toLowerCase()) ||
@@ -175,7 +165,6 @@ public class CLV_switch extends ArrayAdapter<String> {
                                 }
                             }
                         }
-
 
                         results.count = filteredListHostname.size();
                         results.values = new FilterResultModel(
@@ -215,7 +204,6 @@ public class CLV_switch extends ArrayAdapter<String> {
                     vKeterangan.clear();
                     vKeterangan.addAll(filterResultModel.getFilteredKeterangan());
 
-                    // Update originalData
                     originalData = new ArrayList<>(vHostname);
 
                     notifyDataSetChanged();
@@ -224,7 +212,6 @@ public class CLV_switch extends ArrayAdapter<String> {
                 e.printStackTrace();
             }
         }
-
     }
 
     private static class FilterResultModel {
@@ -247,25 +234,20 @@ public class CLV_switch extends ArrayAdapter<String> {
         public List<String> getFilteredHostname() {
             return filteredHostname;
         }
-
         public List<String> getFilteredMerk() {
             return filteredMerk;
         }
-
         public List<String> getFilteredSerialNumber() {
             return filteredSerialNumber;
         }
         public List<String> getFilteredIp() {
             return filteredIp;
         }
-
         public List<String> getFilteredTanggal() {
             return filteredTanggal;
         }
-
         public List<String> getFilteredKeterangan() {
             return filteredKeterangan;
         }
     }
-
 }

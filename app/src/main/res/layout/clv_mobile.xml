@@ -93,7 +93,7 @@
                     </LinearLayout>
 
                 <ImageView
-                    android:id="@+id/fotoLaporan"
+                    android:id="@+id/fotoAsset"
                     android:layout_width="165dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="15dp" />

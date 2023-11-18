@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
@@ -15,6 +16,7 @@ import androidx.cardview.widget.CardView;
 import com.example.asset2.R;
 import com.example.asset2.Updatedata.FMS.Update_jasset;
 import com.example.asset2.Updatedata.Network.Update_wireless;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,51 +29,43 @@ public class CLV_jasset extends ArrayAdapter<String> implements Filterable {
     private ArrayList<String> vStatus;
     private ArrayList<String> vKeterangan;
     private ArrayList<String> vFoto;
-
     private ValueFilter valueFilter;
     private ArrayList<String> originalData;
 
-    public CLV_jasset(Activity context, ArrayList<String> Serialnumber, ArrayList<String> Status, ArrayList<String> Keterangan) {
+    public CLV_jasset(Activity context, ArrayList<String> Serialnumber, ArrayList<String> Status, ArrayList<String> Keterangan, ArrayList<String> Foto) {
         super(context, R.layout.clv_jasset, Serialnumber);
         this.context = context;
         this.vSerialnumber = Serialnumber;
         this.vStatus = Status;
         this.vKeterangan = Keterangan;
-//        this.vFoto          = Foto;
+        this.vFoto          = Foto;
 
     }
 
-    public void updateData(ArrayList<String> Serialnumber, ArrayList<String> Status, ArrayList<String> Keterangan) {
-        // Clear existing data
+    public void updateData(ArrayList<String> Serialnumber, ArrayList<String> Status, ArrayList<String> Keterangan, ArrayList<String> Foto) {
         vSerialnumber.clear();
         vStatus.clear();
         vKeterangan.clear();
+        vFoto.clear();
 
-        // Add new data
         vSerialnumber.addAll(Serialnumber);
         vStatus.addAll(Status);
         vKeterangan.addAll(Keterangan);
+        vFoto.addAll(Foto);
 
-        // Update originalData
         originalData = new ArrayList<>(vSerialnumber);
     }
-
-
-
 
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        //Load Custom Layout untuk list
         View rowView = inflater.inflate(R.layout.clv_jasset, null, true);
 
-        //Declarasi komponen
-        TextView serialnumber = rowView.findViewById(R.id.tvSerial);
-        TextView status = rowView.findViewById(R.id.tvStatus);
-        TextView keterangan = rowView.findViewById(R.id.tvKeterangan);
-//        ImageView foto               = rowView.findViewById(R.id.fotoLaporan);
+        TextView serialnumber   = rowView.findViewById(R.id.tvSerial);
+        TextView status         = rowView.findViewById(R.id.tvStatus);
+        TextView keterangan     = rowView.findViewById(R.id.tvKeterangan);
+        ImageView foto          = rowView.findViewById(R.id.fotoAsset);
 
-        //Set Parameter Value sesuai widget textview
         serialnumber.setText(vSerialnumber.get(position));
         status.setText(vStatus.get(position));
         keterangan.setText(vKeterangan.get(position));
@@ -80,27 +74,24 @@ public class CLV_jasset extends ArrayAdapter<String> implements Filterable {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle CardView click event
-                // Pindah ke halaman update dengan mengirim data yang diperlukan
+
                 Intent intent = new Intent(context, Update_jasset.class);
                 intent.putExtra("serialnumber", vSerialnumber.get(position));
                 intent.putExtra("status", vStatus.get(position));
                 intent.putExtra("keterangan", vKeterangan.get(position));
+                intent.putExtra("foto", vFoto.get(position));
 
                 context.startActivity(intent);
             }
         });
 
-//        if (vFoto.get(position).equals(""))
-//        {
-//            Picasso.get().load("https://tekajeapunya.com/kelompok_9/image_laporpak/profile.png").into(foto);
-//        }
-//        else
-//        {
-//            Picasso.get().load("https://tekajeapunya.com/kelompok_9/image_laporpak/"+vFoto.get(position)).into(foto);
-//        }
+        if (!vFoto.get(position).equals("")) {
 
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/"+vFoto.get(position)).into(foto);
 
+        } else {
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/BUMA.png").into(foto);
+        }
         return rowView;
     }
 
@@ -147,7 +138,6 @@ public class CLV_jasset extends ArrayAdapter<String> implements Filterable {
                             }
                         }
 
-
                         results.count = filteredListSerialNumber.size();
                         results.values = new FilterResultModel(
                                 filteredListSerialNumber, filteredListStatus, filteredListKeterangan);
@@ -167,7 +157,6 @@ public class CLV_jasset extends ArrayAdapter<String> implements Filterable {
             return results;
         }
 
-
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
             try {
@@ -180,7 +169,6 @@ public class CLV_jasset extends ArrayAdapter<String> implements Filterable {
                     vKeterangan.clear();
                     vKeterangan.addAll(filterResultModel.getFilteredKeterangan());
 
-                    // Update originalData
                     originalData = new ArrayList<>(vSerialnumber);
 
                     notifyDataSetChanged();
@@ -206,11 +194,9 @@ public class CLV_jasset extends ArrayAdapter<String> implements Filterable {
         public List<String> getFilteredSerialNumbers() {
             return filteredSerialNumbers;
         }
-
         public List<String> getFilteredStatus() {
             return filteredStatus;
         }
-
         public List<String> getFilteredKeterangan() {
             return filteredKeterangan;
         }

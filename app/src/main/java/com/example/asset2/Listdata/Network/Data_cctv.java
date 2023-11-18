@@ -1,43 +1,31 @@
 package com.example.asset2.Listdata.Network;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
-import com.example.asset2.Listdata.FMS.CLV_ht;
-import com.example.asset2.Listdata.FMS.CLV_rig;
-import com.example.asset2.Listdata.FMS.Data_ht;
-import com.example.asset2.Listdata.FMS.Data_rig;
 import com.example.asset2.R;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class Data_cctv extends AppCompatActivity {
 
-    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan;
+    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan,array_foto;
     SwipeRefreshLayout srl_main;
     ProgressDialog progressDialog;
     SearchView searchView;
     CLV_cctv adapter;
     ListView listData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +45,6 @@ public class Data_cctv extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Update adapter with the filtered data
                 if (adapter != null) {
                     adapter.getFilter().filter(newText);
                 }
@@ -72,7 +59,6 @@ public class Data_cctv extends AppCompatActivity {
                 srl_main.setRefreshing(false);
             }
         });
-        // Scheme colors for animation
         srl_main.setColorSchemeColors(
                 getResources().getColor(android.R.color.holo_blue_bright),
                 getResources().getColor(android.R.color.holo_green_light),
@@ -82,27 +68,25 @@ public class Data_cctv extends AppCompatActivity {
         );
 
         initializeArray();
-        adapter = new CLV_cctv(Data_cctv.this, array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan);
+        adapter = new CLV_cctv(Data_cctv.this, array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan, array_foto);
         listData.setAdapter(adapter);
 
         scrollRefresh();
     }
 
     public  void  scrollRefresh(){
-//        progressDialog.setMessage("Mengambil Data ...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-
         getData();
     }
 
     void initializeArray(){
-        array_hostname = new ArrayList<String>();
-        array_merk = new ArrayList<String>();
-        array_serialnumber = new ArrayList<String>();
-        array_ip = new ArrayList<String>();
-        array_tanggal = new ArrayList<String>();
-        array_keterangan = new ArrayList<String>();
+        array_hostname      = new ArrayList<String>();
+        array_merk          = new ArrayList<String>();
+        array_serialnumber  = new ArrayList<String>();
+        array_ip            = new ArrayList<String>();
+        array_tanggal       = new ArrayList<String>();
+        array_keterangan    = new ArrayList<String>();
+        array_foto          = new ArrayList<String>();
+
 
         //clear
         array_hostname.clear();
@@ -111,6 +95,8 @@ public class Data_cctv extends AppCompatActivity {
         array_ip.clear();
         array_tanggal.clear();
         array_keterangan.clear();
+        array_foto.clear();
+
     }
 
     public void getData(){
@@ -138,15 +124,15 @@ public class Data_cctv extends AppCompatActivity {
                                     array_ip.add(jo.getString("ip"));
                                     array_tanggal.add(jo.getString("tanggal"));
                                     array_keterangan.add(jo.getString("keterangan"));
+                                    array_foto.add(jo.getString("foto"));
+
                                 }
 
                                 if (adapter == null) {
-                                    adapter = new CLV_cctv(Data_cctv.this,array_hostname,array_merk,array_serialnumber,array_ip,array_tanggal,array_keterangan);
+                                    adapter = new CLV_cctv(Data_cctv.this,array_hostname,array_merk,array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
                                     listData.setAdapter(adapter);
                                 } else {
-                                    // Jika adapter sudah ada, update datanya
-                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_ip,array_tanggal,array_keterangan);
-                                    // Memberi tahu adapter bahwa dataset telah berubah
+                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
                                     adapter.notifyDataSetChanged();
                                 }
 
@@ -162,7 +148,6 @@ public class Data_cctv extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // Handle error, for example:
                         if (anError.getErrorCode() != 0) {
                             Log.e("Error", "onError: " + anError.getErrorDetail());
                             Toast.makeText(Data_cctv.this, "Error: " + anError.getErrorDetail(), Toast.LENGTH_SHORT).show();

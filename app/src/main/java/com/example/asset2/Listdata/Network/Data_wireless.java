@@ -1,31 +1,20 @@
 package com.example.asset2.Listdata.Network;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.asset2.R;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 
 public class Data_wireless extends AppCompatActivity {
@@ -56,7 +45,6 @@ public class Data_wireless extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Update adapter with the filtered data
                 if (adapter != null) {
                     adapter.getFilter().filter(newText);
                 }
@@ -71,7 +59,6 @@ public class Data_wireless extends AppCompatActivity {
                 srl_main.setRefreshing(false);
             }
         });
-        // Scheme colors for animation
         srl_main.setColorSchemeColors(
                 getResources().getColor(android.R.color.holo_blue_bright),
                 getResources().getColor(android.R.color.holo_green_light),
@@ -88,24 +75,18 @@ public class Data_wireless extends AppCompatActivity {
     }
 
     public  void  scrollRefresh(){
-//        progressDialog.setMessage("Mengambil Data ...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-
         getData();
     }
 
     void initializeArray(){
-        array_hostname = new ArrayList<String>();
-        array_merk = new ArrayList<String>();
-        array_serialnumber = new ArrayList<String>();
-        array_ip = new ArrayList<String>();
-        array_tanggal = new ArrayList<String>();
-        array_keterangan = new ArrayList<String>();
-        array_foto            = new ArrayList<String>();
+        array_hostname      = new ArrayList<String>();
+        array_merk          = new ArrayList<String>();
+        array_serialnumber  = new ArrayList<String>();
+        array_ip            = new ArrayList<String>();
+        array_tanggal       = new ArrayList<String>();
+        array_keterangan    = new ArrayList<String>();
+        array_foto          = new ArrayList<String>();
 
-
-        //clear
         array_hostname.clear();
         array_merk.clear();
         array_serialnumber.clear();
@@ -118,7 +99,6 @@ public class Data_wireless extends AppCompatActivity {
 
     public void getData(){
         initializeArray();
-        //URL
         AndroidNetworking.post("https://jdksmurf.com/BUMA/getdata_wireless.php")
                 .setTag("Get Data")
                 .setPriority(Priority.MEDIUM)
@@ -149,12 +129,9 @@ public class Data_wireless extends AppCompatActivity {
                                     adapter = new CLV_wireless(Data_wireless.this,array_hostname,array_merk,array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
                                     listData.setAdapter(adapter);
                                 } else {
-                                    // Jika adapter sudah ada, update datanya
                                     adapter.updateData(array_hostname, array_merk, array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
-                                    // Memberi tahu adapter bahwa dataset telah berubah
                                     adapter.notifyDataSetChanged();
                                 }
-
 
                             }else{
                                 Toast.makeText(Data_wireless.this, "Gagal Mengambil Data", Toast.LENGTH_SHORT).show();
@@ -167,7 +144,6 @@ public class Data_wireless extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        // Handle error, for example:
                         if (anError.getErrorCode() != 0) {
                             Log.e("Error", "onError: " + anError.getErrorDetail());
                             Toast.makeText(Data_wireless.this, "Error: " + anError.getErrorDetail(), Toast.LENGTH_SHORT).show();
