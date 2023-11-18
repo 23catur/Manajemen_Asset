@@ -30,7 +30,7 @@ import java.util.ArrayList;
 
 public class Data_wireless extends AppCompatActivity {
 
-    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan;
+    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan,array_foto;
     SwipeRefreshLayout srl_main;
     ProgressDialog progressDialog;
     SearchView searchView;
@@ -81,7 +81,7 @@ public class Data_wireless extends AppCompatActivity {
         );
 
         initializeArray();
-        adapter = new CLV_wireless(Data_wireless.this, array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan);
+        adapter = new CLV_wireless(Data_wireless.this, array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan, array_foto);
         listData.setAdapter(adapter);
 
         scrollRefresh();
@@ -102,6 +102,8 @@ public class Data_wireless extends AppCompatActivity {
         array_ip = new ArrayList<String>();
         array_tanggal = new ArrayList<String>();
         array_keterangan = new ArrayList<String>();
+        array_foto            = new ArrayList<String>();
+
 
         //clear
         array_hostname.clear();
@@ -110,6 +112,8 @@ public class Data_wireless extends AppCompatActivity {
         array_ip.clear();
         array_tanggal.clear();
         array_keterangan.clear();
+        array_foto.clear();
+
     }
 
     public void getData(){
@@ -137,14 +141,16 @@ public class Data_wireless extends AppCompatActivity {
                                     array_ip.add(jo.getString("ip"));
                                     array_tanggal.add(jo.getString("tanggal"));
                                     array_keterangan.add(jo.getString("keterangan"));
+                                    array_foto.add(jo.getString("foto"));
+
                                 }
 
                                 if (adapter == null) {
-                                    adapter = new CLV_wireless(Data_wireless.this,array_hostname,array_merk,array_serialnumber,array_ip,array_tanggal,array_keterangan);
+                                    adapter = new CLV_wireless(Data_wireless.this,array_hostname,array_merk,array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
                                     listData.setAdapter(adapter);
                                 } else {
                                     // Jika adapter sudah ada, update datanya
-                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_ip,array_tanggal,array_keterangan);
+                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
                                     // Memberi tahu adapter bahwa dataset telah berubah
                                     adapter.notifyDataSetChanged();
                                 }

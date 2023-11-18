@@ -22,6 +22,10 @@
         android:theme="@style/Theme.Asset2"
         tools:targetApi="s">
         <activity
+            android:name=".VerticalCaptureActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".Updatedata.Network.Update_laptop"
             android:exported="false" />
         <activity
@@ -155,7 +159,7 @@
         <activity android:name=".DataInput.FMS.Rig_input" />
         <activity android:name=".DataInput.Network.Print_input" />
         <activity android:name=".DataInput.Network.Komputer_input" />
-        <activity android:name=".DataInput.Network.Wireless_input" />
+        <activity android:name=".DataInput.Network.Wireless_input"/>
         <activity android:name=".DataInput.Network.Switch_input" />
         <activity android:name=".Maintenance.Komputer.Input_maintenance" />
 

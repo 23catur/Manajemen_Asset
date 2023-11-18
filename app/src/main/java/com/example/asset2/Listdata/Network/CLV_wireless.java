@@ -2,17 +2,26 @@ package com.example.asset2.Listdata.Network;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Filter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.asset2.R;
 import com.example.asset2.Updatedata.Network.Update_wireless;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +39,7 @@ public class CLV_wireless extends ArrayAdapter<String>  {
     private ValueFilter valueFilter;
     private ArrayList<String> originalData;
 
-    public CLV_wireless(Activity context, ArrayList<String> Hostname, ArrayList<String> Merk, ArrayList<String> Serialnumber, ArrayList<String> Ip, ArrayList<String> Tanggal, ArrayList<String> Keterangan) {
+    public CLV_wireless(Activity context, ArrayList<String> Hostname, ArrayList<String> Merk, ArrayList<String> Serialnumber, ArrayList<String> Ip, ArrayList<String> Tanggal, ArrayList<String> Keterangan, ArrayList<String> Foto) {
         super(context, R.layout.clv_wireless, Hostname);
 
         this.context        = context;
@@ -40,10 +49,10 @@ public class CLV_wireless extends ArrayAdapter<String>  {
         this.vIp            = Ip;
         this.vTanggal       = Tanggal;
         this.vKeterangan    = Keterangan;
-//        this.vFoto          = Foto;
+        this.vFoto          = Foto;
     }
 
-    public void updateData(ArrayList<String> Hostname, ArrayList<String> Merk, ArrayList<String> Serialnumber, ArrayList<String> Ip, ArrayList<String> Tanggal, ArrayList<String> Keterangan) {
+    public void updateData(ArrayList<String> Hostname, ArrayList<String> Merk, ArrayList<String> Serialnumber, ArrayList<String> Ip, ArrayList<String> Tanggal, ArrayList<String> Keterangan, ArrayList<String> Foto) {
         // Clear existing data
         vHostname.clear();
         vMerk.clear();
@@ -51,6 +60,7 @@ public class CLV_wireless extends ArrayAdapter<String>  {
         vIp.clear();
         vTanggal.clear();
         vKeterangan.clear();
+        vFoto.clear();
 
         // Add new data
         vHostname.addAll(Hostname);
@@ -59,6 +69,7 @@ public class CLV_wireless extends ArrayAdapter<String>  {
         vIp.addAll(Ip);
         vTanggal.addAll(Tanggal);
         vKeterangan.addAll(Keterangan);
+        vFoto.addAll(Foto);
 
         // Update originalData
         originalData = new ArrayList<>(vHostname);
@@ -78,7 +89,7 @@ public class CLV_wireless extends ArrayAdapter<String>  {
         TextView ip                 = rowView.findViewById(R.id.tvIP);
         TextView tanggal            = rowView.findViewById(R.id.tvTanggal);
         TextView keterangan         = rowView.findViewById(R.id.tvKeterangan);
-//        ImageView foto               = rowView.findViewById(R.id.fotoLaporan);
+        ImageView foto               = rowView.findViewById(R.id.fotoAsset);
 
         update.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,6 +103,8 @@ public class CLV_wireless extends ArrayAdapter<String>  {
                 intent.putExtra("ip", vIp.get(position));
                 intent.putExtra("tanggal", vTanggal.get(position));
                 intent.putExtra("keterangan", vKeterangan.get(position));
+                intent.putExtra("foto", vFoto.get(position));
+
 
                 context.startActivity(intent);
             }
@@ -107,16 +120,29 @@ public class CLV_wireless extends ArrayAdapter<String>  {
         keterangan.setText(vKeterangan.get(position));
 
 
-//        if (vFoto.get(position).equals(""))
-//        {
-//            Picasso.get().load("https://tekajeapunya.com/kelompok_9/image_laporpak/profile.png").into(foto);
-//        }
-//        else
-//        {
-//            Picasso.get().load("https://tekajeapunya.com/kelompok_9/image_laporpak/"+vFoto.get(position)).into(foto);
-//        }
+        if (!vFoto.get(position).equals("")) {
+//            Glide.with(context)
+//                    .load("https://jdksmurf.com/BUMA/foto_asset/" + vFoto.get(position))
+//                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.DATA))
+//                    .into(foto);
+//            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/BUMA.png").into(foto);
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/"+vFoto.get(position)).into(foto);
+
+//            Picasso.get()
+//                    .load("https://jdksmurf.com/BUMA/foto_asset/" + vFoto.get(position))
+//                    .placeholder(R.drawable.fms4) // Set your placeholder image resource
+//                    .error(R.drawable.mainte4) // Set your error image resource
+//                    .into(foto);
+        } else {
+            // Gantilah URL default yang sesuai jika vFoto kosong
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/BUMA.png").into(foto);
+//            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/"+vFoto.get(position)).into(foto);
+
+        }
         return rowView;
     }
+
+
 
     @Override
     public Filter getFilter() {
