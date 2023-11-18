@@ -87,8 +87,6 @@ public class Data_cctv extends AppCompatActivity {
         array_keterangan    = new ArrayList<String>();
         array_foto          = new ArrayList<String>();
 
-
-        //clear
         array_hostname.clear();
         array_merk.clear();
         array_serialnumber.clear();
