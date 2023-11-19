@@ -22,9 +22,15 @@
         android:theme="@style/Theme.Asset2"
         tools:targetApi="s">
         <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
+            android:name=".ui.login.LoginActivity"
+            android:exported="false"
+            android:label="@string/title_activity_login" />
+        <activity
             android:name=".VerticalCaptureActivity"
-            android:screenOrientation="portrait"/>
-
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Updatedata.Network.Update_laptop"
             android:exported="false" />
@@ -159,7 +165,7 @@
         <activity android:name=".DataInput.FMS.Rig_input" />
         <activity android:name=".DataInput.Network.Print_input" />
         <activity android:name=".DataInput.Network.Komputer_input" />
-        <activity android:name=".DataInput.Network.Wireless_input"/>
+        <activity android:name=".DataInput.Network.Wireless_input" />
         <activity android:name=".DataInput.Network.Switch_input" />
         <activity android:name=".Maintenance.Komputer.Input_maintenance" />
 

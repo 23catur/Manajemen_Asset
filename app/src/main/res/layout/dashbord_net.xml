@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/btn_komputer"
-        android:layout_width="219dp"
-        android:layout_height="211dp"
+        android:layout_width="187dp"
+        android:layout_height="196dp"
         android:onClick="onButtonClick"
         android:src="@drawable/komputer3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/btn_laptop"
-        android:layout_width="219dp"
-        android:layout_height="211dp"
+        android:layout_width="187dp"
+        android:layout_height="196dp"
         android:onClick="onButtonClick"
         android:src="@drawable/laptop3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,8 +37,8 @@
 
     <ImageView
         android:id="@+id/btn_cctv"
-        android:layout_width="219dp"
-        android:layout_height="211dp"
+        android:layout_width="187dp"
+        android:layout_height="196dp"
         android:onClick="onButtonClick"
         android:src="@drawable/cctv3"
         app:layout_constraintBottom_toTopOf="@+id/btn_print"
@@ -51,8 +51,8 @@
 
     <ImageView
         android:id="@+id/btn_switch"
-        android:layout_width="219dp"
-        android:layout_height="211dp"
+        android:layout_width="187dp"
+        android:layout_height="196dp"
         android:onClick="onButtonClick"
         android:src="@drawable/sw3"
         app:layout_constraintBottom_toTopOf="@+id/btn_wireless"
@@ -65,8 +65,8 @@
 
     <ImageView
         android:id="@+id/btn_wireless"
-        android:layout_width="219dp"
-        android:layout_height="211dp"
+        android:layout_width="187dp"
+        android:layout_height="196dp"
         android:onClick="onButtonClick"
         android:src="@drawable/wireless3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -79,8 +79,8 @@
 
     <ImageView
         android:id="@+id/btn_print"
-        android:layout_width="219dp"
-        android:layout_height="211dp"
+        android:layout_width="187dp"
+        android:layout_height="196dp"
         android:onClick="onButtonClick"
         android:src="@drawable/print3"
         app:layout_constraintBottom_toBottomOf="parent"
