@@ -32,8 +32,6 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        //preferences
-
         ETnik     = findViewById(R.id.ETnik);
         btnlogin = findViewById(R.id.IVlogin);
         progressDialog = new ProgressDialog(this);
@@ -86,7 +84,7 @@ public class Login extends AppCompatActivity {
 
                                 if (status) {
                                     new AlertDialog.Builder(Login.this)
-                                            .setMessage("Selamat Datang di LAPOR-PAK!!")
+                                            .setMessage("Selamat Datang di ASSET IT BINSUA")
                                             .setCancelable(false)
                                             .setPositiveButton("Go", new DialogInterface.OnClickListener() {
                                                 @Override
