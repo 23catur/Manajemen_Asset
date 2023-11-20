@@ -2,14 +2,18 @@ package com.example.asset2.Updatedata.Network;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -23,18 +27,22 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.asset2.R;
+import com.github.chrisbanes.photoview.OnViewTapListener;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
 public class Update_wireless extends AppCompatActivity {
 
     Button btnUpdate, btnDelete;
     TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
-    private ImageView imageView;
-    Bitmap bitMap = null;
-
+    PhotoView photoView;
     ProgressDialog progressDialog;
     String hostname, merk, serialnumber, ip, tanggal, keterangan;
 
@@ -70,6 +78,24 @@ public class Update_wireless extends AppCompatActivity {
         Tanggal.setText(tanggal);
         Keterangan.setText(keterangan);
 
+        photoView = findViewById(R.id.photoView);
+
+        getDataIntent();
+
+        PhotoViewAttacher photoAttacher = new PhotoViewAttacher(photoView);
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (photoAttacher.getScale() > 1.0f) {
+                    // Jika gambar sudah diperbesar, kembalikan ke ukuran normal
+                    photoAttacher.setScale(1.0f, true);
+                } else {
+                    // Jika belum diperbesar, perbesar gambar
+                    photoAttacher.setScale(1.5f, true);
+                }
+            }
+        });
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,12 +119,45 @@ public class Update_wireless extends AppCompatActivity {
             }
         });
 
+        photoAttacher.setOnViewTapListener(new OnViewTapListener() {
+            @Override
+            public void onViewTap(View view, float x, float y) {
+                // Respon ketika gambar diklik
+                showFullScreenImage();
+            }
+        });
+
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 KonfirmasiHapus();
             }
         });
+//        photoAttacher.setOnViewTapListener(new OnViewTapListener() {
+//            @Override
+//            public void onViewTap(View view, float x, float y) {
+//                // Respon ketika gambar diklik
+//                showFullScreenImage(bitMap);
+//            }
+//        });
+    }
+    private void showFullScreenImage() {
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fullscreen_image);
+
+        PhotoView fullscreenPhotoView = dialog.findViewById(R.id.fullscreenPhotoView);
+        // Menggunakan Picasso untuk memuat gambar dari URL
+        Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + getIntent().getStringExtra("foto")).into(fullscreenPhotoView);
+
+        fullscreenPhotoView.setOnViewTapListener(new OnViewTapListener() {
+            @Override
+            public void onViewTap(View view, float x, float y) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void KonfirmasiHapus() {
@@ -176,7 +235,25 @@ public class Update_wireless extends AppCompatActivity {
             updateData();
         }
     }
-
+    void getDataIntent(){
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            Hostname.setText(bundle.getString("hostname"));
+            Merk.setText(bundle.getString("merk"));
+            Serialnumber.setText(bundle.getString("serialnumber"));
+            Ip.setText(bundle.getString("ip"));
+            Tanggal.setText(bundle.getString("tanggal"));
+            Keterangan.setText(bundle.getString("keterangan"));
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + bundle.getString("foto")).into(photoView);
+        }else{
+            Hostname.setText("");
+            Merk.setText("");
+            Serialnumber.setText("");
+            Ip.setText("");
+            Tanggal.setText("");
+            Keterangan.setText("");
+        }
+    }
     void updateData() {
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Update_wireless.php")
                 .addBodyParameter("hostname", "" + hostname)

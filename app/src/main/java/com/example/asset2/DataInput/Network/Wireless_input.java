@@ -181,7 +181,6 @@ public class Wireless_input extends AppCompatActivity {
         fullscreenPhotoView.setOnViewTapListener(new OnViewTapListener() {
             @Override
             public void onViewTap(View view, float x, float y) {
-                // Respon ketika gambar diklik
                 dialog.dismiss();
             }
         });
@@ -225,9 +224,6 @@ public class Wireless_input extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_TAKE_PHOTO);
         }
-
-
-
     }
 
     @Override

@@ -25,15 +25,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
+                android:background="#FF001D"
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tvType"
+                    android:id="@+id/tvHostname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:text="TYPE"
-                    android:textColor="@color/black"
+                    android:text="HOSTNAME"
+                    android:textColor="@color/white"
                     android:textSize="24sp"
                     android:textStyle="bold" />
 
@@ -64,13 +65,13 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/tvHostname"
+                        android:id="@+id/tvType"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="7dp"
                         android:layout_marginEnd="10dp"
-                        android:text="HOSTNAME"
+                        android:text="TYPE"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
