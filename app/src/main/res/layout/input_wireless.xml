@@ -78,7 +78,7 @@
         android:layout_height="99dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:scaleType="centerCrop"
+        android:scaleType="fitCenter"
         app:layout_constraintBottom_toTopOf="@+id/btnPhoto"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.062"

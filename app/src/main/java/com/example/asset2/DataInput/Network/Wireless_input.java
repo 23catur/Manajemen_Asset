@@ -6,7 +6,6 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,9 +17,9 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
@@ -42,6 +41,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
 
@@ -49,7 +49,6 @@ public class Wireless_input extends AppCompatActivity {
 
     Button btnDaftar, btnScan, btnPhoto;
     TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
-//    ImageView imageView;
     PhotoView photoView;
     Bitmap bitMap = null;
     public final String APP_TAG = "MyApp";
@@ -58,7 +57,7 @@ public class Wireless_input extends AppCompatActivity {
     ProgressDialog progressDialog;
     String hostname, merk, serialnumber, ip, tanggal, keterangan;
     Bitmap decoded;
-    static final int REQUEST_TAKE_PHOTO = 1;
+    static final int REQUEST_TAKE_PHOTO = 2;
     int bitmap_size = 60; // range 1 - 100
 
 
@@ -78,10 +77,8 @@ public class Wireless_input extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
 
         btnPhoto = findViewById(R.id.btnPhoto);
-//        imageView = findViewById(R.id.imageView);
         photoView = findViewById(R.id.photoView);
         PhotoViewAttacher photoAttacher = new PhotoViewAttacher(photoView);
-// Atur listener untuk memperbesar gambar ketika diklik
         photoView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,24 +116,22 @@ public class Wireless_input extends AppCompatActivity {
                     });
 
                     AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
                     alertDialog.show();
 
-//                    PhotoViewAttacher photoAttacher = new PhotoViewAttacher(photoView);
-//                    photoAttacher.setScaleType(ImageView.ScaleType.CENTER_CROP); // Sesuaikan dengan kebutuhan Anda
-//                    photoAttacher.update();
-                    // Menambahkan listener untuk mendeteksi ketika gambar diklik
-                    photoAttacher.setOnViewTapListener(new OnViewTapListener() {
-                        @Override
-                        public void onViewTap(View view, float x, float y) {
-                            // Respon ketika gambar diklik
-                            showFullScreenImage(bitMap);
-                        }
-                    });
 
                 } else {
 
                     TakePhoto();
                 }
+
+                photoAttacher.setOnViewTapListener(new OnViewTapListener() {
+                    @Override
+                    public void onViewTap(View view, float x, float y) {
+                        // Respon ketika gambar diklik
+                        showFullScreenImage(bitMap);
+                    }
+                });
             }
         });
 
@@ -160,13 +155,14 @@ public class Wireless_input extends AppCompatActivity {
 
                 if (bitMap == null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Wireless_input.this);
-                    builder.setMessage("Mohon masukkan foto");
+                    Toast.makeText(Wireless_input.this, "Mohon ambil foto terlebih dahulu", Toast.LENGTH_SHORT).show();
                     AlertDialog alert1 = builder.create();
                     alert1.show();
                     progressDialog.dismiss();
                 }
 
                 else {
+
                     validasiData();
 
                 }
@@ -182,7 +178,6 @@ public class Wireless_input extends AppCompatActivity {
         PhotoView fullscreenPhotoView = dialog.findViewById(R.id.fullscreenPhotoView);
         fullscreenPhotoView.setImageBitmap(bitmap);
 
-        // Menambahkan listener untuk mendeteksi ketika gambar diklik
         fullscreenPhotoView.setOnViewTapListener(new OnViewTapListener() {
             @Override
             public void onViewTap(View view, float x, float y) {
@@ -193,6 +188,7 @@ public class Wireless_input extends AppCompatActivity {
 
         dialog.show();
     }
+
 
     void validasiData(){
         if (!hostname.isEmpty() && !merk.isEmpty() && !ip.isEmpty() && !serialnumber.isEmpty() && !tanggal.isEmpty() && !keterangan.isEmpty()){
@@ -229,6 +225,9 @@ public class Wireless_input extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_TAKE_PHOTO);
         }
+
+
+
     }
 
     @Override
@@ -240,7 +239,7 @@ public class Wireless_input extends AppCompatActivity {
                 bitMap = decodeSampledBitmapFromFile(String.valueOf(photoFile), 1000, 700);
                 photoView.setImageBitmap(bitMap);
 
-//                PhotoViewAttacher photoAttacher = new PhotoViewAttacher(photoView);
+//                Log.d("Bitmap Size", "Width: " + bitMap.getWidth() + ", Height: " + bitMap.getHeight());
 
             } else {
                 Toast.makeText(Wireless_input.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
@@ -248,17 +247,55 @@ public class Wireless_input extends AppCompatActivity {
         }
 
         switch (requestCode) {
+            case REQUEST_TAKE_PHOTO:
+                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    Uri filePath = data.getData();
+                    try {
+                        bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                        setToImageView(getResizedBitmap(bitMap, 512));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+
+            case 1:
+                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    if (photo != null) {
+                        setToImageView(getResizedBitmap(photo, 512));
+                    } else {
+                        Toast.makeText(this, "Gambar dari kamera null", Toast.LENGTH_SHORT).show();
+                    }
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Wireless_input.this);
+                    alertDialogBuilder.setMessage("Do yo want to take photo again?");
+
+                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            TakePhoto();
+                        }
+                    });
+
+                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Handle the "No" case
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
+                }
+                break;
+
             case IntentIntegrator.REQUEST_CODE:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
                 if (result != null) {
                     if (result.getContents() != null) {
                         Log.d("QR Code Result", result.getContents());
-
-                        // Selanjutnya, sesuaikan dengan struktur data yang Anda harapkan.
-                        // Misalnya, jika QR code berisi beberapa nilai yang dipisahkan oleh pemisah tertentu,
-                        // Anda dapat menggunakan metode pemisahan seperti split().
-                        String[] qrCodeValues = result.getContents().split(",");
+                            String[] qrCodeValues = result.getContents().split(",");
 
                         if (qrCodeValues.length >= 6) {
                             Hostname.setText(qrCodeValues[0]);
@@ -280,7 +317,18 @@ public class Wireless_input extends AppCompatActivity {
                 break;
         }
     }
+    private void setToImageView(Bitmap bmp) {
+        if (bmp != null) {
+            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+            bmp.compress(Bitmap.CompressFormat.PNG, bitmap_size, bytes);
+            decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(bytes.toByteArray()));
+            photoView.setImageBitmap(decoded);
+            kirimdata();
 
+        } else {
+            Log.e("Error", "Bitmap is null");
+        }
+    }
     public File getPhotoFileUri(String fileName)  {
         if (isExternalStorageAvailable()) {
             File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
@@ -350,20 +398,6 @@ public class Wireless_input extends AppCompatActivity {
         }
         return Bitmap.createScaledBitmap(image, width, height, true);
     }
-
-    private void setToImageView(Bitmap bmp) {
-        if (bmp != null) {
-            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.PNG, bitmap_size, bytes);
-            decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(bytes.toByteArray()));
-
-            photoView.setImageBitmap(decoded);
-
-        } else {
-            Log.e("Error", "Bitmap is null");
-        }
-    }
-
 
     public void showDatePickerDialog(View v) {
         final Calendar calendar = Calendar.getInstance();
