@@ -2,6 +2,7 @@ package com.example.asset2.Updatedata.FMS;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -24,6 +26,10 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.asset2.R;
 import com.example.asset2.Updatedata.Network.Update_wireless;
+import com.github.chrisbanes.photoview.OnViewTapListener;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -33,9 +39,7 @@ public class Update_rig extends AppCompatActivity {
 
     Button btnUpdate, btnDelete;
     TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
-    private ImageView imageView;
-    Bitmap bitMap = null;
-
+    PhotoView photoView;
     ProgressDialog progressDialog;
     String hostname, merk, serialnumber, ip, tanggal, keterangan;
 
@@ -71,6 +75,22 @@ public class Update_rig extends AppCompatActivity {
         Tanggal.setText(tanggal);
         Keterangan.setText(keterangan);
 
+        photoView = findViewById(R.id.photoView);
+
+        getDataIntent();
+
+        PhotoViewAttacher photoAttacher = new PhotoViewAttacher(photoView);
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (photoAttacher.getScale() > 1.0f) {
+                    photoAttacher.setScale(1.0f, true);
+                } else {
+                    photoAttacher.setScale(1.5f, true);
+                }
+            }
+        });
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,12 +113,38 @@ public class Update_rig extends AppCompatActivity {
                 }, 1000);
             }
         });
+
+        photoAttacher.setOnViewTapListener(new OnViewTapListener() {
+            @Override
+            public void onViewTap(View view, float x, float y) {
+                showFullScreenImage();
+            }
+        });
+
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 KonfirmasiHapus();
             }
         });
+    }
+
+    private void showFullScreenImage() {
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fullscreen_image);
+
+        PhotoView fullscreenPhotoView = dialog.findViewById(R.id.fullscreenPhotoView);
+        Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + getIntent().getStringExtra("foto")).into(fullscreenPhotoView);
+
+        fullscreenPhotoView.setOnViewTapListener(new OnViewTapListener() {
+            @Override
+            public void onViewTap(View view, float x, float y) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void KonfirmasiHapus() {
@@ -177,6 +223,26 @@ public class Update_rig extends AppCompatActivity {
         }
     }
 
+    void getDataIntent(){
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            Hostname.setText(bundle.getString("hostname"));
+            Merk.setText(bundle.getString("merk"));
+            Serialnumber.setText(bundle.getString("serialnumber"));
+            Ip.setText(bundle.getString("ip"));
+            Tanggal.setText(bundle.getString("tanggal"));
+            Keterangan.setText(bundle.getString("keterangan"));
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + bundle.getString("foto")).into(photoView);
+        }else{
+            Hostname.setText("");
+            Merk.setText("");
+            Serialnumber.setText("");
+            Ip.setText("");
+            Tanggal.setText("");
+            Keterangan.setText("");
+        }
+    }
+
     void updateData() {
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Update_rig.php")
                 .addBodyParameter("hostname", "" + hostname)
@@ -205,9 +271,9 @@ public class Update_rig extends AppCompatActivity {
                                         .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                //Intent i = getIntent();
-                                                //setResult(RESULT_OK,i);
-                                                //add_mahasiswa.this.finish();
+                                                Intent i = getIntent();
+                                                setResult(RESULT_OK,i);
+                                                Update_rig.this.finish();
                                             }
                                         })
                                         .show();
@@ -217,9 +283,9 @@ public class Update_rig extends AppCompatActivity {
                                         .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                //Intent i = getIntent();
-                                                //setResult(RESULT_CANCELED,i);
-                                                //add_mahasiswa.this.finish();
+                                                Intent i = getIntent();
+                                                setResult(RESULT_CANCELED,i);
+                                                Update_rig.this.finish();
                                             }
                                         })
                                         .setCancelable(false)

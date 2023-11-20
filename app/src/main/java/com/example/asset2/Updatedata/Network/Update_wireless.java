@@ -6,22 +6,16 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -31,11 +25,7 @@ import com.github.chrisbanes.photoview.OnViewTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.squareup.picasso.Picasso;
-
 import org.json.JSONObject;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.Calendar;
 
 public class Update_wireless extends AppCompatActivity {
@@ -46,12 +36,10 @@ public class Update_wireless extends AppCompatActivity {
     ProgressDialog progressDialog;
     String hostname, merk, serialnumber, ip, tanggal, keterangan;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_wireless);
-
 
         btnUpdate = findViewById(R.id.btnUpdate);
         Hostname = findViewById(R.id.txtHostname);
@@ -62,7 +50,6 @@ public class Update_wireless extends AppCompatActivity {
         Keterangan = findViewById(R.id.txtKeterangan1);
         btnDelete = findViewById(R.id.btnDelete);
         progressDialog = new ProgressDialog(this);
-
 
         hostname = getIntent().getStringExtra("hostname");
         merk = getIntent().getStringExtra("merk");
@@ -87,10 +74,8 @@ public class Update_wireless extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (photoAttacher.getScale() > 1.0f) {
-                    // Jika gambar sudah diperbesar, kembalikan ke ukuran normal
                     photoAttacher.setScale(1.0f, true);
                 } else {
-                    // Jika belum diperbesar, perbesar gambar
                     photoAttacher.setScale(1.5f, true);
                 }
             }
@@ -122,7 +107,6 @@ public class Update_wireless extends AppCompatActivity {
         photoAttacher.setOnViewTapListener(new OnViewTapListener() {
             @Override
             public void onViewTap(View view, float x, float y) {
-                // Respon ketika gambar diklik
                 showFullScreenImage();
             }
         });
@@ -133,21 +117,14 @@ public class Update_wireless extends AppCompatActivity {
                 KonfirmasiHapus();
             }
         });
-//        photoAttacher.setOnViewTapListener(new OnViewTapListener() {
-//            @Override
-//            public void onViewTap(View view, float x, float y) {
-//                // Respon ketika gambar diklik
-//                showFullScreenImage(bitMap);
-//            }
-//        });
     }
+
     private void showFullScreenImage() {
         final Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_fullscreen_image);
 
         PhotoView fullscreenPhotoView = dialog.findViewById(R.id.fullscreenPhotoView);
-        // Menggunakan Picasso untuk memuat gambar dari URL
         Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + getIntent().getStringExtra("foto")).into(fullscreenPhotoView);
 
         fullscreenPhotoView.setOnViewTapListener(new OnViewTapListener() {
@@ -254,6 +231,7 @@ public class Update_wireless extends AppCompatActivity {
             Keterangan.setText("");
         }
     }
+
     void updateData() {
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Update_wireless.php")
                 .addBodyParameter("hostname", "" + hostname)
@@ -302,21 +280,19 @@ public class Update_wireless extends AppCompatActivity {
                                         .setCancelable(false)
                                         .show();
                             }
-                        } catch (Exception e) {
+                        }
+                        catch (Exception e) {
                             e.printStackTrace();
                         }
-
-
                     }
 
                     @Override
                     public void onError(ANError anError) {
-                        //  Log.d("Tidak dapat memperbarui data Anda", "" + anError.getErrorBody());
-
                         Log.d("Tidak dapat memperbarui", "" + anError.getErrorBody());
                     }
                 });
     }
+
     public void showDatePickerDialog(View v) {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -328,7 +304,6 @@ public class Update_wireless extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        // Tindakan yang akan diambil saat tanggal dipilih
                         String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                         Tanggal.setText(selectedDate);
                     }

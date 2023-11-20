@@ -2,39 +2,37 @@ package com.example.asset2.Updatedata.Network;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.example.asset2.R;
-
+import com.github.chrisbanes.photoview.OnViewTapListener;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
+import com.squareup.picasso.Picasso;
 import org.json.JSONObject;
-
 import java.util.Calendar;
 
 public class Update_cctv extends AppCompatActivity {
 
     Button btnUpdate, btnDelete;
     TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
-    private ImageView imageView;
-    Bitmap bitMap = null;
-
+    PhotoView photoView;
     ProgressDialog progressDialog;
     String hostname, merk, serialnumber, ip, tanggal, keterangan;
 
@@ -43,7 +41,6 @@ public class Update_cctv extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.update_cctv);
-
 
         btnUpdate = findViewById(R.id.btnUpdate);
         Hostname = findViewById(R.id.txtHostname);
@@ -54,7 +51,6 @@ public class Update_cctv extends AppCompatActivity {
         Keterangan = findViewById(R.id.txtKeterangan1);
         btnDelete = findViewById(R.id.btnDelete);
         progressDialog = new ProgressDialog(this);
-
 
         hostname = getIntent().getStringExtra("hostname");
         merk = getIntent().getStringExtra("merk");
@@ -69,6 +65,22 @@ public class Update_cctv extends AppCompatActivity {
         Ip.setText(ip);
         Tanggal.setText(tanggal);
         Keterangan.setText(keterangan);
+
+        photoView = findViewById(R.id.photoView);
+
+        getDataIntent();
+
+        PhotoViewAttacher photoAttacher = new PhotoViewAttacher(photoView);
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (photoAttacher.getScale() > 1.0f) {
+                    photoAttacher.setScale(1.0f, true);
+                } else {
+                    photoAttacher.setScale(1.5f, true);
+                }
+            }
+        });
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,12 +105,37 @@ public class Update_cctv extends AppCompatActivity {
             }
         });
 
+        photoAttacher.setOnViewTapListener(new OnViewTapListener() {
+            @Override
+            public void onViewTap(View view, float x, float y) {
+                showFullScreenImage();
+            }
+        });
+
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 KonfirmasiHapus();
             }
         });
+    }
+
+    private void showFullScreenImage() {
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fullscreen_image);
+
+        PhotoView fullscreenPhotoView = dialog.findViewById(R.id.fullscreenPhotoView);
+        Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + getIntent().getStringExtra("foto")).into(fullscreenPhotoView);
+
+        fullscreenPhotoView.setOnViewTapListener(new OnViewTapListener() {
+            @Override
+            public void onViewTap(View view, float x, float y) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
     private void KonfirmasiHapus() {
@@ -177,6 +214,26 @@ public class Update_cctv extends AppCompatActivity {
         }
     }
 
+    void getDataIntent(){
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            Hostname.setText(bundle.getString("hostname"));
+            Merk.setText(bundle.getString("merk"));
+            Serialnumber.setText(bundle.getString("serialnumber"));
+            Ip.setText(bundle.getString("ip"));
+            Tanggal.setText(bundle.getString("tanggal"));
+            Keterangan.setText(bundle.getString("keterangan"));
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + bundle.getString("foto")).into(photoView);
+        }else{
+            Hostname.setText("");
+            Merk.setText("");
+            Serialnumber.setText("");
+            Ip.setText("");
+            Tanggal.setText("");
+            Keterangan.setText("");
+        }
+    }
+
     void updateData() {
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Update_cctv.php")
                 .addBodyParameter("hostname", "" + hostname)
@@ -205,9 +262,9 @@ public class Update_cctv extends AppCompatActivity {
                                         .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                //Intent i = getIntent();
-                                                //setResult(RESULT_OK,i);
-                                                //add_mahasiswa.this.finish();
+                                                Intent i = getIntent();
+                                                setResult(RESULT_OK,i);
+                                                Update_cctv.this.finish();
                                             }
                                         })
                                         .show();
@@ -217,9 +274,9 @@ public class Update_cctv extends AppCompatActivity {
                                         .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
-                                                //Intent i = getIntent();
-                                                //setResult(RESULT_CANCELED,i);
-                                                //add_mahasiswa.this.finish();
+                                                Intent i = getIntent();
+                                                setResult(RESULT_CANCELED,i);
+                                                Update_cctv.this.finish();
                                             }
                                         })
                                         .setCancelable(false)
@@ -234,8 +291,6 @@ public class Update_cctv extends AppCompatActivity {
 
                     @Override
                     public void onError(ANError anError) {
-                        //  Log.d("Tidak dapat memperbarui data Anda", "" + anError.getErrorBody());
-
                         Log.d("Tidak dapat memperbarui", "" + anError.getErrorBody());
                     }
                 });
@@ -251,7 +306,6 @@ public class Update_cctv extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        // Tindakan yang akan diambil saat tanggal dipilih
                         String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                         Tanggal.setText(selectedDate);
                     }
