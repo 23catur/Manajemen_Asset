@@ -56,9 +56,69 @@ public class Login extends AppCompatActivity {
         if (!nik.isEmpty() ){
             SignIn();
         }else{
-            ETnik.setError("Masukkan Email Anda!");
+            ETnik.setError("Masukkan NIK Anda!");
         }
     }
+//    void SignIn() {
+//        AndroidNetworking.post("https://jdksmurf.com/BUMA/login.php")
+//                .addBodyParameter("nik", "" + nik)
+//                .setPriority(Priority.MEDIUM)
+//                .setTag("Tambah Data")
+//                .build()
+//                .getAsJSONObject(new JSONObjectRequestListener() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        progressDialog.dismiss();
+//                        Log.d("cekTambah", "" + response);
+//                        try {
+//                            // Periksa apakah kunci "status" ada dalam objek JSON
+//                            if (response.has("status")) {
+//                                // Ambil nilai yang terkait dengan kunci "status"
+//                                Boolean status = response.getBoolean("status");
+//                                String pesan = response.getString("result");
+//                                String nama = response.getString("nama");
+//                                String nik = response.getString("nik");
+//
+//                                Toast.makeText(Login.this, "" + pesan, Toast.LENGTH_SHORT).show();
+//                                Log.d("status", "" + status);
+//
+//                                if (status) {
+//                                    new AlertDialog.Builder(Login.this)
+//                                            .setMessage("Selamat Datang di ASSET IT BINSUA")
+//                                            .setCancelable(false)
+//                                            .setPositiveButton("Go", new DialogInterface.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(DialogInterface dialog, int which) {
+//                                                    Intent intent = new Intent(Login.this, NavigasiActivity.class);
+//                                                    startActivity(intent);
+//                                                }
+//                                            })
+//                                            .show();
+//                                } else {
+//                                    new AlertDialog.Builder(Login.this)
+//                                            .setMessage("Periksa Kembali NIK !")
+//                                            .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
+//                                                @Override
+//                                                public void onClick(DialogInterface dialog, int which) {
+//                                                    dialog.cancel();
+//                                                }
+//                                            })
+//                                            .setCancelable(false)
+//                                            .show();
+//                                }
+//                            }
+//                        } catch (Exception e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onError(com.androidnetworking.error.ANError anError) {
+//                        Log.d("Error Login", "" + anError.getErrorBody());
+//                    }
+//                });
+//    }
+
     void SignIn() {
         AndroidNetworking.post("https://jdksmurf.com/BUMA/login.php")
                 .addBodyParameter("nik", "" + nik)
@@ -83,20 +143,13 @@ public class Login extends AppCompatActivity {
                                 Log.d("status", "" + status);
 
                                 if (status) {
-                                    new AlertDialog.Builder(Login.this)
-                                            .setMessage("Selamat Datang di ASSET IT BINSUA")
-                                            .setCancelable(false)
-                                            .setPositiveButton("Go", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    Intent intent = new Intent(Login.this, NavigasiActivity.class);
-                                                    startActivity(intent);
-                                                }
-                                            })
-                                            .show();
+                                    // Jika login berhasil, langsung pindah ke halaman selanjutnya
+                                    Intent intent = new Intent(Login.this, NavigasiActivity.class);
+                                    startActivity(intent);
+                                    finish(); // Optional: Jika ingin menutup activity login setelah pindah ke halaman selanjutnya
                                 } else {
                                     new AlertDialog.Builder(Login.this)
-                                            .setMessage("Periksa Kembali Email dan Password !")
+                                            .setMessage("Periksa Kembali NIK !")
                                             .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
@@ -106,9 +159,6 @@ public class Login extends AppCompatActivity {
                                             .setCancelable(false)
                                             .show();
                                 }
-                            } else {
-                                // Kode untuk menangani ketika kunci "status" tidak ada dalam objek JSON
-                                Toast.makeText(Login.this, "Respons tidak sesuai format", Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -121,5 +171,6 @@ public class Login extends AppCompatActivity {
                     }
                 });
     }
+
 
 }
