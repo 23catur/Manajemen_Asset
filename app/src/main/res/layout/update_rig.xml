@@ -150,7 +150,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtType" />
 
     <EditText
-        android:id="@+id/txtIP"
+        android:id="@+id/txtUnit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -161,7 +161,7 @@
         android:backgroundTint="@color/abu_abu"
         android:ems="10"
         android:fontFamily="@font/poppins_semibold"
-        android:hint="IP"
+        android:hint="UNIT"
         android:inputType="textPersonName"
         android:textColor="@color/abu_abu"
         android:textColorHint="@color/abu_abu"
@@ -194,7 +194,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtIP" />
+        app:layout_constraintTop_toBottomOf="@+id/txtUnit" />
 
     <EditText
         android:id="@+id/txtKeterangan1"
