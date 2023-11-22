@@ -30,7 +30,7 @@
 
     <Button
         android:id="@+id/btnPhoto"
-        android:layout_width="190dp"
+        android:layout_width="166dp"
         android:layout_height="55dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -51,7 +51,7 @@
 
     <Button
         android:id="@+id/btnScan"
-        android:layout_width="190dp"
+        android:layout_width="166dp"
         android:layout_height="55dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -62,7 +62,6 @@
         android:onClick="ListenerScanQR"
         android:text="Scan barcode"
         android:textColor="@color/white"
-
         android:textSize="17sp"
         app:backgroundTint="@drawable/selected_button2"
         app:layout_constraintBottom_toBottomOf="parent"

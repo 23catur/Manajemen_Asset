@@ -37,6 +37,7 @@ public class NavigasiActivity extends AppCompatActivity {
 
         binding = ActivityNavigasiBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        sessionManager = new SessionManager(this);
 
         btnnet = findViewById(R.id.btn_network);
         btnmainte = findViewById(R.id.btn_maintenance);
@@ -82,16 +83,21 @@ public class NavigasiActivity extends AppCompatActivity {
                 }
                 else if (id == R.id.nav_logout) {
 
-                    Intent NextPage;
-                    NextPage = new Intent(NavigasiActivity.this, Login.class);
-                    startActivity(NextPage);
+                    if (sessionManager != null) {
+                        sessionManager.logout();
+
+                        // Setelah logout, arahkan ke halaman login atau halaman lain yang sesuai
+                        Intent intent = new Intent(NavigasiActivity.this, Login.class);
+                        startActivity(intent);
+                        finish(); // Optional: Jika ingin menutup activity NavigasiActivity setelah logout
+                    }
 
                 }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
-                //return true;
-                return false;
+                return true;
+//                return false;
             }
         });
 

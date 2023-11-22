@@ -39,14 +39,11 @@ public class Login extends AppCompatActivity {
         btnlogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                progressDialog.setMessage("Loading ...");
+                progressDialog.setMessage("Sabarrr ...");
                 progressDialog.setCancelable(false);
                 progressDialog.show( );
 
                 nik = ETnik.getText().toString();
-
 
                 validasiData();
             }

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/button_rectangle"
         android:fontFamily="@font/poppins_semibold"
         android:text="UPDATE"
@@ -29,8 +29,8 @@
 
     <Button
         android:id="@+id/btnDelete"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="167dp"
+        android:layout_height="51dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="40dp"
@@ -48,6 +48,27 @@
         app:layout_constraintTop_toBottomOf="@id/txtKeterangan1"
         app:layout_constraintVertical_bias="0.804" />
 
+
+    <Button
+        android:id="@+id/btnPhoto"
+        android:layout_width="167dp"
+        android:layout_height="51dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="40dp"
+        android:layout_weight="1"
+        android:background="@drawable/button_rectangle"
+        android:fontFamily="@font/poppins_semibold"
+        android:text="PHOTO"
+        android:textColor="@color/white"
+        android:textSize="23sp"
+        app:backgroundTint="@drawable/selected_button2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtKeterangan1"
+        app:layout_constraintVertical_bias="0.811" />
 
     <com.github.chrisbanes.photoview.PhotoView
         android:id="@+id/photoView"

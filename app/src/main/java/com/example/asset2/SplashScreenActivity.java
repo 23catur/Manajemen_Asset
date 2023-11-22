@@ -10,11 +10,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
-    private  static  int SPLASH_TIMER = 3000;
+    private static final int SPLASH_TIMER = 3000;
 
     SessionManager sessionManager;
 
-    SharedPreferences onBoardingScreen;
+    SharedPreferences login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,45 +27,34 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                login = getSharedPreferences("Login", MODE_PRIVATE);
+                boolean isFirstTime = login.getBoolean("firstTime", true);
 
-                onBoardingScreen = getSharedPreferences("onBoardingScreen",MODE_PRIVATE);
-                boolean isFirstTime = onBoardingScreen.getBoolean("firstTime", true);
-
-                if (isFirstTime){
-
-                    SharedPreferences.Editor editor = onBoardingScreen.edit();
+                if (isFirstTime) {
+                    SharedPreferences.Editor editor = login.edit();
                     editor.putBoolean("firstTime", false);
-                    editor.commit();
+                    editor.apply(); // Menggunakan apply() untuk menyimpan perubahan async
 
+                    // Redirect ke halaman NavigasiActivity jika ini bukan kali pertama
                     Intent intent = new Intent(getApplicationContext(), NavigasiActivity.class);
                     startActivity(intent);
                     finish();
-
-                }else {
-
-                    if (sessionManager.getSPSudahLogin()){
-                        startActivity(new Intent(SplashScreenActivity.this, NavigasiActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
+                } else {
+                    // Tambahkan kondisi untuk mengecek apakah sudah login atau belum
+                    if (sessionManager.getSPSudahLogin()) {
+                        // Jika sudah login, redirect ke NavigasiActivity
+                        Intent intent = new Intent(SplashScreenActivity.this, NavigasiActivity.class);
+                        startActivity(intent);
                         finish();
-                    }else {
+                    } else {
+                        // Jika belum login, redirect ke Login
                         Intent pindah = new Intent(SplashScreenActivity.this, Login.class);
                         startActivity(pindah);
                         finish();
                     }
-
-                    //Intent intent = new Intent(getApplicationContext(), Login.class);
-                    //startActivity(intent);
-                    //finish();
                 }
 
-                /**if (sessionManager.getSPSudahLogin()){
-                 startActivity(new Intent(SplashScreen.this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK));
-                 finish();
-                 }else {
-                 Intent intent = new Intent(SplashScreen.this, OnBoarding.class);
-                 startActivity(intent);
-                 finish();
-                 }*/
             }
-        },SPLASH_TIMER);
+        }, SPLASH_TIMER);
     }
 }

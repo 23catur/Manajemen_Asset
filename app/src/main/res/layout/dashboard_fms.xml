@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/btn_jasset"
-        android:layout_width="187dp"
-        android:layout_height="196dp"
+        android:layout_width="173dp"
+        android:layout_height="189dp"
         android:onClick="onButtonClick"
         android:src="@drawable/jasset3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,8 +23,8 @@
 
     <ImageView
         android:id="@+id/btn_mobile"
-        android:layout_width="187dp"
-        android:layout_height="196dp"
+        android:layout_width="173dp"
+        android:layout_height="189dp"
         android:onClick="onButtonClick"
         android:src="@drawable/mobile3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,21 +37,22 @@
 
     <ImageView
         android:id="@+id/btn_network"
-        android:layout_width="187dp"
-        android:layout_height="196dp"
+        android:layout_width="173dp"
+        android:layout_height="189dp"
         android:onClick="onButtonClick"
         android:src="@drawable/network3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.546"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.969"
+        app:layout_constraintVertical_bias="0.918"
         tools:ignore="OnClick" />
 
     <ImageView
         android:id="@+id/btn_ht"
-        android:layout_width="187dp"
-        android:layout_height="196dp"
+        android:layout_width="173dp"
+        android:layout_height="189dp"
         android:onClick="onButtonClick"
         android:src="@drawable/ht3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -64,8 +65,8 @@
 
     <ImageView
         android:id="@+id/btn_rig"
-        android:layout_width="187dp"
-        android:layout_height="196dp"
+        android:layout_width="173dp"
+        android:layout_height="189dp"
         android:onClick="onButtonClick"
         android:src="@drawable/rig3"
         app:layout_constraintBottom_toBottomOf="parent"

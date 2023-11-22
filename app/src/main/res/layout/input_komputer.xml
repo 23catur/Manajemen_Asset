@@ -30,7 +30,7 @@
 
     <Button
         android:id="@+id/btnPhoto"
-        android:layout_width="190dp"
+        android:layout_width="166dp"
         android:layout_height="55dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
@@ -51,7 +51,7 @@
 
     <Button
         android:id="@+id/btnScan"
-        android:layout_width="190dp"
+        android:layout_width="166dp"
         android:layout_height="55dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
