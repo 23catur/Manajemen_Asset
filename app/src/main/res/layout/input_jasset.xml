@@ -93,7 +93,7 @@
         android:layout_marginTop="40dp"
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/poppins_bold"
-        android:text="Input Data Barang"
+        android:text="Input Data Asset"
         android:textColor="@color/black_custom"
         android:textSize="30sp"
         android:textStyle="bold"

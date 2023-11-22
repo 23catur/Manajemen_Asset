@@ -161,7 +161,7 @@
         android:backgroundTint="@color/abu_abu"
         android:ems="10"
         android:fontFamily="@font/poppins_semibold"
-        android:hint="IP"
+        android:hint="SECTION"
         android:inputType="textPersonName"
         android:textColor="@color/abu_abu"
         android:textColorHint="@color/abu_abu"

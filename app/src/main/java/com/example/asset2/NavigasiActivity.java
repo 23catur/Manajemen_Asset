@@ -28,6 +28,7 @@ public class NavigasiActivity extends AppCompatActivity {
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityNavigasiBinding binding;
     ImageView btnnet, btnmainte, btnfms;
+    SessionManager sessionManager;
 
 
     @Override
@@ -42,13 +43,6 @@ public class NavigasiActivity extends AppCompatActivity {
         btnfms = findViewById(R.id.btn_fms);
 
         setSupportActionBar(binding.appBarNavigasi.toolbar);
-//        binding.appBarNavigasi.fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         // Passing each menu ID as a set of Ids because each
@@ -86,11 +80,12 @@ public class NavigasiActivity extends AppCompatActivity {
                     NextPage = new Intent(NavigasiActivity.this, Dashboard_listdata_fms.class);
                     startActivity(NextPage);
                 }
-                else if (id == R.id.nav_slideshow) {
+                else if (id == R.id.nav_logout) {
 
                     Intent NextPage;
-                    NextPage = new Intent(NavigasiActivity.this, NavigasiActivity.class);
+                    NextPage = new Intent(NavigasiActivity.this, Login.class);
                     startActivity(NextPage);
+
                 }
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
