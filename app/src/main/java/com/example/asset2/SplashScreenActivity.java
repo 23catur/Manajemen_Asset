@@ -40,21 +40,13 @@ public class SplashScreenActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    // Tambahkan kondisi untuk mengecek apakah sudah login atau belum
-                    if (sessionManager.getSPSudahLogin()) {
-                        // Jika sudah login, redirect ke NavigasiActivity
-                        Intent intent = new Intent(SplashScreenActivity.this, NavigasiActivity.class);
-                        startActivity(intent);
-                        finish();
-                    } else {
-                        // Jika belum login, redirect ke Login
-                        Intent pindah = new Intent(SplashScreenActivity.this, Login.class);
-                        startActivity(pindah);
-                        finish();
-                    }
+                    // Selalu arahkan pengguna ke halaman login setelah logout
+                    Intent pindah = new Intent(SplashScreenActivity.this, Login.class);
+                    startActivity(pindah);
+                    finish();
                 }
-
             }
         }, SPLASH_TIMER);
+
     }
 }

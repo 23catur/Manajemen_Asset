@@ -53,7 +53,7 @@ public class Login extends AppCompatActivity {
         if (!nik.isEmpty() ){
             SignIn();
         }else{
-            ETnik.setError("Masukkan NIK Anda!");
+            ETnik.setError("");
         }
     }
 

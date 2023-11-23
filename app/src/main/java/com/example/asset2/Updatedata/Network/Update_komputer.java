@@ -7,11 +7,17 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -19,11 +25,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.asset2.DataInput.Network.Komputer_input;
 import com.example.asset2.R;
 import com.github.chrisbanes.photoview.OnViewTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -32,16 +40,23 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Calendar;
 
 public class Update_komputer extends AppCompatActivity {
 
-    Button btnUpdate, btnDelete;
+    Button btnUpdate, btnDelete, btnPhoto;
     TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
     PhotoView photoView;
     ProgressDialog progressDialog;
-    String hostname, merk, serialnumber, ip, tanggal, keterangan;
-
+    String hostname, merk, serialnumber, ip, tanggal, keterangan, foto;
+    Bitmap bitMap = null;
+    File photoFile;
+    Bitmap decoded;
+    public String photoFileName = "photo.jpg";
+    static final int REQUEST_TAKE_PHOTO = 2;
+    public final String APP_TAG = "MyApp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +89,8 @@ public class Update_komputer extends AppCompatActivity {
         Tanggal.setText(tanggal);
         Keterangan.setText(keterangan);
 
+//        btnPhoto = findViewById(R.id.btnPhoto);
+
         photoView = findViewById(R.id.photoView);
 
         getDataIntent();
@@ -90,33 +107,92 @@ public class Update_komputer extends AppCompatActivity {
             }
         });
 
+//        btnPhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                if (bitMap != null) {
+//
+//                    androidx.appcompat.app.AlertDialog.Builder alertDialogBuilder = new androidx.appcompat.app.AlertDialog.Builder(Update_komputer.this);
+//                    alertDialogBuilder.setMessage("Do yo want to take photo again?");
+//
+//                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface arg0, int arg1) {
+//                            TakePhoto();
+//                        }
+//                    });
+//
+//                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//
+//                        }
+//                    });
+//
+//                    androidx.appcompat.app.AlertDialog alertDialog = alertDialogBuilder.create();
+//                    alertDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+//                    alertDialog.show();
+//
+//                } else {
+//
+//                    TakePhoto();
+//                }
+//                photoAttacher.setOnViewTapListener(new OnViewTapListener() {
+//                    @Override
+//                    public void onViewTap(View view, float x, float y) {
+//                        // Respon ketika gambar diklik
+//                        showFullScreenImage(bitMap);
+//                    }
+//                });
+//            }
+//        });
+
+        btnPhoto = findViewById(R.id.btnPhoto);
+        btnPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handlePhotoButtonClick();
+            }
+        });
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.setMessage("Updating Data...");
+                progressDialog.setMessage("Memperbarui Data...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                hostname        = Hostname.getText().toString();
-                merk            = Merk.getText().toString();
-                serialnumber    = Serialnumber.getText().toString();
-                ip              = Ip.getText().toString();
-                tanggal         = Tanggal.getText().toString();
-                keterangan      = Keterangan.getText().toString();
+                hostname = Hostname.getText().toString();
+                merk = Merk.getText().toString();
+                serialnumber = Serialnumber.getText().toString();
+                ip = Ip.getText().toString();
+                tanggal = Tanggal.getText().toString();
+                keterangan = Keterangan.getText().toString();
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        validatingData();
-                    }
-                }, 1000);
+                if (bitMap == null) {
+                    progressDialog.dismiss();
+                    new AlertDialog.Builder(Update_komputer.this)
+                            .setMessage("Mohon masukkan foto")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Anda dapat menambahkan tindakan apa pun yang diperlukan ketika pengguna mengakui pesan.
+                                }
+                            })
+                            .show();
+                } else {
+                    validatingData();
+                }
             }
         });
+
+
 
         photoAttacher.setOnViewTapListener(new OnViewTapListener() {
             @Override
             public void onViewTap(View view, float x, float y) {
-                showFullScreenImage();
+                showFullScreenImage(bitMap);
             }
         });
 
@@ -128,7 +204,106 @@ public class Update_komputer extends AppCompatActivity {
         });
     }
 
-    private void showFullScreenImage() {
+    private void handlePhotoButtonClick() {
+        if (bitMap != null) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Update_komputer.this);
+            alertDialogBuilder.setMessage("Apakah Anda ingin mengambil foto baru?");
+            alertDialogBuilder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    TakePhoto(); // Menggunakan metode TakePhoto() untuk mengambil foto baru
+                }
+            });
+
+            alertDialogBuilder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Tidak melakukan apa-apa atau tambahkan tindakan khusus
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        } else {
+            TakePhoto(); // Menggunakan metode TakePhoto() untuk mengambil foto baru
+        }
+    }
+
+
+
+
+    private void ambilFoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoFile = getPhotoFileUri(photoFileName);
+
+        String authorities = getPackageName() + ".fileprovider";
+        Uri fileProvider = FileProvider.getUriForFile(Update_komputer.this, authorities, photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+        } else {
+            Log.e("Update_komputer", "Tidak ada aplikasi kamera yang tersedia");
+        }
+    }
+
+    private boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        return state.equals(Environment.MEDIA_MOUNTED);
+    }
+
+    public File getPhotoFileUri(String fileName)  {
+        if (isExternalStorageAvailable()) {
+            File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+                Log.d(APP_TAG, "failed to create directory");
+            }
+            File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+
+            return file;
+
+        }
+        return null;
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            // Foto berhasil diambil, perbarui antarmuka pengguna Anda atau lakukan tindakan yang diperlukan
+            // Anda mungkin ingin memuat foto baru ke dalam ImageView, tetapi ini tergantung pada implementasi Anda
+            // Sebagai contoh, Anda dapat menggunakan Picasso atau perpustakaan pemuatan gambar lainnya untuk memuat foto baru.
+            muatGambarKeImageView(photoFile.getPath());
+
+            // Perbarui bitMap dengan gambar yang baru diambil
+            bitMap = BitmapFactory.decodeFile(photoFile.getPath());
+        }
+    }
+
+
+    private void muatGambarKeImageView(String imagePath) {
+        // Memuat gambar ke dalam ImageView menggunakan Picasso atau perpustakaan pemuatan gambar lainnya
+        Picasso.get().load("file://" + imagePath).into(photoView);
+    }
+
+    public  void TakePhoto(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoFile = getPhotoFileUri(photoFileName);
+
+        String authorities = getPackageName() + ".fileprovider";
+        Uri fileProvider = FileProvider.getUriForFile(Update_komputer.this, authorities, photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+        } else {
+            Log.e("Update_komputer", "No camera app available");
+        }
+    }
+
+
+    private void showFullScreenImage(Bitmap bitmap) {
         final Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_fullscreen_image);
@@ -242,7 +417,17 @@ public class Update_komputer extends AppCompatActivity {
                 });
     }
 
+    public String getStringImage(Bitmap bmp){
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        byte[] imageBytes = baos.toByteArray();
+        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return encodedImage;
+    }
+
     void updateData() {
+        String foto = getStringImage(bitMap);
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Update_komputer.php")
                 .addBodyParameter("hostname", "" + hostname)
                 .addBodyParameter("merk", "" + merk)
@@ -250,6 +435,7 @@ public class Update_komputer extends AppCompatActivity {
                 .addBodyParameter("ip", "" + ip)
                 .addBodyParameter("tanggal", "" + tanggal)
                 .addBodyParameter("keterangan", "" + keterangan)
+                .addBodyParameter("foto",""+foto)
                 .setPriority(Priority.MEDIUM)
                 .setTag("Update Data")
                 .build()
@@ -278,7 +464,7 @@ public class Update_komputer extends AppCompatActivity {
                                         .show();
                             } else {
                                 new AlertDialog.Builder(Update_komputer.this)
-                                        .setMessage("Gagal Menambahkan Data !")
+                                        .setMessage("Gagal Mengupdate Data !")
                                         .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {

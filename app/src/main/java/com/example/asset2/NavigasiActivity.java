@@ -82,17 +82,15 @@ public class NavigasiActivity extends AppCompatActivity {
                     startActivity(NextPage);
                 }
                 else if (id == R.id.nav_logout) {
+                    // Clear session dan arahkan ke halaman login
+                    sessionManager.logout();
 
-                    if (sessionManager != null) {
-                        sessionManager.logout();
-
-                        // Setelah logout, arahkan ke halaman login atau halaman lain yang sesuai
-                        Intent intent = new Intent(NavigasiActivity.this, Login.class);
-                        startActivity(intent);
-                        finish(); // Optional: Jika ingin menutup activity NavigasiActivity setelah logout
-                    }
-
+                    // Setelah logout, arahkan ke halaman login atau halaman lain yang sesuai
+                    Intent intent = new Intent(NavigasiActivity.this, Login.class);
+                    startActivity(intent);
+                    finish(); // Optional: Jika ingin menutup activity NavigasiActivity setelah logout
                 }
+
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
