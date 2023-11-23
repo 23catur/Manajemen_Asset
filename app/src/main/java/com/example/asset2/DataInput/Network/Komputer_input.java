@@ -257,17 +257,6 @@ public class Komputer_input extends AppCompatActivity {
         }
 
         switch (requestCode) {
-//            case REQUEST_TAKE_PHOTO:
-//                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-//                    Uri filePath = data.getData();
-//                    try {
-//                        bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-//                        setToImageView(getResizedBitmap(bitMap, 512));
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//                break;
 
             case 1:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
@@ -456,9 +445,7 @@ public class Komputer_input extends AppCompatActivity {
         progressDialog.setMessage("Mengirim Data...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-//        String foto = getStringImage(bitMap);
-        String foto = "";  // Inisialisasi string foto dengan nilai kosong
-        // Periksa apakah bitMap (foto) tidak null, jika tidak null, konversi menjadi string
+        String foto = "";
         if (bitMap != null) {
             foto = getStringImage(bitMap);
         }

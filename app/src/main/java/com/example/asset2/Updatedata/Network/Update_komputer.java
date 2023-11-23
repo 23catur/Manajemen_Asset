@@ -170,7 +170,7 @@ public class Update_komputer extends AppCompatActivity {
                 tanggal = Tanggal.getText().toString();
                 keterangan = Keterangan.getText().toString();
 
-                if (bitMap == null) {
+                if (bitMap != null) {
                     progressDialog.dismiss();
                     new AlertDialog.Builder(Update_komputer.this)
                             .setMessage("Mohon masukkan foto")
@@ -427,7 +427,10 @@ public class Update_komputer extends AppCompatActivity {
     }
 
     void updateData() {
-        String foto = getStringImage(bitMap);
+        String foto = "";
+        if (bitMap != null) {
+            foto = getStringImage(bitMap);
+        }
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Update_komputer.php")
                 .addBodyParameter("hostname", "" + hostname)
                 .addBodyParameter("merk", "" + merk)

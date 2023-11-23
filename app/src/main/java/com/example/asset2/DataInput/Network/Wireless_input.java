@@ -57,7 +57,7 @@ public class Wireless_input extends AppCompatActivity {
     ProgressDialog progressDialog;
     String hostname, merk, serialnumber, ip, tanggal, keterangan;
     Bitmap decoded;
-    static final int REQUEST_TAKE_PHOTO = 2;
+    static final int REQUEST_TAKE_PHOTO = 1;
     int bitmap_size = 60; // range 1 - 100
 
 
@@ -153,7 +153,7 @@ public class Wireless_input extends AppCompatActivity {
                 tanggal         = Tanggal.getText().toString();
                 keterangan      = Keterangan.getText().toString();
 
-                if (bitMap == null) {
+                if (bitMap != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Wireless_input.this);
                     Toast.makeText(Wireless_input.this, "Mohon ambil foto terlebih dahulu", Toast.LENGTH_SHORT).show();
                     AlertDialog alert1 = builder.create();
@@ -189,15 +189,18 @@ public class Wireless_input extends AppCompatActivity {
     }
 
 
-    void validasiData(){
-        if (!hostname.isEmpty() && !merk.isEmpty() && !ip.isEmpty() && !serialnumber.isEmpty() && !tanggal.isEmpty() && !keterangan.isEmpty()){
+    void validasiData() {
+        hostname = Hostname.getText().toString();
+        merk = Merk.getText().toString();
+        serialnumber = Serialnumber.getText().toString();
+        ip = Ip.getText().toString();
+        tanggal = Tanggal.getText().toString();
+        keterangan = Keterangan.getText().toString();
+
+        if (!hostname.isEmpty() || !merk.isEmpty() || !ip.isEmpty() || !serialnumber.isEmpty() || !tanggal.isEmpty() || !keterangan.isEmpty()) {
             kirimdata();
-        }else{
-            Hostname.setError("Masukkan Hostname!");
-            Merk.setError("Masukkan Type / Merk!");
-            Ip.setError("Masukkan IP!");
-            Serialnumber.setError("Masukkan Serial Number!");
-            Tanggal.setError("Masukkan Tanggal!");
+        } else {
+            Toast.makeText(this, "Setidaknya satu field harus diisi", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -243,17 +246,6 @@ public class Wireless_input extends AppCompatActivity {
         }
 
         switch (requestCode) {
-            case REQUEST_TAKE_PHOTO:
-                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-                    Uri filePath = data.getData();
-                    try {
-                        bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                        setToImageView(getResizedBitmap(bitMap, 512));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
 
             case 1:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
@@ -439,7 +431,10 @@ public class Wireless_input extends AppCompatActivity {
         progressDialog.setMessage("Mengirim Data...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        String foto = getStringImage(bitMap);
+        String foto = "";
+        if (bitMap != null) {
+            foto = getStringImage(bitMap);
+        }
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Api_wireless.php")
                 .addBodyParameter("hostname",""+hostname)
                 .addBodyParameter("merk",""+merk)
