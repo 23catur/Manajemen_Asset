@@ -137,22 +137,22 @@
             android:name=".Maintenance.Dashboard_maintenance"
             android:exported="false" />
         <activity
-            android:name=".Maintenance.Komputer.DataKeymou"
+            android:name=".Maintenance.Data_maintenance.DataKeymou"
             android:exported="false" />
         <activity
-            android:name=".Maintenance.Komputer.DataIPPhone"
+            android:name=".Maintenance.Data_maintenance.DataIPPhone"
             android:exported="false" />
         <activity
-            android:name=".Maintenance.Komputer.DataPrinter"
+            android:name=".Maintenance.Data_maintenance.DataPrinter"
             android:exported="false" />
         <activity
-            android:name=".Maintenance.Komputer.DataMonitor"
+            android:name=".Maintenance.Data_maintenance.DataMonitor"
             android:exported="false" />
         <activity
-            android:name=".Maintenance.Komputer.DataUPS"
+            android:name=".Maintenance.Data_maintenance.DataUPS"
             android:exported="false" />
         <activity
-            android:name=".Maintenance.Komputer.DataCPU"
+            android:name=".Maintenance.Data_maintenance.DataCPU"
             android:exported="false" />
         <activity android:name=".Halaman_utama" />
         <activity android:name=".DataInput.Network.Cctv_input" />
@@ -163,7 +163,12 @@
         <activity android:name=".DataInput.Network.Komputer_input" />
         <activity android:name=".DataInput.Network.Wireless_input" />
         <activity android:name=".DataInput.Network.Switch_input" />
-        <activity android:name=".Maintenance.Komputer.Input_maintenance" />
+        <activity android:name=".Maintenance.Maintenance_komputer" />
+        <activity android:name=".Maintenance.Maintenance_cctv" />
+        <activity android:name=".Maintenance.Maintenance_laptop" />
+        <activity android:name=".Maintenance.Maintenance_print" />
+        <activity android:name=".Maintenance.Maintenance_switch" />
+        <activity android:name=".Maintenance.Maintenance_wireless" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -1,22 +1,25 @@
-package com.example.asset2.Maintenance.Komputer;
+package com.example.asset2.Maintenance;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.example.inventarisapp.DataBase.DBHelper;
-//import com.example.inventarisapp.DataBase.DataModel;
+import com.example.asset2.Maintenance.Data_maintenance.DataCPU;
+import com.example.asset2.Maintenance.Data_maintenance.DataIPPhone;
+import com.example.asset2.Maintenance.Data_maintenance.DataKeymou;
+import com.example.asset2.Maintenance.Data_maintenance.DataMonitor;
+import com.example.asset2.Maintenance.Data_maintenance.DataPrinter;
+import com.example.asset2.Maintenance.Data_maintenance.DataUPS;
 import com.example.asset2.R;
 
-public class Input_maintenance extends AppCompatActivity {
+public class Maintenance_wireless extends AppCompatActivity {
 
     //deklarasi variabel
-    Button btnDaftar, btnCPU, btnMONITOR, btnUPS, btnKeyboard,btnPrint, btnPhone;
+    Button btnDaftar, btnCPU, btnMONITOR, btnUPS, btnKeyboard, btnPrint, btnPhone;
     TextView Nama, Jumlah, Satuan, Tanggal, Keterangan;
 //    DBHelper db;
 
@@ -24,7 +27,7 @@ public class Input_maintenance extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.input_maintenance);
+        setContentView(R.layout.input_maintenance_wireless);
 
         //memberikan nilai/object ke variabel
         btnDaftar = findViewById(R.id.btnSelesai);
@@ -69,7 +72,7 @@ public class Input_maintenance extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Tindakan yang akan dijalankan saat Tombol 2 ditekan
-                Intent intent = new Intent(Input_maintenance.this, DataCPU.class);
+                Intent intent = new Intent(Maintenance_wireless.this, DataCPU.class);
                 startActivity(intent);
             }
         });
@@ -78,7 +81,7 @@ public class Input_maintenance extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Tindakan yang akan dijalankan saat Tombol 2 ditekan
-                Intent intent = new Intent(Input_maintenance.this, DataUPS.class);
+                Intent intent = new Intent(Maintenance_wireless.this, DataUPS.class);
                 startActivity(intent);
             }
         });
@@ -87,7 +90,7 @@ public class Input_maintenance extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Tindakan yang akan dijalankan saat Tombol 2 ditekan
-                Intent intent = new Intent(Input_maintenance.this, DataMonitor.class);
+                Intent intent = new Intent(Maintenance_wireless.this, DataMonitor.class);
                 startActivity(intent);
             }
         });
@@ -96,7 +99,7 @@ public class Input_maintenance extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Tindakan yang akan dijalankan saat Tombol 2 ditekan
-                Intent intent = new Intent(Input_maintenance.this, DataPrinter.class);
+                Intent intent = new Intent(Maintenance_wireless.this, DataPrinter.class);
                 startActivity(intent);
             }
         });
@@ -105,7 +108,7 @@ public class Input_maintenance extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Tindakan yang akan dijalankan saat Tombol 2 ditekan
-                Intent intent = new Intent(Input_maintenance.this, DataIPPhone.class);
+                Intent intent = new Intent(Maintenance_wireless.this, DataIPPhone.class);
                 startActivity(intent);
             }
         });
@@ -114,7 +117,7 @@ public class Input_maintenance extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Tindakan yang akan dijalankan saat Tombol 2 ditekan
-                Intent intent = new Intent(Input_maintenance.this, DataKeymou.class);
+                Intent intent = new Intent(Maintenance_wireless.this, DataKeymou.class);
                 startActivity(intent);
             }
         });
@@ -122,15 +125,11 @@ public class Input_maintenance extends AppCompatActivity {
     }
 
 
-
-    void clearText(){
+    void clearText() {
         Nama.setText("");
         Jumlah.setText("");
         Satuan.setText("");
         Tanggal.setText("");
         Keterangan.setText("");
-
     }
-
 }
-

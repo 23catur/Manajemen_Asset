@@ -1,4 +1,4 @@
-package com.example.asset2.Maintenance.Komputer;
+package com.example.asset2.Maintenance.Data_maintenance;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,11 +6,11 @@ import android.os.Bundle;
 
 import com.example.asset2.R;
 
-public class DataCPU extends AppCompatActivity {
+public class DataMonitor extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.data_cpu);
+        setContentView(R.layout.data_monitor);
     }
 }

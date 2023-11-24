@@ -8,77 +8,78 @@
 
     <ImageView
         android:id="@+id/btn_komputer"
-        android:layout_width="140dp"
-        android:layout_height="158dp"
+        android:layout_width="188dp"
+        android:layout_height="198dp"
         android:onClick="onButtonClick"
         android:src="@drawable/komputer3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/btn_laptop"
+        app:layout_constraintHorizontal_bias="0.411"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.052"
+        app:layout_constraintVertical_bias="0.063"
         tools:ignore="OnClick" />
 
     <ImageView
         android:id="@+id/btn_laptop"
-        android:layout_width="145dp"
-        android:layout_height="158dp"
+        android:layout_width="188dp"
+        android:layout_height="198dp"
         android:onClick="onButtonClick"
         android:src="@drawable/laptop3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.052"
-        tools:ignore="OnClick" />
-
-    <ImageView
-        android:id="@+id/btn_cctv"
-        android:layout_width="140dp"
-        android:layout_height="158dp"
-        android:onClick="onButtonClick"
-        android:src="@drawable/cctv3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.052"
+        app:layout_constraintVertical_bias="0.067"
+        tools:ignore="OnClick" />
+
+    <ImageView
+        android:id="@+id/btn_cctv"
+        android:layout_width="188dp"
+        android:layout_height="198dp"
+        android:onClick="onButtonClick"
+        android:src="@drawable/cctv3"
+        app:layout_constraintBottom_toTopOf="@+id/btn_print"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_laptop"
+        app:layout_constraintVertical_bias="0.424"
         tools:ignore="OnClick" />
 
     <ImageView
         android:id="@+id/btn_switch"
-        android:layout_width="140dp"
-        android:layout_height="158dp"
+        android:layout_width="188dp"
+        android:layout_height="198dp"
         android:onClick="onButtonClick"
         android:src="@drawable/sw3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toTopOf="@+id/btn_wireless"
+        app:layout_constraintEnd_toStartOf="@+id/btn_cctv"
+        app:layout_constraintHorizontal_bias="0.296"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.363"
+        app:layout_constraintTop_toBottomOf="@+id/btn_komputer"
+        app:layout_constraintVertical_bias="0.424"
         tools:ignore="OnClick" />
 
     <ImageView
         android:id="@+id/btn_wireless"
-        android:layout_width="140dp"
-        android:layout_height="158dp"
+        android:layout_width="188dp"
+        android:layout_height="198dp"
         android:onClick="onButtonClick"
         android:src="@drawable/wireless3"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintEnd_toStartOf="@+id/btn_print"
+        app:layout_constraintHorizontal_bias="0.425"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.363"
+        app:layout_constraintVertical_bias="0.942"
         tools:ignore="OnClick" />
 
     <ImageView
         android:id="@+id/btn_print"
-        android:layout_width="140dp"
-        android:layout_height="158dp"
+        android:layout_width="188dp"
+        android:layout_height="198dp"
         android:onClick="onButtonClick"
         android:src="@drawable/print3"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -86,7 +87,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.363"
+        app:layout_constraintVertical_bias="0.942"
         tools:ignore="OnClick" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
