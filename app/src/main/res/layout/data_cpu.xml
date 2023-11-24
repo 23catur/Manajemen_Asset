@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,39 +7,28 @@
     android:background="@color/white">
 
 
-    <Button
-        android:id="@+id/btnSelesai"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_rectangle"
-        android:fontFamily="@font/poppins_semibold"
-        android:text="SELESAI"
-        android:textColor="@color/white"
-        android:textSize="23sp"
-        app:backgroundTint="@drawable/selected_button1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent" />
+<!--    <Button-->
+<!--        android:id="@+id/btnSelesai"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        android:layout_marginBottom="16dp"-->
+<!--        android:background="@drawable/button_rectangle"-->
+<!--        android:fontFamily="@font/poppins_semibold"-->
+<!--        android:text="SELESAI"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="23sp"-->
+<!--        app:backgroundTint="@drawable/selected_button1"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.0"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
 
-    <ScrollView
-        android:layout_width="411dp"
-        android:layout_height="650dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+          <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
 
             <TextView
@@ -58,7 +47,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <EditText
+            <TextView
                 android:id="@+id/txtParam1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -68,10 +57,10 @@
                 android:backgroundTint="@color/black"
                 android:ems="10"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Cek Secara Fisik CPU"
                 android:inputType="text"
+                android:text="Cek Secara Fisik CPU"
                 android:textColor="@color/black"
-                android:textColorHint="@color/blue_sec"
+                android:textColorHint="@color/black"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -93,7 +82,7 @@
                 android:hint="Kondisi"
                 android:inputType="text"
                 android:textColor="@color/black"
-                android:textColorHint="@color/blue_sec"
+                android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -115,7 +104,7 @@
                 android:hint="Keterangan"
                 android:inputType="textPersonName"
                 android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -125,20 +114,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtkondisi1" />
 
 
-            <EditText
+            <TextView
                 android:id="@+id/txtParam2"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
-                android:backgroundTint="@color/abu_abu"
+                android:backgroundTint="@color/black"
                 android:ems="10"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Posisi CPU"
                 android:inputType="textPersonName"
-                android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:text="Posisi CPU"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -160,7 +149,7 @@
                 android:hint="Kondisi"
                 android:inputType="text"
                 android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -182,7 +171,7 @@
                 android:hint="Keterangan"
                 android:inputType="textPersonName"
                 android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -192,20 +181,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtkondisi2" />
 
 
-            <EditText
+            <TextView
                 android:id="@+id/txtParam3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
-                android:backgroundTint="@color/abu_abu"
+                android:backgroundTint="@color/black"
                 android:ems="10"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Kondisi CPU"
                 android:inputType="textPersonName"
-                android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:text="Kondisi CPU"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -223,11 +212,11 @@
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/abu_abu"
                 android:ems="10"
-                android:fontFamily="@font/poppins"
+                android:fontFamily="@font/poppins_semibold"
                 android:hint="Kondisi"
                 android:inputType="text"
                 android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -245,11 +234,11 @@
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/abu_abu"
                 android:ems="10"
-                android:fontFamily="@font/poppins"
+                android:fontFamily="@font/poppins_semibold"
                 android:hint="Keterangan"
                 android:inputType="textPersonName"
                 android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -259,20 +248,20 @@
                 app:layout_constraintTop_toBottomOf="@+id/txtkondisi3" />
 
 
-            <EditText
+            <TextView
                 android:id="@+id/txtParam4"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="16dp"
-                android:backgroundTint="@color/abu_abu"
+                android:backgroundTint="@color/black"
                 android:ems="10"
-                android:fontFamily="@font/poppins"
-                android:text="Kabel Yang Masuk Ke CPU"
+                android:fontFamily="@font/poppins_bold"
                 android:inputType="textPersonName"
-                android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:text="Kabel Yang Masuk Ke CPU"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -290,11 +279,11 @@
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/abu_abu"
                 android:ems="10"
-                android:fontFamily="@font/poppins"
+                android:fontFamily="@font/poppins_semibold"
                 android:hint="Kondisi"
                 android:inputType="text"
                 android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -312,11 +301,11 @@
                 android:layout_marginEnd="16dp"
                 android:backgroundTint="@color/abu_abu"
                 android:ems="10"
-                android:fontFamily="@font/poppins"
+                android:fontFamily="@font/poppins_semibold"
                 android:hint="Keterangan"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
                 android:textColor="@color/abu_abu"
-                android:textColorHint="@color/abu_abu"
+                android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -325,7 +314,25 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtkondisi4" />
 
+            <Button
+                android:id="@+id/btnSelesai"
+                android:layout_width="385dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="252dp"
+                android:background="@drawable/button_rectangle"
+                android:fontFamily="@font/poppins_semibold"
+                android:text="SELESAI"
+                android:textColor="@color/white"
+                android:textSize="23sp"
+                app:backgroundTint="@drawable/selected_button1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtKet4"
+                app:layout_constraintVertical_bias="1.0" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
