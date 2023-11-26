@@ -2,6 +2,7 @@ package com.example.asset2.DataInput.FMS;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -16,6 +17,8 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -28,29 +31,34 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.asset2.Listdata.FMS.Data_mobile;
 import com.example.asset2.NavigasiActivity;
 import com.example.asset2.R;
 import com.example.asset2.VerticalCaptureActivity;
+import com.github.chrisbanes.photoview.OnViewTapListener;
+import com.github.chrisbanes.photoview.PhotoView;
+import com.github.chrisbanes.photoview.PhotoViewAttacher;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONObject;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 
 
 public class Ht_input extends AppCompatActivity {
 
     Button btnDaftar, btnScan, btnPhoto;
-    TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
-    ImageView imageView;
+    TextView Hostname, Merk, Serialnumber, User, Tanggal, Keterangan;
+    PhotoView photoView;
     Bitmap bitMap = null;
     public final String APP_TAG = "MyApp";
     public String photoFileName = "photo.jpg";
     File photoFile;
     ProgressDialog progressDialog;
-    String hostname, merk, serialnumber, ip, tanggal, keterangan;
+    String hostname, merk, serialnumber, user, tanggal, keterangan;
     Bitmap decoded;
     static final int REQUEST_TAKE_PHOTO = 1;
     int bitmap_size = 60; // range 1 - 100
@@ -65,15 +73,27 @@ public class Ht_input extends AppCompatActivity {
         Hostname = findViewById(R.id.txtHostname);
         Merk = findViewById(R.id.txtType);
         Serialnumber = findViewById(R.id.txtSerial);
-        Ip = findViewById(R.id.txtIP);
+        User = findViewById(R.id.txtUser);
         Tanggal = findViewById(R.id.txtTanggal);
         Keterangan = findViewById(R.id.txtKeterangan1);
         btnScan = findViewById(R.id.btnScan);
         progressDialog = new ProgressDialog(this);
 
         btnPhoto = findViewById(R.id.btnPhoto);
-        imageView = findViewById(R.id.imageView);
-
+        photoView = findViewById(R.id.photoView);
+        PhotoViewAttacher photoAttacher = new PhotoViewAttacher(photoView);
+        photoView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (photoAttacher.getScale() > 1.0f) {
+                    // Jika gambar sudah diperbesar, kembalikan ke ukuran normal
+                    photoAttacher.setScale(1.0f, true);
+                } else {
+                    // Jika belum diperbesar, perbesar gambar
+                    photoAttacher.setScale(1.5f, true);
+                }
+            }
+        });
         btnPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,12 +118,20 @@ public class Ht_input extends AppCompatActivity {
                     });
 
                     AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
                     alertDialog.show();
 
                 } else {
 
                     TakePhoto();
                 }
+                photoAttacher.setOnViewTapListener(new OnViewTapListener() {
+                    @Override
+                    public void onViewTap(View view, float x, float y) {
+                        // Respon ketika gambar diklik
+                        showFullScreenImage(bitMap);
+                    }
+                });
             }
         });
 
@@ -121,11 +149,11 @@ public class Ht_input extends AppCompatActivity {
                 hostname        = Hostname.getText().toString();
                 merk            = Merk.getText().toString();
                 serialnumber    = Serialnumber.getText().toString();
-                ip              = Ip.getText().toString();
+                user              = User.getText().toString();
                 tanggal         = Tanggal.getText().toString();
                 keterangan      = Keterangan.getText().toString();
 
-                if (bitMap == null) {
+                if (bitMap != null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Ht_input.this);
                     builder.setMessage("Mohon masukkan foto");
                     AlertDialog alert1 = builder.create();
@@ -141,16 +169,36 @@ public class Ht_input extends AppCompatActivity {
         });
     }
 
+    private void showFullScreenImage(Bitmap bitmap) {
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_fullscreen_image);
 
-    void validasiData(){
-        if (!hostname.isEmpty() && !merk.isEmpty() && !ip.isEmpty() && !serialnumber.isEmpty() && !tanggal.isEmpty() && !keterangan.isEmpty()){
+        PhotoView fullscreenPhotoView = dialog.findViewById(R.id.fullscreenPhotoView);
+        fullscreenPhotoView.setImageBitmap(bitmap);
+
+        fullscreenPhotoView.setOnViewTapListener(new OnViewTapListener() {
+            @Override
+            public void onViewTap(View view, float x, float y) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    void validasiData() {
+        hostname        = Hostname.getText().toString();
+        merk            = Merk.getText().toString();
+        serialnumber    = Serialnumber.getText().toString();
+        user              = User.getText().toString();
+        tanggal         = Tanggal.getText().toString();
+        keterangan      = Keterangan.getText().toString();
+
+        if (!hostname.isEmpty() || !merk.isEmpty() || !user.isEmpty() || !serialnumber.isEmpty() || !tanggal.isEmpty() || !keterangan.isEmpty()) {
             kirimdata();
-        }else{
-            Hostname.setError("Masukkan Hostname!");
-            Merk.setError("Masukkan Type / Merk!");
-            Ip.setError("Masukkan IP!");
-            Serialnumber.setError("Masukkan Serial Number!");
-            Tanggal.setError("Masukkan Tanggal!");
+        } else {
+            Toast.makeText(this, "Setidaknya satu field harus diisi", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -186,30 +234,68 @@ public class Ht_input extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 bitMap = decodeSampledBitmapFromFile(String.valueOf(photoFile), 1000, 700);
-                imageView.setImageBitmap(bitMap);
+                photoView.setImageBitmap(bitMap);
             } else {
                 Toast.makeText(Ht_input.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
 
         switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    if (photo != null) {
+                        setToImageView(getResizedBitmap(photo, 512));
+                    } else {
+                        Toast.makeText(this, "Gambar dari kamera null", Toast.LENGTH_SHORT).show();
+                    }
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Ht_input.this);
+                    alertDialogBuilder.setMessage("Do yo want to take photo again?");
+
+                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            TakePhoto();
+                        }
+                    });
+
+                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Handle the "No" case
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
+                }
+                break;
+
             case IntentIntegrator.REQUEST_CODE:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
                 if (result != null) {
                     if (result.getContents() != null) {
-                        Hostname.setText(result.getContents());
-                        Merk.setText(result.getContents());
-                        Serialnumber.setText(result.getContents());
-                        Ip.setText(result.getContents());
-                        Tanggal.setText(result.getContents());
-                        Keterangan.setText(result.getContents());
+                        Log.d("QR Code Result", result.getContents());
+                        String[] qrCodeValues = result.getContents().split(",");
+
+                        if (qrCodeValues.length >= 6) {
+                            Hostname.setText(qrCodeValues[0]);
+                            Merk.setText(qrCodeValues[1]);
+                            Serialnumber.setText(qrCodeValues[2]);
+                            User.setText(qrCodeValues[3]);
+                            Tanggal.setText(qrCodeValues[4]);
+                            Keterangan.setText(qrCodeValues[5]);
+                        } else {
+                            Toast.makeText(this, "Format QR code tidak sesuai", Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(this, "Scan dibatalkan atau hasil scan tidak valid", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(this, "Gagal mengambil hasil scan", Toast.LENGTH_SHORT).show();
                 }
+
                 break;
         }
     }
@@ -289,8 +375,8 @@ public class Ht_input extends AppCompatActivity {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();
             bmp.compress(Bitmap.CompressFormat.PNG, bitmap_size, bytes);
             decoded = BitmapFactory.decodeStream(new ByteArrayInputStream(bytes.toByteArray()));
-
-            imageView.setImageBitmap(decoded);
+            photoView.setImageBitmap(decoded);
+            kirimdata();
 
         } else {
             Log.e("Error", "Bitmap is null");
@@ -342,12 +428,15 @@ public class Ht_input extends AppCompatActivity {
         progressDialog.setMessage("Mengirim Data...");
         progressDialog.setCancelable(false);
         progressDialog.show();
-        String foto = getStringImage(bitMap);
+        String foto = "";
+        if (bitMap != null) {
+            foto = getStringImage(bitMap);
+        }
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Api_ht.php")
                 .addBodyParameter("hostname",""+hostname)
                 .addBodyParameter("merk",""+merk)
                 .addBodyParameter("serialnumber",""+serialnumber)
-                .addBodyParameter("ip",""+ip)
+                .addBodyParameter("user",""+user)
                 .addBodyParameter("tanggal",""+tanggal)
                 .addBodyParameter("keterangan",""+keterangan)
                 .addBodyParameter("foto",""+foto)

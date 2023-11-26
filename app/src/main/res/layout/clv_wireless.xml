@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cvSwitch"
+        android:id="@+id/cvWireless"
         android:layout_width="match_parent"
         android:layout_height="300dp"
         app:cardBackgroundColor="@color/white"

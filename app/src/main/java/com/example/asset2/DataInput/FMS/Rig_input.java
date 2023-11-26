@@ -43,14 +43,14 @@ import java.util.Calendar;
 public class Rig_input extends AppCompatActivity {
 
     Button btnDaftar, btnScan, btnPhoto;
-    TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
+    TextView Hostname, Merk, Serialnumber, Unit, Tanggal, Keterangan;
     ImageView imageView;
     Bitmap bitMap = null;
     public final String APP_TAG = "MyApp";
     public String photoFileName = "photo.jpg";
     File photoFile;
     ProgressDialog progressDialog;
-    String hostname, merk, serialnumber, ip, tanggal, keterangan;
+    String hostname, merk, serialnumber, unit, tanggal, keterangan;
     Bitmap decoded;
     static final int REQUEST_TAKE_PHOTO = 1;
     int bitmap_size = 60; // range 1 - 100
@@ -65,7 +65,7 @@ public class Rig_input extends AppCompatActivity {
         Hostname = findViewById(R.id.txtHostname);
         Merk = findViewById(R.id.txtType);
         Serialnumber = findViewById(R.id.txtSerial);
-        Ip = findViewById(R.id.txtIP);
+        Unit = findViewById(R.id.txtUnit);
         Tanggal = findViewById(R.id.txtTanggal);
         Keterangan = findViewById(R.id.txtKeterangan1);
         btnScan = findViewById(R.id.btnScan);

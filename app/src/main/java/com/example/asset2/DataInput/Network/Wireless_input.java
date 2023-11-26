@@ -48,14 +48,14 @@ import java.util.Calendar;
 public class Wireless_input extends AppCompatActivity {
 
     Button btnDaftar, btnScan, btnPhoto;
-    TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
+    TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan, Department, Lokasi;
     PhotoView photoView;
     Bitmap bitMap = null;
     public final String APP_TAG = "MyApp";
     public String photoFileName = "photo.jpg";
     File photoFile;
     ProgressDialog progressDialog;
-    String hostname, merk, serialnumber, ip, tanggal, keterangan;
+    String hostname, merk, serialnumber, ip, tanggal, keterangan, department, lokasi;
     Bitmap decoded;
     static final int REQUEST_TAKE_PHOTO = 1;
     int bitmap_size = 60; // range 1 - 100
@@ -70,6 +70,8 @@ public class Wireless_input extends AppCompatActivity {
         Hostname = findViewById(R.id.txtHostname);
         Merk = findViewById(R.id.txtType);
         Serialnumber = findViewById(R.id.txtSerial);
+        Department = findViewById(R.id.txtDepartment);
+        Lokasi = findViewById(R.id.txtLokasi);
         Ip = findViewById(R.id.txtIP);
         Tanggal = findViewById(R.id.txtTanggal);
         Keterangan = findViewById(R.id.txtKeterangan1);
@@ -150,6 +152,8 @@ public class Wireless_input extends AppCompatActivity {
                 merk            = Merk.getText().toString();
                 serialnumber    = Serialnumber.getText().toString();
                 ip              = Ip.getText().toString();
+                department      = Department.getText().toString();
+                lokasi          = Lokasi.getText().toString();
                 tanggal         = Tanggal.getText().toString();
                 keterangan      = Keterangan.getText().toString();
 
@@ -190,14 +194,16 @@ public class Wireless_input extends AppCompatActivity {
 
 
     void validasiData() {
-        hostname = Hostname.getText().toString();
-        merk = Merk.getText().toString();
-        serialnumber = Serialnumber.getText().toString();
-        ip = Ip.getText().toString();
-        tanggal = Tanggal.getText().toString();
-        keterangan = Keterangan.getText().toString();
+        hostname        = Hostname.getText().toString();
+        merk            = Merk.getText().toString();
+        serialnumber    = Serialnumber.getText().toString();
+        ip              = Ip.getText().toString();
+        department      = Department.getText().toString();
+        lokasi          = Lokasi.getText().toString();
+        tanggal         = Tanggal.getText().toString();
+        keterangan      = Keterangan.getText().toString();
 
-        if (!hostname.isEmpty() || !merk.isEmpty() || !ip.isEmpty() || !serialnumber.isEmpty() || !tanggal.isEmpty() || !keterangan.isEmpty()) {
+        if (!hostname.isEmpty() || !merk.isEmpty() || !ip.isEmpty() || !serialnumber.isEmpty() || !department.isEmpty() || !lokasi.isEmpty() || !tanggal.isEmpty() || !keterangan.isEmpty()) {
             kirimdata();
         } else {
             Toast.makeText(this, "Setidaknya satu field harus diisi", Toast.LENGTH_SHORT).show();
@@ -285,13 +291,15 @@ public class Wireless_input extends AppCompatActivity {
                         Log.d("QR Code Result", result.getContents());
                             String[] qrCodeValues = result.getContents().split(",");
 
-                        if (qrCodeValues.length >= 6) {
+                        if (qrCodeValues.length >= 8) {
                             Hostname.setText(qrCodeValues[0]);
                             Merk.setText(qrCodeValues[1]);
                             Serialnumber.setText(qrCodeValues[2]);
                             Ip.setText(qrCodeValues[3]);
-                            Tanggal.setText(qrCodeValues[4]);
-                            Keterangan.setText(qrCodeValues[5]);
+                            Department.setText(qrCodeValues[4]);
+                            Lokasi.setText(qrCodeValues[5]);
+                            Tanggal.setText(qrCodeValues[6]);
+                            Keterangan.setText(qrCodeValues[7]);
                         } else {
                             Toast.makeText(this, "Format QR code tidak sesuai", Toast.LENGTH_SHORT).show();
                         }
@@ -440,6 +448,8 @@ public class Wireless_input extends AppCompatActivity {
                 .addBodyParameter("merk",""+merk)
                 .addBodyParameter("serialnumber",""+serialnumber)
                 .addBodyParameter("ip",""+ip)
+                .addBodyParameter("department",""+department)
+                .addBodyParameter("lokasi",""+lokasi)
                 .addBodyParameter("tanggal",""+tanggal)
                 .addBodyParameter("keterangan",""+keterangan)
                 .addBodyParameter("foto",""+foto)
