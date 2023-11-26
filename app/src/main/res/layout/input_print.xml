@@ -183,7 +183,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txtType" />
 
         <EditText
-            android:id="@+id/txtIP"
+            android:id="@+id/txtSection"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -194,7 +194,7 @@
             android:backgroundTint="@color/black"
             android:ems="10"
             android:fontFamily="@font/poppins_semibold"
-            android:hint="IP"
+            android:hint="SECTION"
             android:inputType="textPersonName"
             android:textColor="#000000"
             android:textColorHint="#FF0000"
@@ -228,7 +228,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtIP" />
+            app:layout_constraintTop_toBottomOf="@+id/txtSection" />
 
         <EditText
             android:id="@+id/txtLokasi"

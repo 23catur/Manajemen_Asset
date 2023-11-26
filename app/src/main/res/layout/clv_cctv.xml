@@ -9,14 +9,14 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cvCctv"
         android:layout_width="match_parent"
-        android:layout_height="246dp"
+        android:layout_height="300dp"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="15dp"
         app:cardElevation="5dp"
         app:cardUseCompatPadding="true">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="391dp"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -43,11 +43,11 @@
             <LinearLayout
                 android:id="@+id/Linear1"
                 android:layout_width="match_parent"
-                android:layout_height="175dp"
+                android:layout_height="221dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    android:layout_width="180dp"
+                    android:layout_width="100dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:orientation="vertical">
@@ -103,6 +103,32 @@
                         android:textSize="18sp" />
 
                     <TextView
+                        android:id="@+id/tvDepartment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="10dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="DEPARTMENT"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvLokasi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginEnd="10dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="LOKASI"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
                         android:id="@+id/tvKeterangan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -119,7 +145,7 @@
 
                 <ImageView
                     android:id="@+id/fotoAsset"
-                    android:layout_width="165dp"
+                    android:layout_width="123dp"
                     android:layout_height="match_parent"
                     android:layout_marginRight="15dp" />
 

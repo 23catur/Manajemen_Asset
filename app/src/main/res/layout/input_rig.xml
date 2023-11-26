@@ -172,7 +172,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtType" />
 
     <EditText
-        android:id="@+id/txtIP"
+        android:id="@+id/txtUnit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
