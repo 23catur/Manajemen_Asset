@@ -245,7 +245,7 @@ public class Komputer_input extends AppCompatActivity {
 
         switch (requestCode) {
 
-            case 1:
+            case REQUEST_TAKE_PHOTO:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     if (photo != null) {

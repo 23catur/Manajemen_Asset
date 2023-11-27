@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class Data_print extends AppCompatActivity {
 
-    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan,array_foto;
+    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_section, array_tanggal, array_keterangan,array_foto, array_department, array_lokasi;
     SwipeRefreshLayout srl_main;
     ProgressDialog progressDialog;
     SearchView searchView;
@@ -68,7 +68,7 @@ public class Data_print extends AppCompatActivity {
         );
 
         initializeArray();
-        adapter = new CLV_print(Data_print.this, array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan, array_foto);
+        adapter = new CLV_print(Data_print.this, array_hostname, array_merk, array_serialnumber, array_section, array_tanggal, array_keterangan, array_foto, array_department, array_lokasi);
         listData.setAdapter(adapter);
 
         scrollRefresh();
@@ -82,18 +82,22 @@ public class Data_print extends AppCompatActivity {
         array_hostname      = new ArrayList<String>();
         array_merk          = new ArrayList<String>();
         array_serialnumber  = new ArrayList<String>();
-        array_ip            = new ArrayList<String>();
+        array_section            = new ArrayList<String>();
         array_tanggal       = new ArrayList<String>();
         array_keterangan    = new ArrayList<String>();
         array_foto          = new ArrayList<String>();
+        array_department    = new ArrayList<String>();
+        array_lokasi        = new ArrayList<String>();
 
         array_hostname.clear();
         array_merk.clear();
         array_serialnumber.clear();
-        array_ip.clear();
+        array_section.clear();
         array_tanggal.clear();
         array_keterangan.clear();
         array_foto.clear();
+        array_department.clear();
+        array_lokasi.clear();
 
     }
 
@@ -118,7 +122,9 @@ public class Data_print extends AppCompatActivity {
                                     array_hostname.add(jo.getString("hostname"));
                                     array_merk.add(jo.getString("merk"));
                                     array_serialnumber.add(jo.getString("serialnumber"));
-                                    array_ip.add(jo.getString("ip"));
+                                    array_section.add(jo.getString("section"));
+                                    array_department.add(jo.getString("department"));
+                                    array_lokasi.add(jo.getString("lokasi"));
                                     array_tanggal.add(jo.getString("tanggal"));
                                     array_keterangan.add(jo.getString("keterangan"));
                                     array_foto.add(jo.getString("foto"));
@@ -126,10 +132,10 @@ public class Data_print extends AppCompatActivity {
                                 }
 
                                 if (adapter == null) {
-                                    adapter = new CLV_print(Data_print.this,array_hostname,array_merk,array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
+                                    adapter = new CLV_print(Data_print.this,array_hostname,array_merk,array_serialnumber,array_section,array_department,array_lokasi,array_tanggal,array_keterangan,array_foto);
                                     listData.setAdapter(adapter);
                                 } else {
-                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
+                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_section,array_department,array_lokasi,array_tanggal,array_keterangan,array_foto);
                                     adapter.notifyDataSetChanged();
                                 }
 

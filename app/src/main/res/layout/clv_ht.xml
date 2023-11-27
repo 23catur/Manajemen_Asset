@@ -90,7 +90,7 @@
                         android:textSize="18sp" />
 
                     <TextView
-                        android:id="@+id/tvIP"
+                        android:id="@+id/tvUser"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"

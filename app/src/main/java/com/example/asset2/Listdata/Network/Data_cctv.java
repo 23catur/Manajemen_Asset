@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class Data_cctv extends AppCompatActivity {
 
-    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan,array_foto;
+    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan,array_foto, array_department, array_lokasi;
     SwipeRefreshLayout srl_main;
     ProgressDialog progressDialog;
     SearchView searchView;
@@ -68,7 +68,7 @@ public class Data_cctv extends AppCompatActivity {
         );
 
         initializeArray();
-        adapter = new CLV_cctv(Data_cctv.this, array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan, array_foto);
+        adapter = new CLV_cctv(Data_cctv.this, array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan, array_foto, array_department, array_lokasi);
         listData.setAdapter(adapter);
 
         scrollRefresh();
@@ -86,6 +86,8 @@ public class Data_cctv extends AppCompatActivity {
         array_tanggal       = new ArrayList<String>();
         array_keterangan    = new ArrayList<String>();
         array_foto          = new ArrayList<String>();
+        array_department    = new ArrayList<String>();
+        array_lokasi        = new ArrayList<String>();
 
         array_hostname.clear();
         array_merk.clear();
@@ -94,6 +96,8 @@ public class Data_cctv extends AppCompatActivity {
         array_tanggal.clear();
         array_keterangan.clear();
         array_foto.clear();
+        array_department.clear();
+        array_lokasi.clear();
 
     }
 
@@ -119,6 +123,8 @@ public class Data_cctv extends AppCompatActivity {
                                     array_merk.add(jo.getString("merk"));
                                     array_serialnumber.add(jo.getString("serialnumber"));
                                     array_ip.add(jo.getString("ip"));
+                                    array_department.add(jo.getString("department"));
+                                    array_lokasi.add(jo.getString("lokasi"));
                                     array_tanggal.add(jo.getString("tanggal"));
                                     array_keterangan.add(jo.getString("keterangan"));
                                     array_foto.add(jo.getString("foto"));
@@ -126,10 +132,10 @@ public class Data_cctv extends AppCompatActivity {
                                 }
 
                                 if (adapter == null) {
-                                    adapter = new CLV_cctv(Data_cctv.this,array_hostname,array_merk,array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
+                                    adapter = new CLV_cctv(Data_cctv.this,array_hostname,array_merk,array_serialnumber,array_ip,array_department,array_lokasi,array_tanggal,array_keterangan,array_foto);
                                     listData.setAdapter(adapter);
                                 } else {
-                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
+                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_ip,array_department,array_lokasi,array_tanggal,array_keterangan,array_foto);
                                     adapter.notifyDataSetChanged();
                                 }
 
