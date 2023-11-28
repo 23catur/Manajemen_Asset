@@ -86,8 +86,10 @@ public class Komputer_input extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (photoAttacher.getScale() > 1.0f) {
+                    // Jika gambar sudah diperbesar, kembalikan ke ukuran normal
                     photoAttacher.setScale(1.0f, true);
                 } else {
+                    // Jika belum diperbesar, perbesar gambar
                     photoAttacher.setScale(1.5f, true);
                 }
             }
@@ -127,6 +129,7 @@ public class Komputer_input extends AppCompatActivity {
                 photoAttacher.setOnViewTapListener(new OnViewTapListener() {
                     @Override
                     public void onViewTap(View view, float x, float y) {
+                        // Respon ketika gambar diklik
                         showFullScreenImage(bitMap);
                     }
                 });
@@ -143,29 +146,26 @@ public class Komputer_input extends AppCompatActivity {
         btnDaftar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                hostname = Hostname.getText().toString();
+                merk = Merk.getText().toString();
+                serialnumber = Serialnumber.getText().toString();
+                user = User.getText().toString();
+                department = Department.getText().toString();
+                lokasi = Lokasi.getText().toString();
+                tanggal = Tanggal.getText().toString();
+                keterangan = Keterangan.getText().toString();
 
-                hostname        = Hostname.getText().toString();
-                merk            = Merk.getText().toString();
-                serialnumber    = Serialnumber.getText().toString();
-                user            = User.getText().toString();
-                department      = Department.getText().toString();
-                lokasi          = Lokasi.getText().toString();
-                tanggal         = Tanggal.getText().toString();
-                keterangan      = Keterangan.getText().toString();
-
-                if (bitMap != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Komputer_input.this);
-                    builder.setMessage("Mohon masukkan foto");
-                    AlertDialog alert1 = builder.create();
-                    alert1.show();
-                    progressDialog.dismiss();
+                // Periksa apakah foto telah diambil
+                if (bitMap == null && photoFile == null) {
+                    // Foto tidak diambil, berikan nilai default atau sesuaikan dengan kebutuhan Anda
+                    bitMap = BitmapFactory.decodeResource(getResources(), R.drawable.buma);
                 }
 
-                else {
-                    validasiData();
-                }
+                // Lanjutkan dengan validasi data
+                validasiData();
             }
         });
+
     }
 
     private void showFullScreenImage(Bitmap bitmap) {
@@ -187,23 +187,33 @@ public class Komputer_input extends AppCompatActivity {
     }
 
     void validasiData() {
-        hostname        = Hostname.getText().toString();
-        merk            = Merk.getText().toString();
-        serialnumber    = Serialnumber.getText().toString();
-        user            = User.getText().toString();
-        department      = Department.getText().toString();
-        lokasi          = Lokasi.getText().toString();
-        tanggal         = Tanggal.getText().toString();
-        keterangan      = Keterangan.getText().toString();
+        hostname = Hostname.getText().toString();
+        merk = Merk.getText().toString();
+        serialnumber = Serialnumber.getText().toString();
+        user = User.getText().toString();
+        department = Department.getText().toString();
+        lokasi = Lokasi.getText().toString();
+        tanggal = Tanggal.getText().toString();
+        keterangan = Keterangan.getText().toString();
 
-        if (!hostname.isEmpty() || !merk.isEmpty() || !user.isEmpty() || !serialnumber.isEmpty() || !department.isEmpty() || !lokasi.isEmpty() || !tanggal.isEmpty() || !keterangan.isEmpty()) {
+//        if (bitMap == null) {
+//            // Foto tidak diambil, berikan nilai default atau sesuaikan dengan kebutuhan Anda
+//            bitMap = BitmapFactory.decodeResource(getResources(), R.drawable.buma);
+//        }
+
+        if (!hostname.isEmpty() && !merk.isEmpty() && !user.isEmpty() && !serialnumber.isEmpty() && !department.isEmpty() && !lokasi.isEmpty() && !tanggal.isEmpty() && !keterangan.isEmpty()) {
             kirimdata();
+
         } else {
-            Toast.makeText(this, "Setidaknya satu field harus diisi", Toast.LENGTH_SHORT).show();
+            Hostname.setError("Masukkan Hostname!");
+            Merk.setError("Masukkan Type / Merk!");
+            User.setError("Masukkan User!");
+            Serialnumber.setError("Masukkan Serial Number!");
+            Department.setError("Masukkan Department!");
+            Lokasi.setError("Masukkan Lokasi!");
+            Tanggal.setError("Masukkan Tanggal!");
         }
     }
-
-
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -244,8 +254,7 @@ public class Komputer_input extends AppCompatActivity {
         }
 
         switch (requestCode) {
-
-            case REQUEST_TAKE_PHOTO:
+            case 1:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     if (photo != null) {
@@ -266,6 +275,7 @@ public class Komputer_input extends AppCompatActivity {
                     alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            // Handle the "No" case
                         }
                     });
 
@@ -434,7 +444,7 @@ public class Komputer_input extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
         String foto = "";
-        if (bitMap != null) {
+        if (bitMap == null) {
             foto = getStringImage(bitMap);
         }
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Api_komputer.php")

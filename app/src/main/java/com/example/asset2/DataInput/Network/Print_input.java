@@ -58,7 +58,7 @@ public class Print_input extends AppCompatActivity {
     ProgressDialog progressDialog;
     String hostname, merk, serialnumber, section, tanggal, keterangan, department, lokasi;
     Bitmap decoded;
-    static final int REQUEST_TAKE_PHOTO = 1;
+    static final int REQUEST_TAKE_PHOTO = 2;
     int bitmap_size = 60; // range 1 - 100
 
 
@@ -156,7 +156,7 @@ public class Print_input extends AppCompatActivity {
                 keterangan      = Keterangan.getText().toString();
 
 
-                if (bitMap != null) {
+                if (bitMap == null) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(Print_input.this);
                     builder.setMessage("Mohon masukkan foto");
                     AlertDialog alert1 = builder.create();
@@ -191,19 +191,26 @@ public class Print_input extends AppCompatActivity {
     }
 
     void validasiData() {
-        hostname        = Hostname.getText().toString();
-        merk            = Merk.getText().toString();
-        serialnumber    = Serialnumber.getText().toString();
-        section         = Section.getText().toString();
-        department      = Department.getText().toString();
-        lokasi          = Lokasi.getText().toString();
-        tanggal         = Tanggal.getText().toString();
-        keterangan      = Keterangan.getText().toString();
+        hostname = Hostname.getText().toString();
+        merk = Merk.getText().toString();
+        serialnumber = Serialnumber.getText().toString();
+        section = Section.getText().toString();
+        department = Department.getText().toString();
+        lokasi = Lokasi.getText().toString();
+        tanggal = Tanggal.getText().toString();
+        keterangan = Keterangan.getText().toString();
 
-        if (!hostname.isEmpty() || !merk.isEmpty() || !section.isEmpty() || !serialnumber.isEmpty() || !department.isEmpty() || !lokasi.isEmpty() || !tanggal.isEmpty() || !keterangan.isEmpty()) {
+        if (!hostname.isEmpty() && !merk.isEmpty() && !section.isEmpty() && !serialnumber.isEmpty() && !department.isEmpty() && !lokasi.isEmpty() && !tanggal.isEmpty() && !keterangan.isEmpty()) {
             kirimdata();
+
         } else {
-            Toast.makeText(this, "Setidaknya satu field harus diisi", Toast.LENGTH_SHORT).show();
+            Hostname.setError("Masukkan Hostname!");
+            Merk.setError("Masukkan Type / Merk!");
+            Section.setError("Masukkan Section!");
+            Serialnumber.setError("Masukkan Serial Number!");
+            Department.setError("Masukkan Department!");
+            Lokasi.setError("Masukkan Lokasi!");
+            Tanggal.setError("Masukkan Tanggal!");
         }
     }
 
@@ -220,6 +227,7 @@ public class Print_input extends AppCompatActivity {
     }
 
     public  void TakePhoto(){
+        bitMap = null;
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoFile = getPhotoFileUri(photoFileName);
 
@@ -239,43 +247,47 @@ public class Print_input extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 bitMap = decodeSampledBitmapFromFile(String.valueOf(photoFile), 1000, 700);
-                photoView.setImageBitmap(bitMap);
+                if (bitMap != null) {
+                    photoView.setImageBitmap(bitMap);
+                } else {
+                    Toast.makeText(Print_input.this, "Error decoding the picture!", Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(Print_input.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
 
         switch (requestCode) {
-            case 1:
-                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-                    if (photo != null) {
-                        setToImageView(getResizedBitmap(photo, 512));
-                    } else {
-                        Toast.makeText(this, "Gambar dari kamera null", Toast.LENGTH_SHORT).show();
-                    }
-                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Print_input.this);
-                    alertDialogBuilder.setMessage("Do yo want to take photo again?");
-
-                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface arg0, int arg1) {
-                            TakePhoto();
-                        }
-                    });
-
-                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Handle the "No" case
-                        }
-                    });
-
-                    AlertDialog alertDialog = alertDialogBuilder.create();
-                    alertDialog.show();
-
-                }
-                break;
+//            case 1:
+//                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+//                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+//                    if (photo != null) {
+//                        setToImageView(getResizedBitmap(photo, 512));
+//                    } else {
+//                        Toast.makeText(this, "Gambar dari kamera null", Toast.LENGTH_SHORT).show();
+//                    }
+//                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Print_input.this);
+//                    alertDialogBuilder.setMessage("Do yo want to take photo again?");
+//
+//                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface arg0, int arg1) {
+//                            TakePhoto();
+//                        }
+//                    });
+//
+//                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
+//                            // Handle the "No" case
+//                        }
+//                    });
+//
+//                    AlertDialog alertDialog = alertDialogBuilder.create();
+//                    alertDialog.show();
+//
+//                }
+//                break;
 
             case IntentIntegrator.REQUEST_CODE:
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);

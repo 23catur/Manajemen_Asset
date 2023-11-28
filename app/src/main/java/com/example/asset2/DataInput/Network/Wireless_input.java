@@ -163,13 +163,10 @@ public class Wireless_input extends AppCompatActivity {
                     AlertDialog alert1 = builder.create();
                     alert1.show();
                     progressDialog.dismiss();
-                }
-
-                else {
-
+                } else {
                     validasiData();
-
                 }
+
             }
         });
     }
@@ -253,7 +250,19 @@ public class Wireless_input extends AppCompatActivity {
 
         switch (requestCode) {
 
-            case 1:
+            case REQUEST_TAKE_PHOTO:
+                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
+                    Uri filePath = data.getData();
+                    try {
+                        bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                        setToImageView(getResizedBitmap(bitMap, 512));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+
+            case 2:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     if (photo != null) {
