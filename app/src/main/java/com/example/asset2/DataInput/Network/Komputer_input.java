@@ -155,13 +155,11 @@ public class Komputer_input extends AppCompatActivity {
                 tanggal = Tanggal.getText().toString();
                 keterangan = Keterangan.getText().toString();
 
-                // Periksa apakah foto telah diambil
                 if (bitMap == null && photoFile == null) {
-                    // Foto tidak diambil, berikan nilai default atau sesuaikan dengan kebutuhan Anda
                     bitMap = BitmapFactory.decodeResource(getResources(), R.drawable.buma);
-                }
+                    photoView.setImageBitmap(bitMap);
 
-                // Lanjutkan dengan validasi data
+                }
                 validasiData();
             }
         });
@@ -196,10 +194,6 @@ public class Komputer_input extends AppCompatActivity {
         tanggal = Tanggal.getText().toString();
         keterangan = Keterangan.getText().toString();
 
-//        if (bitMap == null) {
-//            // Foto tidak diambil, berikan nilai default atau sesuaikan dengan kebutuhan Anda
-//            bitMap = BitmapFactory.decodeResource(getResources(), R.drawable.buma);
-//        }
 
         if (!hostname.isEmpty() && !merk.isEmpty() && !user.isEmpty() && !serialnumber.isEmpty() && !department.isEmpty() && !lokasi.isEmpty() && !tanggal.isEmpty() && !keterangan.isEmpty()) {
             kirimdata();
@@ -444,7 +438,7 @@ public class Komputer_input extends AppCompatActivity {
         progressDialog.setCancelable(false);
         progressDialog.show();
         String foto = "";
-        if (bitMap == null) {
+        if (bitMap != null) {
             foto = getStringImage(bitMap);
         }
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Api_komputer.php")

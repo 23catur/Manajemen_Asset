@@ -155,19 +155,12 @@ public class Print_input extends AppCompatActivity {
                 tanggal         = Tanggal.getText().toString();
                 keterangan      = Keterangan.getText().toString();
 
-
-                if (bitMap == null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Print_input.this);
-                    builder.setMessage("Mohon masukkan foto");
-                    AlertDialog alert1 = builder.create();
-                    alert1.show();
-                    progressDialog.dismiss();
-                }
-
-                else {
-                    validasiData();
+                if (bitMap == null && photoFile == null) {
+                    bitMap = BitmapFactory.decodeResource(getResources(), R.drawable.buma);
+                    photoView.setImageBitmap(bitMap);
 
                 }
+                validasiData();
             }
         });
     }
@@ -199,6 +192,7 @@ public class Print_input extends AppCompatActivity {
         lokasi = Lokasi.getText().toString();
         tanggal = Tanggal.getText().toString();
         keterangan = Keterangan.getText().toString();
+
 
         if (!hostname.isEmpty() && !merk.isEmpty() && !section.isEmpty() && !serialnumber.isEmpty() && !department.isEmpty() && !lokasi.isEmpty() && !tanggal.isEmpty() && !keterangan.isEmpty()) {
             kirimdata();
@@ -247,47 +241,43 @@ public class Print_input extends AppCompatActivity {
         if (requestCode == REQUEST_TAKE_PHOTO) {
             if (resultCode == Activity.RESULT_OK) {
                 bitMap = decodeSampledBitmapFromFile(String.valueOf(photoFile), 1000, 700);
-                if (bitMap != null) {
-                    photoView.setImageBitmap(bitMap);
-                } else {
-                    Toast.makeText(Print_input.this, "Error decoding the picture!", Toast.LENGTH_SHORT).show();
-                }
+                photoView.setImageBitmap(bitMap);
             } else {
                 Toast.makeText(Print_input.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
 
         switch (requestCode) {
-//            case 1:
-//                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
-//                    Bitmap photo = (Bitmap) data.getExtras().get("data");
-//                    if (photo != null) {
-//                        setToImageView(getResizedBitmap(photo, 512));
-//                    } else {
-//                        Toast.makeText(this, "Gambar dari kamera null", Toast.LENGTH_SHORT).show();
-//                    }
-//                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Print_input.this);
-//                    alertDialogBuilder.setMessage("Do yo want to take photo again?");
-//
-//                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface arg0, int arg1) {
-//                            TakePhoto();
-//                        }
-//                    });
-//
-//                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            // Handle the "No" case
-//                        }
-//                    });
-//
-//                    AlertDialog alertDialog = alertDialogBuilder.create();
-//                    alertDialog.show();
-//
-//                }
-//                break;
+            case 1:
+                if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
+                    Bitmap photo = (Bitmap) data.getExtras().get("data");
+                    if (photo != null) {
+                        setToImageView(getResizedBitmap(photo, 512));
+                    } else {
+                        Toast.makeText(this, "Gambar dari kamera null", Toast.LENGTH_SHORT).show();
+                    }
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Print_input.this);
+                    alertDialogBuilder.setMessage("Do yo want to take photo again?");
+
+                    alertDialogBuilder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface arg0, int arg1) {
+                            TakePhoto();
+                        }
+                    });
+
+                    alertDialogBuilder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Handle the "No" case
+                        }
+                    });
+
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+                    alertDialog.show();
+
+                }
+                break;
 
             case IntentIntegrator.REQUEST_CODE:
                 IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);

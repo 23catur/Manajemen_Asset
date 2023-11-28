@@ -115,11 +115,9 @@ public class CLV_wireless extends ArrayAdapter<String>  {
 
 
         if (!vFoto.get(position).equals("")) {
-
             Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/"+vFoto.get(position)).into(foto);
-
         } else {
-            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/BUMA.png").into(foto);
+            Picasso.get().load(R.drawable.buma1).into(foto);
         }
         return rowView;
     }

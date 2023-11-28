@@ -157,15 +157,13 @@ public class Wireless_input extends AppCompatActivity {
                 tanggal         = Tanggal.getText().toString();
                 keterangan      = Keterangan.getText().toString();
 
-                if (bitMap != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Wireless_input.this);
-                    Toast.makeText(Wireless_input.this, "Mohon ambil foto terlebih dahulu", Toast.LENGTH_SHORT).show();
-                    AlertDialog alert1 = builder.create();
-                    alert1.show();
-                    progressDialog.dismiss();
-                } else {
-                    validasiData();
+                if (bitMap == null && photoFile == null) {
+                    bitMap = BitmapFactory.decodeResource(getResources(), R.drawable.buma);
+                    photoView.setImageBitmap(bitMap);
+
                 }
+                validasiData();
+
 
             }
         });
@@ -191,19 +189,27 @@ public class Wireless_input extends AppCompatActivity {
 
 
     void validasiData() {
-        hostname        = Hostname.getText().toString();
-        merk            = Merk.getText().toString();
-        serialnumber    = Serialnumber.getText().toString();
-        ip              = Ip.getText().toString();
-        department      = Department.getText().toString();
-        lokasi          = Lokasi.getText().toString();
-        tanggal         = Tanggal.getText().toString();
-        keterangan      = Keterangan.getText().toString();
+        hostname = Hostname.getText().toString();
+        merk = Merk.getText().toString();
+        serialnumber = Serialnumber.getText().toString();
+        ip = Ip.getText().toString();
+        department = Department.getText().toString();
+        lokasi = Lokasi.getText().toString();
+        tanggal = Tanggal.getText().toString();
+        keterangan = Keterangan.getText().toString();
 
-        if (!hostname.isEmpty() || !merk.isEmpty() || !ip.isEmpty() || !serialnumber.isEmpty() || !department.isEmpty() || !lokasi.isEmpty() || !tanggal.isEmpty() || !keterangan.isEmpty()) {
+
+        if (!hostname.isEmpty() && !merk.isEmpty() && !ip.isEmpty() && !serialnumber.isEmpty() && !department.isEmpty() && !lokasi.isEmpty() && !tanggal.isEmpty() && !keterangan.isEmpty()) {
             kirimdata();
+
         } else {
-            Toast.makeText(this, "Setidaknya satu field harus diisi", Toast.LENGTH_SHORT).show();
+            Hostname.setError("Masukkan Hostname!");
+            Merk.setError("Masukkan Type / Merk!");
+            Ip.setError("Masukkan IP!");
+            Serialnumber.setError("Masukkan Serial Number!");
+            Department.setError("Masukkan Department!");
+            Lokasi.setError("Masukkan Lokasi!");
+            Tanggal.setError("Masukkan Tanggal!");
         }
     }
 
@@ -240,29 +246,13 @@ public class Wireless_input extends AppCompatActivity {
             if (resultCode == Activity.RESULT_OK) {
                 bitMap = decodeSampledBitmapFromFile(String.valueOf(photoFile), 1000, 700);
                 photoView.setImageBitmap(bitMap);
-
-//                Log.d("Bitmap Size", "Width: " + bitMap.getWidth() + ", Height: " + bitMap.getHeight());
-
             } else {
                 Toast.makeText(Wireless_input.this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
 
         switch (requestCode) {
-
-            case REQUEST_TAKE_PHOTO:
-                if (resultCode == RESULT_OK && data != null && data.getData() != null) {
-                    Uri filePath = data.getData();
-                    try {
-                        bitMap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                        setToImageView(getResizedBitmap(bitMap, 512));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                break;
-
-            case 2:
+            case 1:
                 if (resultCode == RESULT_OK && data != null && data.getExtras() != null) {
                     Bitmap photo = (Bitmap) data.getExtras().get("data");
                     if (photo != null) {
@@ -298,7 +288,7 @@ public class Wireless_input extends AppCompatActivity {
                 if (result != null) {
                     if (result.getContents() != null) {
                         Log.d("QR Code Result", result.getContents());
-                            String[] qrCodeValues = result.getContents().split(",");
+                        String[] qrCodeValues = result.getContents().split(",");
 
                         if (qrCodeValues.length >= 8) {
                             Hostname.setText(qrCodeValues[0]);
@@ -322,6 +312,7 @@ public class Wireless_input extends AppCompatActivity {
                 break;
         }
     }
+
     private void setToImageView(Bitmap bmp) {
         if (bmp != null) {
             ByteArrayOutputStream bytes = new ByteArrayOutputStream();

@@ -156,18 +156,12 @@ public class Laptop_input extends AppCompatActivity {
                 tanggal         = Tanggal.getText().toString();
                 keterangan      = Keterangan.getText().toString();
 
-                if (bitMap != null) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(Laptop_input.this);
-                    builder.setMessage("Mohon masukkan foto");
-                    AlertDialog alert1 = builder.create();
-                    alert1.show();
-                    progressDialog.dismiss();
-                }
-
-                else {
-                    validasiData();
+                if (bitMap == null && photoFile == null) {
+                    bitMap = BitmapFactory.decodeResource(getResources(), R.drawable.buma);
+                    photoView.setImageBitmap(bitMap);
 
                 }
+                validasiData();
             }
         });
     }
@@ -191,19 +185,27 @@ public class Laptop_input extends AppCompatActivity {
     }
 
     void validasiData() {
-        hostname        = Hostname.getText().toString();
-        merk            = Merk.getText().toString();
-        serialnumber    = Serialnumber.getText().toString();
-        user            = User.getText().toString();
-        department      = Department.getText().toString();
-        lokasi          = Lokasi.getText().toString();
-        tanggal         = Tanggal.getText().toString();
-        keterangan      = Keterangan.getText().toString();
+        hostname = Hostname.getText().toString();
+        merk = Merk.getText().toString();
+        serialnumber = Serialnumber.getText().toString();
+        user = User.getText().toString();
+        department = Department.getText().toString();
+        lokasi = Lokasi.getText().toString();
+        tanggal = Tanggal.getText().toString();
+        keterangan = Keterangan.getText().toString();
 
-        if (!hostname.isEmpty() || !merk.isEmpty() || !user.isEmpty() || !serialnumber.isEmpty() || !department.isEmpty() || !lokasi.isEmpty() || !tanggal.isEmpty() || !keterangan.isEmpty()) {
+
+        if (!hostname.isEmpty() && !merk.isEmpty() && !user.isEmpty() && !serialnumber.isEmpty() && !department.isEmpty() && !lokasi.isEmpty() && !tanggal.isEmpty() && !keterangan.isEmpty()) {
             kirimdata();
+
         } else {
-            Toast.makeText(this, "Setidaknya satu field harus diisi", Toast.LENGTH_SHORT).show();
+            Hostname.setError("Masukkan Hostname!");
+            Merk.setError("Masukkan Type / Merk!");
+            User.setError("Masukkan User!");
+            Serialnumber.setError("Masukkan Serial Number!");
+            Department.setError("Masukkan Department!");
+            Lokasi.setError("Masukkan Lokasi!");
+            Tanggal.setError("Masukkan Tanggal!");
         }
     }
 
