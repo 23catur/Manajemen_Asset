@@ -47,10 +47,10 @@ import java.util.Calendar;
 public class Update_komputer extends AppCompatActivity {
 
     Button btnUpdate, btnDelete, btnPhoto;
-    TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
+    TextView Hostname, Merk, Serialnumber, User, Department, Lokasi, Tanggal, Keterangan;
     PhotoView photoView;
     ProgressDialog progressDialog;
-    String hostname, merk, serialnumber, ip, tanggal, keterangan, foto;
+    String hostname, merk, serialnumber, user, department, lokasi, tanggal, keterangan, foto;
     Bitmap bitMap = null;
     File photoFile;
     Bitmap decoded;
@@ -68,7 +68,9 @@ public class Update_komputer extends AppCompatActivity {
         Hostname = findViewById(R.id.txtHostname);
         Merk = findViewById(R.id.txtType);
         Serialnumber = findViewById(R.id.txtSerial);
-        Ip = findViewById(R.id.txtIP);
+        User = findViewById(R.id.txtUser);
+        Department = findViewById(R.id.txtDepartment);
+        Lokasi = findViewById(R.id.txtLokasi);
         Tanggal = findViewById(R.id.txtTanggal);
         Keterangan = findViewById(R.id.txtKeterangan1);
         btnDelete = findViewById(R.id.btnDelete);
@@ -78,18 +80,20 @@ public class Update_komputer extends AppCompatActivity {
         hostname = getIntent().getStringExtra("hostname");
         merk = getIntent().getStringExtra("merk");
         serialnumber = getIntent().getStringExtra("serialnumber");
-        ip = getIntent().getStringExtra("ip");
+        user = getIntent().getStringExtra("user");
+        department = getIntent().getStringExtra("department");
+        lokasi = getIntent().getStringExtra("lokasi");
         tanggal = getIntent().getStringExtra("tanggal");
         keterangan = getIntent().getStringExtra("keterangan");
 
         Hostname.setText(hostname);
         Merk.setText(merk);
         Serialnumber.setText(serialnumber);
-        Ip.setText(ip);
+        User.setText(user);
+        Department.setText(department);
+        Lokasi.setText(lokasi);
         Tanggal.setText(tanggal);
         Keterangan.setText(keterangan);
-
-//        btnPhoto = findViewById(R.id.btnPhoto);
 
         photoView = findViewById(R.id.photoView);
 
@@ -166,9 +170,13 @@ public class Update_komputer extends AppCompatActivity {
                 hostname = Hostname.getText().toString();
                 merk = Merk.getText().toString();
                 serialnumber = Serialnumber.getText().toString();
-                ip = Ip.getText().toString();
+                user = User.getText().toString();
+                department = Department.getText().toString();
+                lokasi = Lokasi.getText().toString();
                 tanggal = Tanggal.getText().toString();
                 keterangan = Keterangan.getText().toString();
+
+                Log.d("Update_komputer", "bitMap: " + bitMap);
 
                 if (bitMap != null) {
                     progressDialog.dismiss();
@@ -186,6 +194,7 @@ public class Update_komputer extends AppCompatActivity {
                 }
             }
         });
+
 
 
 
@@ -232,6 +241,8 @@ public class Update_komputer extends AppCompatActivity {
 
 
 
+
+
     private void ambilFoto() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoFile = getPhotoFileUri(photoFileName);
@@ -267,10 +278,12 @@ public class Update_komputer extends AppCompatActivity {
         return null;
     }
 
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            Log.d("Update_komputer", "Foto berhasil diambil");
             // Foto berhasil diambil, perbarui antarmuka pengguna Anda atau lakukan tindakan yang diperlukan
             // Anda mungkin ingin memuat foto baru ke dalam ImageView, tetapi ini tergantung pada implementasi Anda
             // Sebagai contoh, Anda dapat menggunakan Picasso atau perpustakaan pemuatan gambar lainnya untuk memuat foto baru.
@@ -278,8 +291,11 @@ public class Update_komputer extends AppCompatActivity {
 
             // Perbarui bitMap dengan gambar yang baru diambil
             bitMap = BitmapFactory.decodeFile(photoFile.getPath());
+        } else {
+            Log.e("Update_komputer", "Gagal mengambil foto, resultCode: " + resultCode);
         }
     }
+
 
 
     private void muatGambarKeImageView(String imagePath) {
@@ -287,7 +303,9 @@ public class Update_komputer extends AppCompatActivity {
         Picasso.get().load("file://" + imagePath).into(photoView);
     }
 
-    public  void TakePhoto(){
+    public void TakePhoto() {
+        Log.d("Update_komputer", "Memulai pengambilan foto");
+
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         photoFile = getPhotoFileUri(photoFileName);
 
@@ -298,7 +316,7 @@ public class Update_komputer extends AppCompatActivity {
         if (intent.resolveActivity(getPackageManager()) != null) {
             startActivityForResult(intent, REQUEST_TAKE_PHOTO);
         } else {
-            Log.e("Update_komputer", "No camera app available");
+            Log.e("Update_komputer", "Tidak ada aplikasi kamera yang tersedia");
         }
     }
 
@@ -322,13 +340,25 @@ public class Update_komputer extends AppCompatActivity {
     }
 
     void validatingData() {
-        if (hostname.equals("") || merk.equals("") || serialnumber.equals("") || ip.equals("") || tanggal.equals("") || keterangan.equals("")) {
+        if (hostname.equals("") || merk.equals("") || serialnumber.equals("") || user.equals("") || department.equals("") || lokasi.equals("") || tanggal.equals("") || keterangan.equals("")) {
             progressDialog.dismiss();
             Toast.makeText(Update_komputer.this, "Check your input!", Toast.LENGTH_SHORT).show();
+        } else if (bitMap == null) {
+            progressDialog.dismiss();
+            new AlertDialog.Builder(Update_komputer.this)
+                    .setMessage("Mohon masukkan foto")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Anda dapat menambahkan tindakan apa pun yang diperlukan ketika pengguna mengakui pesan.
+                        }
+                    })
+                    .show();
         } else {
             updateData();
         }
     }
+
 
     void getDataIntent(){
         Bundle bundle = getIntent().getExtras();
@@ -336,7 +366,9 @@ public class Update_komputer extends AppCompatActivity {
             Hostname.setText(bundle.getString("hostname"));
             Merk.setText(bundle.getString("merk"));
             Serialnumber.setText(bundle.getString("serialnumber"));
-            Ip.setText(bundle.getString("ip"));
+            User.setText(bundle.getString("user"));
+            Department.setText(bundle.getString("department"));
+            Lokasi.setText(bundle.getString("lokasi"));
             Tanggal.setText(bundle.getString("tanggal"));
             Keterangan.setText(bundle.getString("keterangan"));
             Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + bundle.getString("foto")).into(photoView);
@@ -344,7 +376,9 @@ public class Update_komputer extends AppCompatActivity {
             Hostname.setText("");
             Merk.setText("");
             Serialnumber.setText("");
-            Ip.setText("");
+            User.setText("");
+            Department.setText("");
+            Lokasi.setText("");
             Tanggal.setText("");
             Keterangan.setText("");
         }
@@ -417,28 +451,43 @@ public class Update_komputer extends AppCompatActivity {
                 });
     }
 
-    public String getStringImage(Bitmap bmp){
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-        byte[] imageBytes = baos.toByteArray();
-        String encodedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-        return encodedImage;
-    }
-
     void updateData() {
-        String foto = "";
+        String foto = "";  // Default foto kosong
         if (bitMap != null) {
             foto = getStringImage(bitMap);
+        } else {
+            // Tampilkan pesan kesalahan jika tidak ada foto yang dipilih
+            progressDialog.dismiss();
+            Log.e("Update_komputer", "BitMap is null!");
+            new AlertDialog.Builder(Update_komputer.this)
+                    .setMessage("Mohon masukkan foto")
+                    .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Anda dapat menambahkan tindakan apa pun yang diperlukan ketika pengguna mengakui pesan.
+                        }
+                    })
+                    .show();
+            return; // Keluar dari metode
         }
+
+        progressDialog.setMessage("Memperbarui Data...");
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+
+        Log.d("Update_komputer", "Mengirim permintaan pembaruan dengan foto: " + foto);
+
+
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Update_komputer.php")
                 .addBodyParameter("hostname", "" + hostname)
                 .addBodyParameter("merk", "" + merk)
                 .addBodyParameter("serialnumber", "" + serialnumber)
-                .addBodyParameter("ip", "" + ip)
+                .addBodyParameter("user", "" + user)
+                .addBodyParameter("department", "" + department)
+                .addBodyParameter("lokasi", "" + lokasi)
                 .addBodyParameter("tanggal", "" + tanggal)
                 .addBodyParameter("keterangan", "" + keterangan)
-                .addBodyParameter("foto",""+foto)
+                .addBodyParameter("foto", "" + foto)
                 .setPriority(Priority.MEDIUM)
                 .setTag("Update Data")
                 .build()
@@ -454,25 +503,25 @@ public class Update_komputer extends AppCompatActivity {
                             Log.d("status", "" + status);
                             if (status) {
                                 new AlertDialog.Builder(Update_komputer.this)
-                                        .setMessage("Data berhasil di update !")
+                                        .setMessage("Data berhasil diupdate!")
                                         .setCancelable(false)
                                         .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 Intent i = getIntent();
-                                                setResult(RESULT_OK,i);
+                                                setResult(RESULT_OK, i);
                                                 Update_komputer.this.finish();
                                             }
                                         })
                                         .show();
                             } else {
                                 new AlertDialog.Builder(Update_komputer.this)
-                                        .setMessage("Gagal Mengupdate Data !")
+                                        .setMessage("Gagal mengupdate data!")
                                         .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 Intent i = getIntent();
-                                                setResult(RESULT_CANCELED,i);
+                                                setResult(RESULT_CANCELED, i);
                                                 Update_komputer.this.finish();
                                             }
                                         })
@@ -487,9 +536,24 @@ public class Update_komputer extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         Log.d("Tidak dapat memperbarui", "" + anError.getErrorBody());
+                        progressDialog.dismiss();
+                        Toast.makeText(Update_komputer.this, "Error mengupdate data", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
+    public String getStringImage(Bitmap bmp) {
+        if (bmp == null) {
+            return "";  // Jika bitmap null, kembalikan string kosong
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+
     public void showDatePickerDialog(View v) {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);

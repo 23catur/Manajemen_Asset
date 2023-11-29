@@ -14,8 +14,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     SessionManager sessionManager;
 
-    SharedPreferences login;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,26 +25,20 @@ public class SplashScreenActivity extends AppCompatActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                login = getSharedPreferences("Login", MODE_PRIVATE);
-                boolean isFirstTime = login.getBoolean("firstTime", true);
+                boolean isLoggedIn = sessionManager.isLoggedIn();
 
-                if (isFirstTime) {
-                    SharedPreferences.Editor editor = login.edit();
-                    editor.putBoolean("firstTime", false);
-                    editor.apply(); // Menggunakan apply() untuk menyimpan perubahan async
-
-                    // Redirect ke halaman NavigasiActivity jika ini bukan kali pertama
+                if (isLoggedIn) {
                     Intent intent = new Intent(getApplicationContext(), NavigasiActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
-                    // Selalu arahkan pengguna ke halaman login setelah logout
                     Intent pindah = new Intent(SplashScreenActivity.this, Login.class);
                     startActivity(pindah);
                     finish();
                 }
             }
         }, SPLASH_TIMER);
-
     }
 }
+
+
