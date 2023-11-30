@@ -7,11 +7,17 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageView;
@@ -19,11 +25,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.asset2.DataInput.Network.Laptop_input;
 import com.example.asset2.R;
 import com.github.chrisbanes.photoview.OnViewTapListener;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -32,16 +40,22 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Calendar;
 
 public class Update_print extends AppCompatActivity {
 
-    Button btnUpdate, btnDelete;
-    TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
+    Button btnUpdate, btnDelete, btnPhoto;
+    TextView Hostname, Merk, Serialnumber, Section, Department, Lokasi, Tanggal, Keterangan;
     PhotoView photoView;
     ProgressDialog progressDialog;
-    String hostname, merk, serialnumber, ip, tanggal, keterangan;
-
+    String hostname, merk, serialnumber, section, department, lokasi, tanggal, keterangan, foto;
+    Bitmap bitMap = null;
+    File photoFile;
+    public String photoFileName = "photo.jpg";
+    static final int REQUEST_TAKE_PHOTO = 2;
+    public final String APP_TAG = "MyApp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +67,9 @@ public class Update_print extends AppCompatActivity {
         Hostname = findViewById(R.id.txtHostname);
         Merk = findViewById(R.id.txtType);
         Serialnumber = findViewById(R.id.txtSerial);
-        Ip = findViewById(R.id.txtIP);
+        Section = findViewById(R.id.txtSection);
+        Department = findViewById(R.id.txtDepartment);
+        Lokasi = findViewById(R.id.txtLokasi);
         Tanggal = findViewById(R.id.txtTanggal);
         Keterangan = findViewById(R.id.txtKeterangan1);
         btnDelete = findViewById(R.id.btnDelete);
@@ -62,14 +78,18 @@ public class Update_print extends AppCompatActivity {
         hostname = getIntent().getStringExtra("hostname");
         merk = getIntent().getStringExtra("merk");
         serialnumber = getIntent().getStringExtra("serialnumber");
-        ip = getIntent().getStringExtra("ip");
+        section = getIntent().getStringExtra("section");
+        department = getIntent().getStringExtra("department");
+        lokasi = getIntent().getStringExtra("lokasi");
         tanggal = getIntent().getStringExtra("tanggal");
         keterangan = getIntent().getStringExtra("keterangan");
 
         Hostname.setText(hostname);
         Merk.setText(merk);
         Serialnumber.setText(serialnumber);
-        Ip.setText(ip);
+        Section.setText(section);
+        Department.setText(department);
+        Lokasi.setText(lokasi);
         Tanggal.setText(tanggal);
         Keterangan.setText(keterangan);
 
@@ -89,33 +109,53 @@ public class Update_print extends AppCompatActivity {
             }
         });
 
+        btnPhoto = findViewById(R.id.btnPhoto);
+        btnPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handlePhotoButtonClick();
+            }
+        });
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progressDialog.setMessage("Updating Data...");
+                progressDialog.setMessage("Memperbarui Data...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
 
-                hostname        = Hostname.getText().toString();
-                merk            = Merk.getText().toString();
-                serialnumber    = Serialnumber.getText().toString();
-                ip              = Ip.getText().toString();
-                tanggal         = Tanggal.getText().toString();
-                keterangan      = Keterangan.getText().toString();
+                hostname = Hostname.getText().toString();
+                merk = Merk.getText().toString();
+                serialnumber = Serialnumber.getText().toString();
+                section = Section.getText().toString();
+                department = Department.getText().toString();
+                lokasi = Lokasi.getText().toString();
+                tanggal = Tanggal.getText().toString();
+                keterangan = Keterangan.getText().toString();
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        validatingData();
-                    }
-                }, 1000);
+                Log.d("Update_print", "bitMap: " + bitMap);
+
+                if (bitMap == null) {
+                    progressDialog.dismiss();
+                    new AlertDialog.Builder(Update_print.this)
+                            .setMessage("Mohon masukkan foto")
+                            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Anda dapat menambahkan tindakan apa pun yang diperlukan ketika pengguna mengakui pesan.
+                                }
+                            })
+                            .show();
+                } else {
+                    validatingData();
+                }
             }
         });
 
         photoAttacher.setOnViewTapListener(new OnViewTapListener() {
             @Override
             public void onViewTap(View view, float x, float y) {
-                showFullScreenImage();
+                showFullScreenImage(bitMap);
             }
         });
 
@@ -127,7 +167,107 @@ public class Update_print extends AppCompatActivity {
         });
     }
 
-    private void showFullScreenImage() {
+
+    private void handlePhotoButtonClick() {
+        if (bitMap != null) {
+            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(Update_print.this);
+            alertDialogBuilder.setMessage("Apakah Anda ingin mengambil foto baru?");
+            alertDialogBuilder.setPositiveButton("Ya", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                    ambilFoto(); // Menggunakan metode ambilFoto() untuk mengambil foto baru
+                }
+            });
+
+            alertDialogBuilder.setNegativeButton("Tidak", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Tidak melakukan apa-apa atau tambahkan tindakan khusus
+                }
+            });
+
+            AlertDialog alertDialog = alertDialogBuilder.create();
+            alertDialog.show();
+        } else {
+            ambilFoto(); // Menggunakan metode ambilFoto() untuk mengambil foto baru
+        }
+    }
+
+
+    private void ambilFoto() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoFile = getPhotoFileUri(photoFileName);
+
+        String authorities = getPackageName() + ".fileprovider";
+        Uri fileProvider = FileProvider.getUriForFile(Update_print.this, authorities, photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+        } else {
+            Log.e("Update_print", "Tidak ada aplikasi kamera yang tersedia");
+        }
+    }
+
+
+    private boolean isExternalStorageAvailable() {
+        String state = Environment.getExternalStorageState();
+        return state.equals(Environment.MEDIA_MOUNTED);
+    }
+
+    public File getPhotoFileUri(String fileName)  {
+        if (isExternalStorageAvailable()) {
+            File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), APP_TAG);
+
+            if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
+                Log.d(APP_TAG, "failed to create directory");
+            }
+            File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
+
+            return file;
+
+        }
+        return null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            Log.d("Update_print", "Foto berhasil diambil, path: " + photoFile.getPath());
+            muatGambarKeImageView(photoFile.getPath());
+
+            // Inisialisasi bitMap dengan gambar yang baru diambil
+            bitMap = BitmapFactory.decodeFile(photoFile.getPath());
+        } else {
+            Log.e("Update_print", "Gagal mengambil foto, resultCode: " + resultCode);
+        }
+    }
+
+    private void muatGambarKeImageView(String imagePath) {
+        Log.d("Update_print", "Memuat gambar ke dalam ImageView, imagePath: " + imagePath);
+        Picasso.get().load("file://" + imagePath).into(photoView);
+    }
+
+
+    public void TakePhoto() {
+        Log.d("Update_print", "Memulai pengambilan foto");
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        photoFile = getPhotoFileUri(photoFileName);
+
+        String authorities = getPackageName() + ".fileprovider";
+        Uri fileProvider = FileProvider.getUriForFile(Update_print.this, authorities, photoFile);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
+
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+        } else {
+            Log.e("Update_print", "Tidak ada aplikasi kamera yang tersedia");
+        }
+    }
+    private void showFullScreenImage(Bitmap bitmap) {
         final Dialog dialog = new Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_fullscreen_image);
@@ -145,6 +285,38 @@ public class Update_print extends AppCompatActivity {
         dialog.show();
     }
 
+    void validatingData() {
+        if (hostname.equals("") || merk.equals("") || serialnumber.equals("") || section.equals("") || department.equals("") || lokasi.equals("") || tanggal.equals("") || keterangan.equals("")) {
+            progressDialog.dismiss();
+            Toast.makeText(Update_print.this, "Check your input!", Toast.LENGTH_SHORT).show();
+        } else {
+            updateData();
+        }
+    }
+
+    void getDataIntent(){
+        Bundle bundle = getIntent().getExtras();
+        if(bundle!=null){
+            Hostname.setText(bundle.getString("hostname"));
+            Merk.setText(bundle.getString("merk"));
+            Serialnumber.setText(bundle.getString("serialnumber"));
+            Section.setText(bundle.getString("section"));
+            Department.setText(bundle.getString("department"));
+            Lokasi.setText(bundle.getString("lokasi"));
+            Tanggal.setText(bundle.getString("tanggal"));
+            Keterangan.setText(bundle.getString("keterangan"));
+            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + bundle.getString("foto")).into(photoView);
+        }else{
+            Hostname.setText("");
+            Merk.setText("");
+            Serialnumber.setText("");
+            Section.setText("");
+            Department.setText("");
+            Lokasi.setText("");
+            Tanggal.setText("");
+            Keterangan.setText("");
+        }
+    }
 
     private void KonfirmasiHapus() {
         new AlertDialog.Builder(Update_print.this)
@@ -213,43 +385,41 @@ public class Update_print extends AppCompatActivity {
                 });
     }
 
-    void validatingData() {
-        if (hostname.equals("") || merk.equals("") || serialnumber.equals("") || ip.equals("") || tanggal.equals("") || keterangan.equals("")) {
-            progressDialog.dismiss();
-            Toast.makeText(Update_print.this, "Check your input!", Toast.LENGTH_SHORT).show();
-        } else {
-            updateData();
+    private String convertFileToString(File photoFile) {
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(photoFile.getPath());
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            byte[] imageBytes = baos.toByteArray();
+            return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
         }
     }
 
-    void getDataIntent(){
-        Bundle bundle = getIntent().getExtras();
-        if(bundle!=null){
-            Hostname.setText(bundle.getString("hostname"));
-            Merk.setText(bundle.getString("merk"));
-            Serialnumber.setText(bundle.getString("serialnumber"));
-            Ip.setText(bundle.getString("ip"));
-            Tanggal.setText(bundle.getString("tanggal"));
-            Keterangan.setText(bundle.getString("keterangan"));
-            Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + bundle.getString("foto")).into(photoView);
-        }else{
-            Hostname.setText("");
-            Merk.setText("");
-            Serialnumber.setText("");
-            Ip.setText("");
-            Tanggal.setText("");
-            Keterangan.setText("");
-        }
-    }
 
     void updateData() {
+        String foto = "";  // Default foto kosong
+        if (bitMap != null) {
+            foto = getStringImage(bitMap);
+        } else if (photoFile != null) {
+            // Ubah file menjadi String atau lakukan proses lain yang sesuai
+            foto = convertFileToString(photoFile);
+        }
+
+        Log.d("Update_print", "Mengirim permintaan pembaruan dengan foto: " + foto);
+
         AndroidNetworking.post("https://jdksmurf.com/BUMA/Update_print.php")
                 .addBodyParameter("hostname", "" + hostname)
                 .addBodyParameter("merk", "" + merk)
                 .addBodyParameter("serialnumber", "" + serialnumber)
-                .addBodyParameter("ip", "" + ip)
+                .addBodyParameter("section", "" + section)
+                .addBodyParameter("department", "" + department)
+                .addBodyParameter("lokasi", "" + lokasi)
                 .addBodyParameter("tanggal", "" + tanggal)
                 .addBodyParameter("keterangan", "" + keterangan)
+                .addBodyParameter("foto", "" + foto) // Tambahkan foto ke dalam permintaan
                 .setPriority(Priority.MEDIUM)
                 .setTag("Update Data")
                 .build()
@@ -265,25 +435,25 @@ public class Update_print extends AppCompatActivity {
                             Log.d("status", "" + status);
                             if (status) {
                                 new AlertDialog.Builder(Update_print.this)
-                                        .setMessage("Data berhasil di update !")
+                                        .setMessage("Data berhasil diupdate!")
                                         .setCancelable(false)
                                         .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 Intent i = getIntent();
-                                                setResult(RESULT_OK,i);
+                                                setResult(RESULT_OK, i);
                                                 Update_print.this.finish();
                                             }
                                         })
                                         .show();
                             } else {
                                 new AlertDialog.Builder(Update_print.this)
-                                        .setMessage("Gagal Menambahkan Data !")
+                                        .setMessage("Gagal mengupdate data!")
                                         .setPositiveButton("Kembali", new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 Intent i = getIntent();
-                                                setResult(RESULT_CANCELED,i);
+                                                setResult(RESULT_CANCELED, i);
                                                 Update_print.this.finish();
                                             }
                                         })
@@ -298,9 +468,24 @@ public class Update_print extends AppCompatActivity {
                     @Override
                     public void onError(ANError anError) {
                         Log.d("Tidak dapat memperbarui", "" + anError.getErrorBody());
+                        progressDialog.dismiss();
+                        Toast.makeText(Update_print.this, "Error mengupdate data", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
+
+    public String getStringImage(Bitmap bmp) {
+        if (bmp == null) {
+            return "";  // Jika bitmap null, kembalikan string kosong
+        }
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        byte[] imageBytes = baos.toByteArray();
+        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
+    }
+
+
     public void showDatePickerDialog(View v) {
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -312,7 +497,6 @@ public class Update_print extends AppCompatActivity {
                 new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        // Tindakan yang akan diambil saat tanggal dipilih
                         String selectedDate = dayOfMonth + "/" + (month + 1) + "/" + year;
                         Tanggal.setText(selectedDate);
                     }
