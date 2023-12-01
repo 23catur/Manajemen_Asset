@@ -128,7 +128,6 @@ public class Print_input extends AppCompatActivity {
                 photoAttacher.setOnViewTapListener(new OnViewTapListener() {
                     @Override
                     public void onViewTap(View view, float x, float y) {
-                        // Respon ketika gambar diklik
                         showFullScreenImage(bitMap);
                     }
                 });
@@ -441,7 +440,7 @@ public class Print_input extends AppCompatActivity {
         if (bitMap != null) {
             foto = getStringImage(bitMap);
         }
-        AndroidNetworking.post("https://jdksmurf.com/BUMA/Api_printer.php")
+        AndroidNetworking.post("https://jdksmurf.com/BUMA/Api_print.php")
                 .addBodyParameter("hostname",""+hostname)
                 .addBodyParameter("merk",""+merk)
                 .addBodyParameter("serialnumber",""+serialnumber)
