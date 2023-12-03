@@ -43,10 +43,10 @@ import java.util.Calendar;
 public class Update_server extends AppCompatActivity {
 
     Button btnUpdate, btnDelete, btnPhoto;
-    TextView Hostname, Merk, Serialnumber, User, Tanggal, Keterangan;
+    TextView Hostname, Merk, Serialnumber, Ip, Tanggal, Keterangan;
     PhotoView photoView;
     ProgressDialog progressDialog;
-    String hostname, merk, serialnumber, user, tanggal, keterangan, foto;
+    String hostname, merk, serialnumber, ip, tanggal, keterangan, foto;
     Bitmap bitMap = null;
     File photoFile;
     public String photoFileName = "photo.jpg";
@@ -63,7 +63,7 @@ public class Update_server extends AppCompatActivity {
         Hostname = findViewById(R.id.txtHostname);
         Merk = findViewById(R.id.txtType);
         Serialnumber = findViewById(R.id.txtSerial);
-        User = findViewById(R.id.txtUser);
+        Ip = findViewById(R.id.txtIP);
         Tanggal = findViewById(R.id.txtTanggal);
         Keterangan = findViewById(R.id.txtKeterangan1);
         btnDelete = findViewById(R.id.btnDelete);
@@ -72,14 +72,14 @@ public class Update_server extends AppCompatActivity {
         hostname = getIntent().getStringExtra("hostname");
         merk = getIntent().getStringExtra("merk");
         serialnumber = getIntent().getStringExtra("serialnumber");
-        user = getIntent().getStringExtra("user");
+        ip = getIntent().getStringExtra("ip");
         tanggal = getIntent().getStringExtra("tanggal");
         keterangan = getIntent().getStringExtra("keterangan");
 
         Hostname.setText(hostname);
         Merk.setText(merk);
         Serialnumber.setText(serialnumber);
-        User.setText(user);
+        Ip.setText(ip);
         Tanggal.setText(tanggal);
         Keterangan.setText(keterangan);
 
@@ -117,7 +117,7 @@ public class Update_server extends AppCompatActivity {
                 hostname = Hostname.getText().toString();
                 merk = Merk.getText().toString();
                 serialnumber = Serialnumber.getText().toString();
-                user = User.getText().toString();
+                ip = Ip.getText().toString();
                 tanggal = Tanggal.getText().toString();
                 keterangan = Keterangan.getText().toString();
 
@@ -274,7 +274,7 @@ public class Update_server extends AppCompatActivity {
     }
 
     void validatingData() {
-        if (hostname.equals("") || merk.equals("") || serialnumber.equals("") || user.equals("") ||  tanggal.equals("") || keterangan.equals("")) {
+        if (hostname.equals("") || merk.equals("") || serialnumber.equals("") || ip.equals("") ||  tanggal.equals("") || keterangan.equals("")) {
             progressDialog.dismiss();
             Toast.makeText(Update_server.this, "Check your input!", Toast.LENGTH_SHORT).show();
         } else {
@@ -288,7 +288,7 @@ public class Update_server extends AppCompatActivity {
             Hostname.setText(bundle.getString("hostname"));
             Merk.setText(bundle.getString("merk"));
             Serialnumber.setText(bundle.getString("serialnumber"));
-            User.setText(bundle.getString("user"));
+            Ip.setText(bundle.getString("ip"));
             Tanggal.setText(bundle.getString("tanggal"));
             Keterangan.setText(bundle.getString("keterangan"));
             Picasso.get().load("https://jdksmurf.com/BUMA/foto_asset/" + bundle.getString("foto")).into(photoView);
@@ -296,7 +296,7 @@ public class Update_server extends AppCompatActivity {
             Hostname.setText("");
             Merk.setText("");
             Serialnumber.setText("");
-            User.setText("");
+            Ip.setText("");
             Tanggal.setText("");
             Keterangan.setText("");
         }
@@ -398,7 +398,7 @@ public class Update_server extends AppCompatActivity {
                 .addBodyParameter("hostname", "" + hostname)
                 .addBodyParameter("merk", "" + merk)
                 .addBodyParameter("serialnumber", "" + serialnumber)
-                .addBodyParameter("user", "" + user)
+                .addBodyParameter("ip", "" + ip)
                 .addBodyParameter("tanggal", "" + tanggal)
                 .addBodyParameter("keterangan", "" + keterangan)
                 .addBodyParameter("foto", "" + foto) // Tambahkan foto ke dalam permintaan

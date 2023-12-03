@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 public class Data_server extends AppCompatActivity {
 
-    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_user, array_tanggal, array_keterangan,array_foto;
+    ArrayList<String>  array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan,array_foto;
     SwipeRefreshLayout srl_main;
     ProgressDialog progressDialog;
     SearchView searchView;
@@ -72,7 +72,7 @@ public class Data_server extends AppCompatActivity {
         );
 
         initializeArray();
-        adapter = new CLV_server(Data_server.this, array_hostname, array_merk, array_serialnumber, array_user, array_tanggal, array_keterangan, array_foto);
+        adapter = new CLV_server(Data_server.this, array_hostname, array_merk, array_serialnumber, array_ip, array_tanggal, array_keterangan, array_foto);
         listData.setAdapter(adapter);
 
         scrollRefresh();
@@ -86,7 +86,7 @@ public class Data_server extends AppCompatActivity {
         array_hostname      = new ArrayList<String>();
         array_merk          = new ArrayList<String>();
         array_serialnumber  = new ArrayList<String>();
-        array_user            = new ArrayList<String>();
+        array_ip            = new ArrayList<String>();
         array_tanggal       = new ArrayList<String>();
         array_keterangan    = new ArrayList<String>();
         array_foto          = new ArrayList<String>();
@@ -94,7 +94,7 @@ public class Data_server extends AppCompatActivity {
         array_hostname.clear();
         array_merk.clear();
         array_serialnumber.clear();
-        array_user.clear();
+        array_ip.clear();
         array_tanggal.clear();
         array_keterangan.clear();
         array_foto.clear();
@@ -122,7 +122,7 @@ public class Data_server extends AppCompatActivity {
                                     array_hostname.add(jo.getString("hostname"));
                                     array_merk.add(jo.getString("merk"));
                                     array_serialnumber.add(jo.getString("serialnumber"));
-                                    array_user.add(jo.getString("user"));
+                                    array_ip.add(jo.getString("ip"));
                                     array_tanggal.add(jo.getString("tanggal"));
                                     array_keterangan.add(jo.getString("keterangan"));
                                     array_foto.add(jo.getString("foto"));
@@ -130,10 +130,10 @@ public class Data_server extends AppCompatActivity {
                                 }
 
                                 if (adapter == null) {
-                                    adapter = new CLV_server(Data_server.this,array_hostname,array_merk,array_serialnumber,array_user,array_tanggal,array_keterangan,array_foto);
+                                    adapter = new CLV_server(Data_server.this,array_hostname,array_merk,array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
                                     listData.setAdapter(adapter);
                                 } else {
-                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_user,array_tanggal,array_keterangan,array_foto);
+                                    adapter.updateData(array_hostname, array_merk, array_serialnumber,array_ip,array_tanggal,array_keterangan,array_foto);
                                     adapter.notifyDataSetChanged();
                                 }
 

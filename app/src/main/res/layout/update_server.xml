@@ -182,7 +182,7 @@
             app:layout_constraintTop_toBottomOf="@+id/txtType" />
 
         <EditText
-            android:id="@+id/txtUser"
+            android:id="@+id/txtIP"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -193,7 +193,7 @@
             android:backgroundTint="@color/black"
             android:ems="10"
             android:fontFamily="@font/poppins_semibold"
-            android:hint="USER"
+            android:hint="IP"
             android:inputType="textPersonName"
             android:textColor="#000000"
             android:textColorHint="#FF0000"
@@ -204,55 +204,6 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txtSerial" />
-
-        <!--    <EditText-->
-        <!--        android:id="@+id/txtDepartment"-->
-        <!--        android:layout_width="0dp"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:layout_marginStart="16dp"-->
-        <!--        android:layout_marginLeft="16dp"-->
-        <!--        android:layout_marginTop="3dp"-->
-        <!--        android:layout_marginEnd="16dp"-->
-        <!--        android:layout_marginRight="16dp"-->
-        <!--        android:backgroundTint="@color/black"-->
-        <!--        android:ems="10"-->
-        <!--        android:fontFamily="@font/poppins_semibold"-->
-        <!--        android:hint="DEPARTMENT"-->
-        <!--        android:inputType="textPersonName"-->
-        <!--        android:textColor="#000000"-->
-        <!--        android:textColorHint="#FF0000"-->
-        <!--        android:textCursorDrawable="@null"-->
-        <!--        android:textSize="20sp"-->
-        <!--        android:textStyle="bold"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintHorizontal_bias="0.0"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toBottomOf="@+id/txtIP" />-->
-
-        <!--    <EditText-->
-        <!--        android:id="@+id/txtLokasi"-->
-        <!--        android:layout_width="0dp"-->
-        <!--        android:layout_height="wrap_content"-->
-        <!--        android:layout_marginStart="16dp"-->
-        <!--        android:layout_marginLeft="16dp"-->
-        <!--        android:layout_marginTop="3dp"-->
-        <!--        android:layout_marginEnd="16dp"-->
-        <!--        android:layout_marginRight="16dp"-->
-        <!--        android:backgroundTint="@color/black"-->
-        <!--        android:ems="10"-->
-        <!--        android:fontFamily="@font/poppins_semibold"-->
-        <!--        android:hint="LOKASI"-->
-        <!--        android:inputType="textPersonName"-->
-        <!--        android:textColor="#000000"-->
-        <!--        android:textColorHint="#FF0000"-->
-        <!--        android:textCursorDrawable="@null"-->
-        <!--        android:textSize="20sp"-->
-        <!--        android:textStyle="bold"-->
-        <!--        app:layout_constraintEnd_toEndOf="parent"-->
-        <!--        app:layout_constraintHorizontal_bias="0.0"-->
-        <!--        app:layout_constraintStart_toStartOf="parent"-->
-        <!--        app:layout_constraintTop_toBottomOf="@+id/txtDepartment" />-->
-
 
         <EditText
             android:id="@+id/txtTanggal"
@@ -275,7 +226,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtUser" />
+            app:layout_constraintTop_toBottomOf="@+id/txtIP" />
 
         <EditText
             android:id="@+id/txtKeterangan1"
