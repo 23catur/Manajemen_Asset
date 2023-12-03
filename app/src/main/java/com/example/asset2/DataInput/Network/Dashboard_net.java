@@ -15,7 +15,7 @@ public class Dashboard_net extends AppCompatActivity {
 
     private ActionBar toolbar;
 
-    ImageView cctv, print, wireless, komputer, laptop, sw;
+    ImageView cctv, print, wireless, komputer, laptop, sw, server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +31,7 @@ public class Dashboard_net extends AppCompatActivity {
         komputer = findViewById(R.id.btn_komputer);
         laptop = findViewById(R.id.btn_laptop);
         sw = findViewById(R.id.btn_switch);
+        server = findViewById(R.id.btn_server);
 
 //        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
@@ -90,6 +91,14 @@ public class Dashboard_net extends AppCompatActivity {
             }
         });
 
+        server.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Tindakan yang akan dijalankan saat Tombol 2 ditekan
+                Intent intent = new Intent(Dashboard_net.this, Server_input.class);
+                startActivity(intent);
+            }
+        });
 
     }
 

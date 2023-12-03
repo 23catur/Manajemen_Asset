@@ -21,7 +21,7 @@ public class Dashboard_listdata_net extends AppCompatActivity {
 
     private ActionBar toolbar;
 
-    ImageView cctv, print, wireless, komputer, laptop, sw;
+    ImageView cctv, print, wireless, komputer, laptop, sw, server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +36,7 @@ public class Dashboard_listdata_net extends AppCompatActivity {
         komputer = findViewById(R.id.btn_komputer);
         laptop = findViewById(R.id.btn_laptop);
         sw = findViewById(R.id.btn_switch);
-
+        server = findViewById(R.id.btn_server);
 
         cctv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +87,13 @@ public class Dashboard_listdata_net extends AppCompatActivity {
             }
         });
 
-
+        server.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Dashboard_listdata_net.this, Data_server.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
