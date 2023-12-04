@@ -94,7 +94,8 @@ public class CLV_laptop extends ArrayAdapter<String>  {
                 intent.putExtra("serialnumber", vSerialnumber.get(position));
                 intent.putExtra("user", vUser.get(position));
                 intent.putExtra("department", vDepartment.get(position));
-                intent.putExtra("lokasi", vLokasi.get(position));                intent.putExtra("tanggal", vTanggal.get(position));
+                intent.putExtra("lokasi", vLokasi.get(position));
+                intent.putExtra("tanggal", vTanggal.get(position));
                 intent.putExtra("keterangan", vKeterangan.get(position));
                 intent.putExtra("foto", vFoto.get(position));
 

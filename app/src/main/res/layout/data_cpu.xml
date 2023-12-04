@@ -7,25 +7,6 @@
     android:background="@color/white">
 
 
-<!--    <Button-->
-<!--        android:id="@+id/btnSelesai"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:layout_marginBottom="16dp"-->
-<!--        android:background="@drawable/button_rectangle"-->
-<!--        android:fontFamily="@font/poppins_semibold"-->
-<!--        android:text="SELESAI"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="23sp"-->
-<!--        app:backgroundTint="@drawable/selected_button1"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
-
-
           <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -57,7 +38,6 @@
                 android:backgroundTint="@color/black"
                 android:ems="10"
                 android:fontFamily="@font/poppins_bold"
-                android:inputType="text"
                 android:text="Cek Secara Fisik CPU"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
@@ -102,7 +82,7 @@
                 android:ems="10"
                 android:fontFamily="@font/poppins_semibold"
                 android:hint="Keterangan"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
                 android:textColor="@color/abu_abu"
                 android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
@@ -124,7 +104,6 @@
                 android:backgroundTint="@color/black"
                 android:ems="10"
                 android:fontFamily="@font/poppins_bold"
-                android:inputType="textPersonName"
                 android:text="Posisi CPU"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
@@ -169,7 +148,7 @@
                 android:ems="10"
                 android:fontFamily="@font/poppins_semibold"
                 android:hint="Keterangan"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
                 android:textColor="@color/abu_abu"
                 android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
@@ -191,7 +170,6 @@
                 android:backgroundTint="@color/black"
                 android:ems="10"
                 android:fontFamily="@font/poppins_bold"
-                android:inputType="textPersonName"
                 android:text="Kondisi CPU"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"
@@ -236,7 +214,7 @@
                 android:ems="10"
                 android:fontFamily="@font/poppins_semibold"
                 android:hint="Keterangan"
-                android:inputType="textPersonName"
+                android:inputType="textMultiLine"
                 android:textColor="@color/abu_abu"
                 android:textColorHint="#CF1305"
                 android:textCursorDrawable="@null"
@@ -258,7 +236,6 @@
                 android:backgroundTint="@color/black"
                 android:ems="10"
                 android:fontFamily="@font/poppins_bold"
-                android:inputType="textPersonName"
                 android:text="Kabel Yang Masuk Ke CPU"
                 android:textColor="@color/black"
                 android:textColorHint="@color/black"

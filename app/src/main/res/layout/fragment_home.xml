@@ -35,8 +35,30 @@
             android:layout_height="283dp"
             android:onClick="onButtonClick"
             android:layout_marginTop="30dp"
+            android:layout_marginBottom="80dp"
             android:src="@drawable/button_mainte"
             android:layout_gravity="center" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/calligraffitti"
+            android:text="CATUR WIRA SYAHPUTRA MUCHTAR"
+            android:textColor="@color/abu_abu"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/calligraffitti"
+            android:text="KAMPUS MERDEKA BATCH 5"
+            android:textColor="@color/abu_abu"
+            android:textSize="20dp"
+            android:layout_marginBottom="20dp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </ScrollView>

@@ -83,7 +83,7 @@ public class NavigasiActivity extends AppCompatActivity {
                 }
                 else if (id == R.id.nav_logout) {
                     // Clear session dan arahkan ke halaman login
-                    sessionManager.logout();
+//                    sessionManager.logout();
 
                     // Setelah logout, arahkan ke halaman login atau halaman lain yang sesuai
                     Intent intent = new Intent(NavigasiActivity.this, Login.class);
