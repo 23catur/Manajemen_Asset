@@ -67,7 +67,6 @@ public class NavigasiActivity extends AppCompatActivity {
                     NextPage = new Intent(NavigasiActivity.this, NavigasiActivity.class);
                     startActivity(NextPage);
 
-                    //Jika memilih navigasi activity maka user diarahkan ke activity
                 }
                 else if (id == R.id.nav_listdata_net) {
 
@@ -82,20 +81,15 @@ public class NavigasiActivity extends AppCompatActivity {
                     startActivity(NextPage);
                 }
                 else if (id == R.id.nav_logout) {
-                    // Clear session dan arahkan ke halaman login
-//                    sessionManager.logout();
 
-                    // Setelah logout, arahkan ke halaman login atau halaman lain yang sesuai
                     Intent intent = new Intent(NavigasiActivity.this, Login.class);
                     startActivity(intent);
-                    finish(); // Optional: Jika ingin menutup activity NavigasiActivity setelah logout
+                    finish();
                 }
-
 
                 DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
                 drawer.closeDrawer(GravityCompat.START);
                 return true;
-//                return false;
             }
         });
 
@@ -103,7 +97,6 @@ public class NavigasiActivity extends AppCompatActivity {
         btnnet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Tindakan yang akan dijalankan saat Tombol 2 ditekan
                 Intent intent = new Intent(NavigasiActivity.this, Dashboard_net.class);
                 startActivity(intent);
             }
@@ -112,7 +105,6 @@ public class NavigasiActivity extends AppCompatActivity {
         btnfms.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Tindakan yang akan dijalankan saat Tombol 2 ditekan
                 Intent intent = new Intent(NavigasiActivity.this, Dashboard_fms.class);
                 startActivity(intent);
             }
