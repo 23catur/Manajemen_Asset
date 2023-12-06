@@ -46,7 +46,7 @@
             android:fontFamily="@font/vampiro_one"
             android:text="CATUR WIRA SYAHPUTRA MUCHTAR"
             android:textColor="#B5A1A8"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textStyle="bold" />
 
         <TextView
@@ -57,7 +57,7 @@
             android:fontFamily="@font/vampiro_one"
             android:text="KAMPUS MERDEKA BATCH 5"
             android:textColor="#B5A1A8"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:textStyle="bold" />
 
     </LinearLayout>
