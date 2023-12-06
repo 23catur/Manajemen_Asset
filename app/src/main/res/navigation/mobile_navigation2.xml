@@ -22,8 +22,8 @@
         android:name="com.example.asset2.ui.listdata_fms.ListdataFragment_fms"
         android:label="@string/menu_gallery" />
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.asset2.ui.slideshow.SlideshowFragment"
+        android:id="@+id/nav_download"
+        android:name="com.example.asset2.ui.download.DownloadFragment"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        tools:layout="@layout/fragment_download" />
 </navigation>

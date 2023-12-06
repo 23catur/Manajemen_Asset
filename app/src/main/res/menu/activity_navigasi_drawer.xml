@@ -17,6 +17,10 @@
             android:icon="@drawable/listdata"
             android:title="List Data Asset FMS" />
         <item
+            android:id="@+id/nav_download"
+            android:icon="@drawable/download"
+            android:title="Download Data Asset" />
+        <item
             android:id="@+id/nav_logout"
             android:icon="@drawable/logout"
             android:title="LOGOUT" />

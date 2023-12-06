@@ -46,10 +46,8 @@ public class NavigasiActivity extends AppCompatActivity {
         setSupportActionBar(binding.appBarNavigasi.toolbar);
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_listdata_net, R.id.nav_listdata_fms, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_listdata_net, R.id.nav_listdata_fms, R.id.nav_download)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_navigasi);
@@ -80,6 +78,14 @@ public class NavigasiActivity extends AppCompatActivity {
                     NextPage = new Intent(NavigasiActivity.this, Dashboard_listdata_fms.class);
                     startActivity(NextPage);
                 }
+
+                else if (id == R.id.nav_download) {
+
+                    Intent intent = new Intent(NavigasiActivity.this, Download_data.class);
+                    startActivity(intent);
+                    finish();
+                }
+
                 else if (id == R.id.nav_logout) {
 
                     Intent intent = new Intent(NavigasiActivity.this, Login.class);
