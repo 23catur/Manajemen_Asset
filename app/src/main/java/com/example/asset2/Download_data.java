@@ -1,7 +1,5 @@
 package com.example.asset2;
 
-import android.Manifest;
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,15 +18,21 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStreamWriter;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Download_data extends AppCompatActivity {
 
@@ -39,9 +43,6 @@ public class Download_data extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.download_data);
 
-        // Memulai AsyncTask untuk melakukan HTTP Request di latar belakang
-        new DownloadDataTask().execute();
-
         // Mengaitkan fungsi ekspor dengan tombol ekspor
         Button exportButton = findViewById(R.id.exportButton);
         exportButton.setOnClickListener(new View.OnClickListener() {
@@ -50,26 +51,24 @@ public class Download_data extends AppCompatActivity {
                 // Memeriksa dan meminta izin sebelum ekspor data
                 if (checkAndRequestPermissions()) {
                     // Izin sudah diberikan, lanjutkan dengan ekspor data
-                    exportData();
+                    new DownloadDataTask().execute();
                 }
             }
         });
     }
 
     // AsyncTask untuk melakukan operasi jaringan di latar belakang
-    private static class DownloadDataTask extends AsyncTask<Void, Void, String> {
-        // Implementasi AsyncTask
+    private class DownloadDataTask extends AsyncTask<Void, Void, List<DataItem>> {
+
         @Override
-        protected String doInBackground(Void... params) {
-            // Lakukan operasi jaringan di sini
+        protected List<DataItem> doInBackground(Void... params) {
             try {
                 URL url = new URL("https://jdksmurf.com/BUMA/Export_data.php");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
                 try {
                     InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                    // Baca dan konversi InputStream ke dalam String
-                    return convertStreamToString(in);
+                    return convertStreamToData(in);
 
                 } finally {
                     urlConnection.disconnect();
@@ -80,103 +79,167 @@ public class Download_data extends AppCompatActivity {
             }
         }
 
-        // Fungsi untuk mengonversi InputStream menjadi String
-        private String convertStreamToString(InputStream is) {
-            java.util.Scanner s = new java.util.Scanner(is).useDelimiter("\\A");
-            return s.hasNext() ? s.next() : "";
+        private List<DataItem> convertStreamToData(InputStream is) {
+            List<DataItem> dataList = new ArrayList<>();
+
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                StringBuilder response = new StringBuilder();
+                String line;
+
+                while ((line = reader.readLine()) != null) {
+                    response.append(line);
+                }
+
+                try {
+                    JSONArray jsonArray = new JSONArray(response.toString());
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+                        DataItem item = new DataItem();
+                        item.setMerk(jsonObject.getString("merk"));
+                        item.setHostname(jsonObject.getString("hostname"));
+                        // Set properti lainnya sesuai kebutuhan
+                        dataList.add(item);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return dataList;
+        }
+
+        protected void onPostExecute(List<DataItem> dataList) {
+            if (dataList != null) {
+                for (DataItem dataItem : dataList) {
+                    Log.d("DataItem", "" + dataItem.getMerk());
+                    Log.d("DataItem", "" + dataItem.getHostname());
+                    // Log properti lainnya sesuai kebutuhan
+                }
+                exportData(dataList);
+            } else {
+                Toast.makeText(Download_data.this, "Gagal mengunduh data", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
-    // Fungsi untuk mengekspor data ke file CSV
-    private void exportData() {
-        try {
-            // Lokasi penyimpanan file Excel di internal storage
-            String folderName = "Asset";
-            String fileName = "exported_data.xlsx";
+    private void exportData(List<DataItem> dataList) {
+        String folderName = "ASSET IT";
+        String fileName = "output.xlsx";
 
-            File dir = new File(getFilesDir(), folderName);
+        if (isExternalStorageWritable()) {
+            File dir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), folderName);
+
             if (!dir.exists() && !dir.mkdirs()) {
                 Log.e("ExportData", "Failed to create directory");
+                Toast.makeText(this, "Failed to create directory", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             File file = new File(dir, fileName);
+
             if (file.exists() && !file.delete()) {
                 Log.e("ExportData", "Failed to delete existing file");
+                Toast.makeText(this, "Failed to delete existing file", Toast.LENGTH_SHORT).show();
                 return;
             }
 
             Log.d("ExportData", "File path: " + file.getAbsolutePath());
 
-            // Membuat workbook baru
             try (Workbook workbook = new XSSFWorkbook()) {
-                // Membuat sheet baru
                 Sheet sheet = workbook.createSheet("Data");
 
-                // Membuat baris judul
                 Row headerRow = sheet.createRow(0);
-                String[] headers = {"Merk", "Hostname", "Serial Number", "IP", "Department", "Lokasi", "Tanggal", "Keterangan", "Foto"};
+                String[] headers = {"Merk", "Hostname" /*, Tambahkan properti lainnya */};
                 for (int i = 0; i < headers.length; i++) {
                     Cell cell = headerRow.createCell(i);
                     cell.setCellValue(headers[i]);
                 }
 
-                // Membuat baris data
-                Row dataRow = sheet.createRow(1);
-                String[] data = {"SampleMerk", "SampleHostname", "SampleSerialNumber", "SampleIP", "SampleDepartment", "SampleLokasi", "SampleTanggal", "SampleKeterangan", "SampleFoto"};
-                for (int i = 0; i < data.length; i++) {
-                    Cell cell = dataRow.createCell(i);
-                    cell.setCellValue(data[i]);
+                for (int rowIndex = 0; rowIndex < dataList.size(); rowIndex++) {
+                    Row dataRow = sheet.createRow(rowIndex + 1);
+                    DataItem dataItem = dataList.get(rowIndex);
+
+                    Cell cellMerk = dataRow.createCell(0);
+                    cellMerk.setCellValue(dataItem.getMerk());
+
+                    Cell cellHostname = dataRow.createCell(1);
+                    cellHostname.setCellValue(dataItem.getHostname());
+                    // Set properti lainnya sesuai kebutuhan
                 }
 
-                // Menyimpan workbook ke dalam file
                 try (FileOutputStream fileOut = new FileOutputStream(file)) {
                     workbook.write(fileOut);
+                    Toast.makeText(this, "Data exported successfully", Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e("ExportData", "File write failed: " + e.toString());
+                    Toast.makeText(this, "File write failed: " + e.toString(), Toast.LENGTH_SHORT).show();
                 }
-
-                Toast.makeText(this, "Data exported successfully", Toast.LENGTH_SHORT).show();
             } catch (IOException e) {
                 e.printStackTrace();
-                Log.e("Exception", "File write failed: " + e.toString());
-                Toast.makeText(this, "File write failed: " + e.toString(), Toast.LENGTH_SHORT).show();
+                Log.e("ExportData", "Workbook creation failed: " + e.toString());
+                Toast.makeText(this, "Workbook creation failed: " + e.toString(), Toast.LENGTH_SHORT).show();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("Exception", "Workbook creation failed: " + e.toString());
-            Toast.makeText(this, "Workbook creation failed: " + e.toString(), Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "External storage not available", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
 
-    // Fungsi untuk memeriksa dan meminta izin secara dinamis
     private boolean checkAndRequestPermissions() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != android.content.pm.PackageManager.PERMISSION_GRANTED) {
 
-            // Jika izin belum diberikan, minta izin secara dinamis
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     REQUEST_PERMISSIONS);
 
             return false;
         }
-
-        // Izin sudah diberikan
         return true;
     }
 
-    // Tanggapi hasil permintaan izin
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
         if (requestCode == REQUEST_PERMISSIONS) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Izin diberikan, lanjutkan dengan ekspor data
-                exportData();
+            if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                new DownloadDataTask().execute();
             } else {
+                Log.d("ExportData", "Izin ditolak. Aplikasi tidak dapat menulis ke penyimpanan eksternal.");
                 Toast.makeText(this, "Izin ditolak. Aplikasi tidak dapat menulis ke penyimpanan eksternal.", Toast.LENGTH_SHORT).show();
             }
         }
     }
+
+    // src/main/java/com/example/asset2/DataItem.java
+    public class DataItem {
+        private String merk;
+        private String hostname;
+
+        public String getMerk() {
+            return merk;
+        }
+
+        public void setMerk(String merk) {
+            this.merk = merk;
+        }
+
+        public String getHostname() {
+            return hostname;
+        }
+
+        public void setHostname(String hostname) {
+            this.hostname = hostname;
+        }
+    }
+
 }
