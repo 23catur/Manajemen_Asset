@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
     tools:context=".ui.home.HomeFragment">
 
     <LinearLayout
@@ -19,7 +18,7 @@
             android:layout_marginTop="48dp"
             android:layout_gravity="center"
             android:onClick="onButtonClick"
-            android:src="@drawable/button_net2" />
+            android:src="@drawable/button_net" />
 
         <ImageView
             android:id="@+id/btn_fms"
@@ -27,7 +26,7 @@
             android:layout_height="280dp"
             android:layout_marginTop="30dp"
             android:onClick="onButtonClick"
-            android:src="@drawable/button_fms2"
+            android:src="@drawable/button_fms"
             android:layout_gravity="center"/>
 
         <ImageView
@@ -37,7 +36,7 @@
             android:onClick="onButtonClick"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="80dp"
-            android:src="@drawable/button_mainte2"
+            android:src="@drawable/button_mainte"
             android:layout_gravity="center" />
 
         <TextView
