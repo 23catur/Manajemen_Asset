@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".Download_data">
+    tools:context=".DownloadData.Network.Download_cctv">
 
     <TextView
         android:id="@+id/textViewTitle"

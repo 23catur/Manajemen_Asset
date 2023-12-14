@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <uses-feature android:name="android.hardware.camera" /> <!-- File Permission -->
+    <uses-feature android:name="android.hardware.camera" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -21,12 +21,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Asset2"
         tools:targetApi="s">
+        <activity android:name=".DownloadData.Network.Download_cctv" />
+        <activity android:name=".DownloadData.Dashboard_download" />
+
         <activity
-            android:name=".Download_data"
-            android:exported="false" />
-        <activity
-            android:name=".Login"
-            android:exported="false" />
+            android:name=".Login" />
         <activity
             android:name=".VerticalCaptureActivity"
             android:screenOrientation="portrait" />
@@ -113,6 +112,7 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths" />
         </provider>
+
     </application>
 
 </manifest>
