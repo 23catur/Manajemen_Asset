@@ -7,14 +7,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.asset2.Listdata.FMS.Data_ht;
 import com.example.asset2.Listdata.FMS.Data_rig;
-import com.example.asset2.Listdata.Network.Data_cctv;
 import com.example.asset2.R;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -23,7 +18,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -43,7 +37,6 @@ public class Download_rig extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data_rig);
 
-        // Memulai AsyncTask untuk mengunduh dan mengekspor data
         new DownloadDataTask().execute(
                 "https://jdksmurf.com/BUMA/Export_rig.php",
                 "HT.xlsx",
@@ -57,8 +50,7 @@ public class Download_rig extends AppCompatActivity {
     }
 
     private class DownloadDataTask extends AsyncTask<String, Void, List<DataItem>> {
-        private String fileName;  // Tambahkan ini sebagai atribut kelas
-
+        private String fileName;
         @Override
         protected List<DataItem> doInBackground(String... params) {
             String apiUrl = params[0];
@@ -76,7 +68,7 @@ public class Download_rig extends AppCompatActivity {
 
                 try {
                     int statusCode = urlConnection.getResponseCode();
-                    if (statusCode == 200) {  // Status OK
+                    if (statusCode == 200) {
                         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                         return convertStreamToData(in, merkKey, hostnameKey, serialnumberKey, unitKey, tanggalKey, keteranganKey);
                     } else {
@@ -140,13 +132,11 @@ public class Download_rig extends AppCompatActivity {
                     Log.d("DataItem", "" + dataItem.getKeterangan());
                 }
 
-                // Export data
                 exportData(dataList, this.fileName);
 
-                // Pindah ke aktivitas Data_cctv setelah menyelesaikan tugas
                 Intent intent = new Intent(Download_rig.this, Data_rig.class);
                 startActivity(intent);
-                finish(); // Menutup aktivitas saat ini agar tidak dapat dikembalikan dengan tombol "back"
+                finish();
             } else {
                 Toast.makeText(Download_rig.this, "Gagal mengunduh data", Toast.LENGTH_SHORT).show();
             }
@@ -213,7 +203,6 @@ public class Download_rig extends AppCompatActivity {
                     workbook.write(outputStream);
                     Log.d("ExportData", "Data exported successfully");
                     Toast.makeText(this, "Data exported successfully", Toast.LENGTH_SHORT).show();
-                    // Pindai file agar muncul di aplikasi pengelola file
                     MediaScannerConnection.scanFile(this, new String[]{file.getAbsolutePath()}, null, null);
                 } catch (IOException e) {
                     Log.e("ExportData", "Error exporting data: " + e.getMessage());
@@ -242,7 +231,6 @@ public class Download_rig extends AppCompatActivity {
         private String unit;
         private String tanggal;
         private String keterangan;
-
 
         public String getMerk() {
             return merk;

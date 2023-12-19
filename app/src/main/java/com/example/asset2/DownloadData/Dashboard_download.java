@@ -4,12 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.asset2.DataInput.FMS.Dashboard_fms;
-import com.example.asset2.DataInput.Network.Dashboard_net;
 import com.example.asset2.DownloadData.FMS.Download_ht;
 import com.example.asset2.DownloadData.FMS.Download_jasset;
 import com.example.asset2.DownloadData.FMS.Download_mobile;
@@ -22,8 +17,6 @@ import com.example.asset2.DownloadData.Network.Download_print;
 import com.example.asset2.DownloadData.Network.Download_server;
 import com.example.asset2.DownloadData.Network.Download_switch;
 import com.example.asset2.DownloadData.Network.Download_wireless;
-import com.example.asset2.Halaman_utama;
-import com.example.asset2.Maintenance.Dashboard_maintenance;
 import com.example.asset2.R;
 
 public class Dashboard_download extends AppCompatActivity {
@@ -52,7 +45,6 @@ public class Dashboard_download extends AppCompatActivity {
         btncctv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_cctv.class);
                 startActivity(intent);
             }
@@ -61,7 +53,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnkomputer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_komputer.class);
                 startActivity(intent);
             }
@@ -70,7 +61,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnlaptop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_laptop.class);
                 startActivity(intent);
             }
@@ -79,7 +69,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnswitch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_switch.class);
                 startActivity(intent);
             }
@@ -88,7 +77,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnserver.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_server.class);
                 startActivity(intent);
             }
@@ -97,7 +85,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnprint.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_print.class);
                 startActivity(intent);
             }
@@ -106,7 +93,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnwireless.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_wireless.class);
                 startActivity(intent);
             }
@@ -115,7 +101,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnht.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_ht.class);
                 startActivity(intent);
             }
@@ -124,7 +109,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnjasset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_jasset.class);
                 startActivity(intent);
             }
@@ -133,7 +117,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnmobile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_mobile.class);
                 startActivity(intent);
             }
@@ -142,7 +125,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnnetwork.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_network.class);
                 startActivity(intent);
             }
@@ -151,7 +133,6 @@ public class Dashboard_download extends AppCompatActivity {
         btnrig.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Memulai aktivitas Download_cctv
                 Intent intent = new Intent(Dashboard_download.this, Download_rig.class);
                 startActivity(intent);
             }

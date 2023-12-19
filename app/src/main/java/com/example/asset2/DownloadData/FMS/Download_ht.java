@@ -7,13 +7,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import com.example.asset2.Listdata.FMS.Data_ht;
-import com.example.asset2.Listdata.Network.Data_cctv;
 import com.example.asset2.R;
-
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -22,7 +18,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -42,7 +37,6 @@ public class Download_ht extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.data_ht);
 
-        // Memulai AsyncTask untuk mengunduh dan mengekspor data
         new DownloadDataTask().execute(
                 "https://jdksmurf.com/BUMA/Export_ht.php",
                 "HT.xlsx",
@@ -75,7 +69,7 @@ public class Download_ht extends AppCompatActivity {
 
                 try {
                     int statusCode = urlConnection.getResponseCode();
-                    if (statusCode == 200) {  // Status OK
+                    if (statusCode == 200) {
                         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
                         return convertStreamToData(in, merkKey, hostnameKey, serialnumberKey, userKey, tanggalKey, keteranganKey);
                     } else {
@@ -138,14 +132,11 @@ public class Download_ht extends AppCompatActivity {
                     Log.d("DataItem", "" + dataItem.getTanggal());
                     Log.d("DataItem", "" + dataItem.getKeterangan());
                 }
-
-                // Export data
                 exportData(dataList, this.fileName);
 
-                // Pindah ke aktivitas Data_cctv setelah menyelesaikan tugas
                 Intent intent = new Intent(Download_ht.this, Data_ht.class);
                 startActivity(intent);
-                finish(); // Menutup aktivitas saat ini agar tidak dapat dikembalikan dengan tombol "back"
+                finish();
             } else {
                 Toast.makeText(Download_ht.this, "Gagal mengunduh data", Toast.LENGTH_SHORT).show();
             }
@@ -212,7 +203,6 @@ public class Download_ht extends AppCompatActivity {
                     workbook.write(outputStream);
                     Log.d("ExportData", "Data exported successfully");
                     Toast.makeText(this, "Data exported successfully", Toast.LENGTH_SHORT).show();
-                    // Pindai file agar muncul di aplikasi pengelola file
                     MediaScannerConnection.scanFile(this, new String[]{file.getAbsolutePath()}, null, null);
                 } catch (IOException e) {
                     Log.e("ExportData", "Error exporting data: " + e.getMessage());
@@ -241,7 +231,6 @@ public class Download_ht extends AppCompatActivity {
         private String user;
         private String tanggal;
         private String keterangan;
-
 
         public String getMerk() {
             return merk;
