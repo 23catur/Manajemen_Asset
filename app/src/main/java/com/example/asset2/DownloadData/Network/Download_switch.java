@@ -1,25 +1,19 @@
 package com.example.asset2.DownloadData.Network;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
+import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
-import android.media.MediaScannerConnection;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.asset2.DownloadData.Dashboard_download;
 import com.example.asset2.Listdata.Network.Data_cctv;
-import com.example.asset2.NavigasiActivity;
+import com.example.asset2.Listdata.Network.Data_switch;
 import com.example.asset2.R;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -41,17 +35,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Download_cctv extends AppCompatActivity {
+public class Download_switch extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.data_cctv);
+        setContentView(R.layout.data_switch);
 
         // Memulai AsyncTask untuk mengunduh dan mengekspor data
         new DownloadDataTask().execute(
-                "https://jdksmurf.com/BUMA/Export_cctv.php",
-                "CCTV.xlsx",
+                "https://jdksmurf.com/BUMA/Export_switch.php",
+                "SWITCH.xlsx",
                 "merk",
                 "hostname",
                 "serialnumber",
@@ -157,11 +151,11 @@ public class Download_cctv extends AppCompatActivity {
                 exportData(dataList, this.fileName);
 
                 // Pindah ke aktivitas Data_cctv setelah menyelesaikan tugas
-                Intent intent = new Intent(Download_cctv.this, Data_cctv.class);
+                Intent intent = new Intent(Download_switch.this, Data_switch.class);
                 startActivity(intent);
                 finish(); // Menutup aktivitas saat ini agar tidak dapat dikembalikan dengan tombol "back"
             } else {
-                Toast.makeText(Download_cctv.this, "Gagal mengunduh data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Download_switch.this, "Gagal mengunduh data", Toast.LENGTH_SHORT).show();
             }
         }
 

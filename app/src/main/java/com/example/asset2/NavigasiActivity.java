@@ -8,6 +8,7 @@ import android.widget.ImageView;
 
 import com.example.asset2.DataInput.FMS.Dashboard_fms;
 import com.example.asset2.DataInput.Network.Dashboard_net;
+import com.example.asset2.DownloadData.Dashboard_download;
 import com.example.asset2.DownloadData.Network.Download_cctv;
 import com.example.asset2.Listdata.FMS.Dashboard_listdata_fms;
 import com.example.asset2.Listdata.Network.Dashboard_listdata_net;
@@ -83,7 +84,7 @@ public class NavigasiActivity extends AppCompatActivity {
 
                 else if (id == R.id.nav_download) {
 
-                    Intent intent = new Intent(NavigasiActivity.this, Download_cctv.class);
+                    Intent intent = new Intent(NavigasiActivity.this, Dashboard_download.class);
                     startActivity(intent);
                     finish();
                 }

@@ -1,25 +1,19 @@
 package com.example.asset2.DownloadData.Network;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
+import android.media.MediaScannerConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
-import android.media.MediaScannerConnection;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.asset2.DownloadData.Dashboard_download;
 import com.example.asset2.Listdata.Network.Data_cctv;
-import com.example.asset2.NavigasiActivity;
+import com.example.asset2.Listdata.Network.Data_print;
 import com.example.asset2.R;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -41,21 +35,21 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Download_cctv extends AppCompatActivity {
+public class Download_print extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.data_cctv);
+        setContentView(R.layout.data_print);
 
         // Memulai AsyncTask untuk mengunduh dan mengekspor data
         new DownloadDataTask().execute(
-                "https://jdksmurf.com/BUMA/Export_cctv.php",
+                "https://jdksmurf.com/BUMA/Export_print.php",
                 "CCTV.xlsx",
                 "merk",
                 "hostname",
                 "serialnumber",
-                "ip",
+                "section",
                 "department",
                 "lokasi",
                 "tanggal",
@@ -73,7 +67,7 @@ public class Download_cctv extends AppCompatActivity {
             String merkKey = params[2];
             String hostnameKey = params[3];
             String serialnumberKey = params[4];
-            String ipKey = params[5];
+            String sectionKey = params[5];
             String departmentKey = params[6];
             String lokasiKey = params[7];
             String tanggalKey = params[8];
@@ -87,7 +81,7 @@ public class Download_cctv extends AppCompatActivity {
                     int statusCode = urlConnection.getResponseCode();
                     if (statusCode == 200) {  // Status OK
                         InputStream in = new BufferedInputStream(urlConnection.getInputStream());
-                        return convertStreamToData(in, merkKey, hostnameKey, serialnumberKey, ipKey, departmentKey, lokasiKey, tanggalKey, keteranganKey);
+                        return convertStreamToData(in, merkKey, hostnameKey, serialnumberKey, sectionKey, departmentKey, lokasiKey, tanggalKey, keteranganKey);
                     } else {
                         Log.e("DownloadDataTask", "HTTP error code: " + statusCode);
                         return null;
@@ -102,7 +96,7 @@ public class Download_cctv extends AppCompatActivity {
             }
         }
 
-        private List<DataItem> convertStreamToData(InputStream is, String merkKey, String hostnameKey, String serialnumberKey, String ipKey, String departmentKey, String lokasiKey, String tanggalKey, String keteranganKey) {
+        private List<DataItem> convertStreamToData(InputStream is, String merkKey, String hostnameKey, String serialnumberKey, String sectionKey, String departmentKey, String lokasiKey, String tanggalKey, String keteranganKey) {
             List<DataItem> dataList = new ArrayList<>();
 
             try {
@@ -122,7 +116,7 @@ public class Download_cctv extends AppCompatActivity {
                         item.setMerk(jsonObject.getString(merkKey));
                         item.setHostname(jsonObject.getString(hostnameKey));
                         item.setSerialnumber(jsonObject.getString(serialnumberKey));
-                        item.setIp(jsonObject.getString(ipKey));
+                        item.setSection(jsonObject.getString(sectionKey));
                         item.setDepartment(jsonObject.getString(departmentKey));
                         item.setLokasi(jsonObject.getString(lokasiKey));
                         item.setTanggal(jsonObject.getString(tanggalKey));
@@ -146,7 +140,7 @@ public class Download_cctv extends AppCompatActivity {
                     Log.d("DataItem", "" + dataItem.getMerk());
                     Log.d("DataItem", "" + dataItem.getHostname());
                     Log.d("DataItem", "" + dataItem.getSerialnumber());
-                    Log.d("DataItem", "" + dataItem.getIp());
+                    Log.d("DataItem", "" + dataItem.getSection());
                     Log.d("DataItem", "" + dataItem.getDepartment());
                     Log.d("DataItem", "" + dataItem.getLokasi());
                     Log.d("DataItem", "" + dataItem.getTanggal());
@@ -157,11 +151,11 @@ public class Download_cctv extends AppCompatActivity {
                 exportData(dataList, this.fileName);
 
                 // Pindah ke aktivitas Data_cctv setelah menyelesaikan tugas
-                Intent intent = new Intent(Download_cctv.this, Data_cctv.class);
+                Intent intent = new Intent(Download_print.this, Data_print.class);
                 startActivity(intent);
                 finish(); // Menutup aktivitas saat ini agar tidak dapat dikembalikan dengan tombol "back"
             } else {
-                Toast.makeText(Download_cctv.this, "Gagal mengunduh data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(Download_print.this, "Gagal mengunduh data", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -193,7 +187,7 @@ public class Download_cctv extends AppCompatActivity {
                 Sheet sheet = workbook.createSheet("Data");
 
                 Row headerRow = sheet.createRow(0);
-                String[] headers = {"MERK", "HOSTNAME", "SERIAL NUMBER", "IP", "DEPARTMENT", "LOKASI", "TANGGAL", "KETERANGAN"};
+                String[] headers = {"HOSTNAME", "MERK", "SERIAL NUMBER", "SECTION", "DEPARTMENT", "LOKASI", "TANGGAL", "KETERANGAN"};
                 for (int i = 0; i < headers.length; i++) {
                     Cell cell = headerRow.createCell(i);
                     cell.setCellValue(headers[i]);
@@ -212,8 +206,8 @@ public class Download_cctv extends AppCompatActivity {
                     Cell cellSerialnumber = dataRow.createCell(2);
                     cellSerialnumber.setCellValue(dataItem.getSerialnumber());
 
-                    Cell cellIp = dataRow.createCell(3);
-                    cellIp.setCellValue(dataItem.getIp());
+                    Cell cellSection = dataRow.createCell(3);
+                    cellSection.setCellValue(dataItem.getSection());
 
                     Cell cellDepartment = dataRow.createCell(4);
                     cellDepartment.setCellValue(dataItem.getDepartment());
@@ -258,8 +252,7 @@ public class Download_cctv extends AppCompatActivity {
         private String merk;
         private String hostname;
         private String serialnumber;
-        private String ip;
-        private String user;
+        private String section;
         private String department;
         private String lokasi;
         private String tanggal;
@@ -290,20 +283,12 @@ public class Download_cctv extends AppCompatActivity {
             this.serialnumber = serialnumber;
         }
 
-        public String getIp() {
-            return ip;
+        public String getSection() {
+            return section;
         }
 
-        public void setIp(String ip) {
-            this.ip = ip;
-        }
-
-        public String getUser() {
-            return user;
-        }
-
-        public void setUser(String user) {
-            this.user = user;
+        public void setSection(String section) {
+            this.section = section;
         }
 
         public String getDepartment() {

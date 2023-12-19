@@ -22,6 +22,19 @@
         android:theme="@style/Theme.Asset2"
         tools:targetApi="s">
         <activity android:name=".DownloadData.Network.Download_cctv" />
+        <activity android:name=".DownloadData.Network.Download_laptop" />
+        <activity android:name=".DownloadData.Network.Download_komputer" />
+        <activity android:name=".DownloadData.Network.Download_wireless" />
+        <activity android:name=".DownloadData.Network.Download_server" />
+        <activity android:name=".DownloadData.Network.Download_switch" />
+        <activity android:name=".DownloadData.Network.Download_print" />
+
+        <activity android:name=".DownloadData.FMS.Download_rig" />
+        <activity android:name=".DownloadData.FMS.Download_network" />
+        <activity android:name=".DownloadData.FMS.Download_mobile" />
+        <activity android:name=".DownloadData.FMS.Download_jasset" />
+        <activity android:name=".DownloadData.FMS.Download_ht" />
+
         <activity android:name=".DownloadData.Dashboard_download" />
 
         <activity
@@ -29,6 +42,7 @@
         <activity
             android:name=".VerticalCaptureActivity"
             android:screenOrientation="portrait" />
+
         <activity android:name=".Updatedata.Network.Update_wireless" />
         <activity android:name=".Updatedata.Network.Update_laptop" />
         <activity android:name=".Updatedata.Network.Update_print" />
@@ -36,17 +50,20 @@
         <activity android:name=".Updatedata.Network.Update_switch" />
         <activity android:name=".Updatedata.Network.Update_server" />
         <activity android:name=".Updatedata.Network.Update_cctv" />
+
         <activity android:name=".Updatedata.FMS.Update_rig" />
         <activity android:name=".Updatedata.FMS.Update_ht" />
         <activity android:name=".Updatedata.FMS.Update_jasset" />
         <activity android:name=".Updatedata.FMS.Update_mobile" />
         <activity android:name=".Updatedata.FMS.Update_network" />
+
         <activity android:name=".Listdata.FMS.Dashboard_listdata_fms" />
         <activity android:name=".Listdata.FMS.Data_ht" />
         <activity android:name=".Listdata.FMS.Data_rig" />
         <activity android:name=".Listdata.FMS.Data_jasset" />
         <activity android:name=".Listdata.FMS.Data_network" />
         <activity android:name=".Listdata.FMS.Data_mobile" />
+
         <activity android:name=".Listdata.Network.Dashboard_listdata_net" />
         <activity android:name=".Listdata.Network.Data_server" />
         <activity android:name=".Listdata.Network.Data_switch" />
@@ -55,6 +72,7 @@
         <activity android:name=".Listdata.Network.Data_laptop" />
         <activity android:name=".Listdata.Network.Data_komputer" />
         <activity android:name=".Listdata.Network.Data_wireless" />
+
         <activity
             android:name=".NavigasiActivity"
             android:exported="false"
@@ -80,6 +98,7 @@
         <activity android:name=".DataInput.FMS.Ht_input" />
         <activity android:name=".DataInput.FMS.Rig_input" />
         <activity android:name=".DataInput.FMS.Dashboard_fms" />
+
         <activity android:name=".Maintenance.Dashboard_maintenance" />
         <activity android:name=".Maintenance.Data_maintenance.DataKeymou" />
         <activity android:name=".Maintenance.Data_maintenance.DataIPPhone" />
@@ -87,7 +106,9 @@
         <activity android:name=".Maintenance.Data_maintenance.DataMonitor" />
         <activity android:name=".Maintenance.Data_maintenance.DataUPS" />
         <activity android:name=".Maintenance.Data_maintenance.DataCPU" />
+
         <activity android:name=".Halaman_utama" />
+
         <activity android:name=".DataInput.Network.Dashboard_net" />
         <activity android:name=".DataInput.Network.Cctv_input" />
         <activity android:name=".DataInput.Network.Laptop_input" />
@@ -96,6 +117,7 @@
         <activity android:name=".DataInput.Network.Wireless_input" />
         <activity android:name=".DataInput.Network.Switch_input" />
         <activity android:name=".DataInput.Network.Server_input" />
+
         <activity android:name=".Maintenance.Maintenance_komputer" />
         <activity android:name=".Maintenance.Maintenance_cctv" />
         <activity android:name=".Maintenance.Maintenance_laptop" />
